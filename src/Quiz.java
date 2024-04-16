@@ -4,6 +4,7 @@ public class Quiz {
     protected String theme;
     protected String content;
     private boolean completed;
+    
     public Quiz(String quizTitle,String description,String theme,String content){
         this.quizTitle= quizTitle;
         this.description= description;

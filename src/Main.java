@@ -1,6 +1,7 @@
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
+
 public class Main {
     static List<Quiz> quizzes = new ArrayList<>();
     static List<Event> eventList = new ArrayList<>();

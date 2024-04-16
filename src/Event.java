@@ -4,6 +4,7 @@ public class Event {
     protected String venue;
     protected String date;
     protected String time;
+    
     public Event(String eventTitle, String description, String venue, String date, String time){
         this.eventTitle=eventTitle;
         this.description=description;

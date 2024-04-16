@@ -1,6 +1,7 @@
 public class Educators {
     protected int numOfQuiz;
     protected int numOfEvent;
+    
     public Educators(){
         this.numOfEvent = 0;
         this.numOfQuiz = 0;
