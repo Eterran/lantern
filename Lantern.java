@@ -1,5 +1,6 @@
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
@@ -7,8 +8,13 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -16,25 +22,28 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.Pane;
 import java.util.*;
 import java.lang.Thread;
 
-
 public class Lantern extends Application {
-    private static Deque<Scene> history = new ArrayDeque<Scene>(); 
+    private static Deque<Scene> history = new ArrayDeque<Scene>();
     private static Deque<Tab> tabHistory = new ArrayDeque<Tab>();
+
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Lantern");
         showLoginScene(primaryStage);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
-    public static void showLoginScene(Stage stg){
+
+    public static void showLoginScene(Stage stg) {
         Label label = new Label("Welcome to Lantern");
-        label.setFont(Font.font(30));
-        label.setPadding(new Insets(0, 0, 10, 4));
+        label.setFont(Font.font("Lato", FontWeight.BOLD, 30));
+        label.setPadding(new Insets(10, 0, 6, 0));
         TextField usernameTF = new TextField();
         usernameTF.setPadding(new Insets(0, 0, 10, 0));
         TextField passwordTF = new TextField();
@@ -42,40 +51,79 @@ public class Lantern extends Application {
 
         Button loginButton = new Button();
         loginButton.setText("Login");
-        loginButton.setPadding(new Insets(10, 20, 10, 20));
-        loginButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px;");
-
+        loginButton.setFont(Font.font("Montserrat", FontWeight.NORMAL, 12));
+        loginButton.setPadding(new Insets(8, 179, 8, 179));
+        loginButton.setStyle("-fx-background-color: " + color.MAIN.getCode() +
+                     "; -fx-text-fill: white; -fx-font-size: 18px;" +
+                     "-fx-border-color: black; -fx-border-width: 2px;" +
+                     "-fx-background-radius: 10px; -fx-border-radius: 10px;");
         loginButton.setOnAction(e -> {
-            if (checkLoginCredentials(usernameTF.getText(), passwordTF.getText())){
+            if (checkLoginCredentials(usernameTF.getText(), passwordTF.getText())) {
                 showSuccessScene(stg);
             }
         });
 
         Button registerButton = new Button();
         registerButton.setText("Register");
+        registerButton.setFont(Font.font("Montserrat", FontWeight.NORMAL, 12));
+        registerButton.setPadding(new Insets(8, 170, 8, 170));
+        registerButton.setStyle("-fx-background-color: " + color.ACCENT.getCode() +
+                        "; -fx-text-fill: white; -fx-font-size: 18px;" +
+                        "-fx-border-color: black; -fx-border-width: 2px;" +
+                        "-fx-background-radius: 10px; -fx-border-radius: 10px;");
         registerButton.setOnAction(e -> showRegistrationScene(stg));
 
-        VBox vbox = new VBox(10);
-        vbox.getChildren().add(label);
-        vbox.getChildren().add(new VBox(new Text("Username:")) {{ setPadding(new Insets(0, 0, 0, 4)); }});
-        vbox.getChildren().add(usernameTF);
-        vbox.getChildren().add(new VBox(new Text("Password:")) {{ setPadding(new Insets(0, 0, 0, 4)); }});
-        vbox.getChildren().add(passwordTF);
-        vbox.getChildren().add(loginButton);
-        vbox.getChildren().add(registerButton);
+        VBox labelBox = new VBox(10);
+        labelBox.setAlignment(Pos.CENTER);
+        labelBox.getChildren().add(label);
+        
+        VBox inputBox = new VBox(10);
+        inputBox.setPadding(new Insets(0, 10, 0, 14));
+        Text usernameText = new Text("Username:");
+        usernameText.setFont(Font.font("Montserrat", FontWeight.NORMAL, 14));
+        VBox usernameBox = new VBox(usernameText);
+        usernameBox.setPadding(new Insets(0, 10, 0, 14));
+        inputBox.getChildren().add(usernameBox);
+        inputBox.getChildren().add(usernameTF);
 
-        StackPane root = new StackPane();
+        Text passwordText = new Text("Password:");
+        passwordText.setFont(Font.font("Montserrat", FontWeight.NORMAL, 14));
+        VBox passwordBox = new VBox(passwordText);
+        passwordBox.setPadding(new Insets(0, 10, 0, 14));
+        inputBox.getChildren().add(passwordBox);
+        inputBox.getChildren().add(passwordTF);
 
-        Scene scene = new Scene(root, 500, 450);
-        vbox.setBackground(new Background(new BackgroundFill(Color.SANDYBROWN, CornerRadii.EMPTY, Insets.EMPTY)));
-        //root.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
+        VBox buttonBox = new VBox(10);
+        buttonBox.setPadding(new Insets(80, 0, 0, 0));
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.getChildren().add(loginButton);
+        buttonBox.getChildren().add(registerButton);
 
-        root.getChildren().add(vbox);
+        VBox rootBox = new VBox(15);
+        rootBox.setPrefSize(300, 300);
+        rootBox.setMaxSize(500, 450);
+        rootBox.setMinSize(500, 450);
+        
+        rootBox.setBackground(new Background(new BackgroundFill(
+            Color.web(color.BACKGROUND.getCode()), new CornerRadii(6), Insets.EMPTY)));
+        //rootBox.setBorder(new Border(new BorderStroke(
+            //Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(10), BorderWidths.DEFAULT)));
+        // root.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,
+        // CornerRadii.EMPTY, Insets.EMPTY)));
+        rootBox.getChildren().addAll(labelBox, inputBox, buttonBox);
 
+        StackPane rootPane = new StackPane();
+        rootPane.setStyle("-fx-background-image: url('assets/lantern_background.jpg'); "
+                + "-fx-background-size: cover; "
+                + "-fx-background-color: rgba(255, 255, 255, 0.7);");
+        rootPane.getChildren().add(rootBox);
+
+        Scene scene = new Scene(rootPane, 800, 500);
         stg.setScene(scene);
         history.push(stg.getScene());
     }
-    public static void showRegistrationScene(Stage stg){
+
+    public static void showRegistrationScene(Stage stg) {
         history.push(stg.getScene());
         Label label = new Label("Register");
         label.setFont(Font.font(30));
@@ -92,7 +140,7 @@ public class Lantern extends Application {
         Button registerButton = new Button();
         registerButton.setText("Register");
         registerButton.setOnAction(e -> {
-            if (checkRegisterCredentials(usernameTF.getText(), passwordTF.getText(), comboBox.getValue())){
+            if (checkRegisterCredentials(usernameTF.getText(), passwordTF.getText(), comboBox.getValue())) {
                 showSuccessScene(stg);
             }
         });
@@ -103,11 +151,35 @@ public class Lantern extends Application {
 
         VBox vbox = new VBox(10);
         vbox.getChildren().add(label);
-        vbox.getChildren().add(new VBox(new Text("Username:") {{setFill(Color.WHITE);}}) {{setPadding(new Insets(0, 0, 0, 4)); }});
+        vbox.getChildren().add(new VBox(new Text("Username:") {
+            {
+                setFill(Color.WHITE);
+            }
+        }) {
+            {
+                setPadding(new Insets(0, 0, 0, 4));
+            }
+        });
         vbox.getChildren().add(usernameTF);
-        vbox.getChildren().add(new VBox(new Text("Password:") {{setFill(Color.WHITE);}}) {{setPadding(new Insets(0, 0, 0, 4)); }});
+        vbox.getChildren().add(new VBox(new Text("Password:") {
+            {
+                setFill(Color.WHITE);
+            }
+        }) {
+            {
+                setPadding(new Insets(0, 0, 0, 4));
+            }
+        });
         vbox.getChildren().add(passwordTF);
-        vbox.getChildren().add(new VBox(new Text("Role:") {{setFill(Color.WHITE);}}) {{setPadding(new Insets(0, 0, 0, 4)); }});
+        vbox.getChildren().add(new VBox(new Text("Role:") {
+            {
+                setFill(Color.WHITE);
+            }
+        }) {
+            {
+                setPadding(new Insets(0, 0, 0, 4));
+            }
+        });
         vbox.getChildren().add(comboBox);
         vbox.getChildren().add(registerButton);
         vbox.getChildren().add(backButton);
@@ -115,17 +187,21 @@ public class Lantern extends Application {
         StackPane root = new StackPane();
 
         Pane backgroundPane = new Pane();
-        backgroundPane.setBackground(new Background(new BackgroundFill(Color.SANDYBROWN, CornerRadii.EMPTY, Insets.EMPTY)));
-        //root.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
-        backgroundPane.setStyle("-fx-background-image: url('assets/lantern_background.jpg'); " + "-fx-background-size: cover; " + "-fx-opacity: 0.7;");
+        backgroundPane
+                .setBackground(new Background(new BackgroundFill(Color.SANDYBROWN, CornerRadii.EMPTY, Insets.EMPTY)));
+        // root.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,
+        // CornerRadii.EMPTY, Insets.EMPTY)));
+        backgroundPane.setStyle("-fx-background-image: url('assets/lantern_background.jpg'); "
+                + "-fx-background-size: cover; " + "-fx-opacity: 0.7;");
 
         root.getChildren().add(backgroundPane);
         root.getChildren().add(vbox);
 
-        Scene scene = new Scene(root, 500, 450);
+        Scene scene = new Scene(root, 800, 500);
         stg.setScene(scene);
     }
-    public static void showHomeScene(Stage stg){
+
+    public static void showHomeScene(Stage stg) {
         history.clear();
         Button backButton = new Button("Back");
         TabPane tabPane = new TabPane();
@@ -139,32 +215,50 @@ public class Lantern extends Application {
         tab3.setClosable(false);
         tab4.setClosable(false);
         tab5.setClosable(false);
-        tabHome.setContent(new Label("Home Content"));
-        tabProfile.setContent(new Label("Profile Content"));
-        tab3.setContent(new Label("3 Content"));
-        tab4.setContent(new Label("4 Content"));
-        tab5.setContent(new Label("5 Content"));
-
+        Label homeContent = new Label("Home Content");
+        homeContent.setStyle("-fx-background-color: " + color.BACKGROUND.getCode() + ";");
+        tabHome.setContent(homeContent);
+        Label profileContent = new Label("Profile Content");
+        profileContent.setStyle("-fx-background-color: " + color.BACKGROUND.getCode() + ";");
+        tabProfile.setContent(profileContent);
+        Label content3 = new Label("Content 3");
+        content3.setStyle("-fx-background-color: " + color.BACKGROUND.getCode() + ";");
+        tab3.setContent(content3);
+        Label content4 = new Label("Content 4");
+        content4.setStyle("-fx-background-color: " + color.BACKGROUND.getCode() + ";");
+        tab4.setContent(content4);
+        Label content5 = new Label("Content 5");
+        content5.setStyle("-fx-background-color: " + color.BACKGROUND.getCode() + ";");
+        tab5.setContent(content5);        
+        tabHome.setStyle("-fx-min-width: 1000px, -fx-pref-width: 1000px;" + "-fx-min-height: 600px, -fx-pref-height: 600px;");
+        tabProfile.setStyle("-fx-min-width: 1000px, -fx-pref-width: 1000px;" + "-fx-min-height: 600px, -fx-pref-height: 600px;");
+        tab3.setStyle("-fx-min-width: 1000px, -fx-pref-width: 1000px;" + "-fx-min-height: 600px, -fx-pref-height: 600px;");
+        tab4.setStyle("-fx-min-width: 1000px, -fx-pref-width: 1000px;" + "-fx-min-height: 600px, -fx-pref-height: 600px;");
+        tab5.setStyle("-fx-min-width: 1000px, -fx-pref-width: 1000px;" + "-fx-min-height: 600px, -fx-pref-height: 600px;");
         tabPane.getTabs().addAll(tabHome, tabProfile, tab3, tab4, tab5);
-        backButton.setOnAction(e -> {goBackTab(tabPane); goBackTab(tabPane);});
+        backButton.setOnAction(e -> {
+            goBackTab(tabPane);
+            goBackTab(tabPane);
+        });
         tabHistory.push(tabHome);
 
-        tabPane.setStyle("-fx-tab-min-width:100px; -fx-tab-max-width:100px; -fx-tab-min-height:30px; -fx-tab-max-height:30px; -fx-font-size:14px; -fx-font-weight:bold;");
+        tabPane.setStyle(
+                "-fx-tab-min-width:100px; -fx-tab-max-width:100px; -fx-tab-min-height:30px; -fx-tab-max-height:30px; -fx-font-size:14px; -fx-font-weight:bold;");
 
-        tabHome.setStyle("-fx-background-color: #008080; -fx-text-fill: white;");
-        tabProfile.setStyle("-fx-background-color: #2f4f4f; -fx-text-fill: white;");
-        tab3.setStyle("-fx-background-color: #2f4f4f; -fx-text-fill: white;");
-        tab4.setStyle("-fx-background-color: #2f4f4f; -fx-text-fill: white;");
-        tab5.setStyle("-fx-background-color: #2f4f4f; -fx-text-fill: white;");
+        tabHome.setStyle("-fx-background-color: "+color.BACKGROUND.getCode()+"; -fx-text-fill: white;");
+        tabProfile.setStyle("-fx-background-color: "+color.MAIN.getCode()+"; -fx-text-fill: white;");
+        tab3.setStyle("-fx-background-color: "+color.MAIN.getCode()+"; -fx-text-fill: white;");
+        tab4.setStyle("-fx-background-color: "+color.MAIN.getCode()+"; -fx-text-fill: white;");
+        tab5.setStyle("-fx-background-color: "+color.MAIN.getCode()+"; -fx-text-fill: white;");
 
         tabHome.selectedProperty().addListener((obs, wasSelected, isNowSelected) -> {
             if (isNowSelected) {
                 if ((!tabHistory.isEmpty() || tabHistory.peek() != tabPane.getSelectionModel().getSelectedItem())) {
                     tabHistory.push(tabPane.getSelectionModel().getSelectedItem());
                 }
-                tabHome.setStyle("-fx-background-color: #008080; -fx-text-fill: white;");
+                tabHome.setStyle("-fx-background-color: "+color.BACKGROUND.getCode()+"; -fx-text-fill: white;");
             } else {
-                tabHome.setStyle("-fx-background-color: #2f4f4f; -fx-text-fill: white;");
+                tabHome.setStyle("-fx-background-color: "+color.MAIN.getCode()+"; -fx-text-fill: white;");
             }
         });
         tabProfile.selectedProperty().addListener((obs, wasSelected, isNowSelected) -> {
@@ -172,9 +266,9 @@ public class Lantern extends Application {
                 if ((!tabHistory.isEmpty() || tabHistory.peek() != tabPane.getSelectionModel().getSelectedItem())) {
                     tabHistory.push(tabPane.getSelectionModel().getSelectedItem());
                 }
-                tabProfile.setStyle("-fx-background-color: #008080; -fx-text-fill: white;");
+                tabProfile.setStyle("-fx-background-color: "+color.BACKGROUND.getCode()+"; -fx-text-fill: white;");
             } else {
-                tabProfile.setStyle("-fx-background-color: #2f4f4f; -fx-text-fill: white;");
+                tabProfile.setStyle("-fx-background-color: "+color.MAIN.getCode()+"; -fx-text-fill: white;");
             }
         });
         tab3.selectedProperty().addListener((obs, wasSelected, isNowSelected) -> {
@@ -182,9 +276,9 @@ public class Lantern extends Application {
                 if ((!tabHistory.isEmpty() || tabHistory.peek() != tabPane.getSelectionModel().getSelectedItem())) {
                     tabHistory.push(tabPane.getSelectionModel().getSelectedItem());
                 }
-                tab3.setStyle("-fx-background-color: #008080; -fx-text-fill: white;");
+                tab3.setStyle("-fx-background-color: "+color.BACKGROUND.getCode()+"; -fx-text-fill: white;");
             } else {
-                tab3.setStyle("-fx-background-color: #2f4f4f; -fx-text-fill: white;");
+                tab3.setStyle("-fx-background-color: "+color.MAIN.getCode()+"; -fx-text-fill: white;");
             }
         });
         tab4.selectedProperty().addListener((obs, wasSelected, isNowSelected) -> {
@@ -192,9 +286,9 @@ public class Lantern extends Application {
                 if ((!tabHistory.isEmpty() || tabHistory.peek() != tabPane.getSelectionModel().getSelectedItem())) {
                     tabHistory.push(tabPane.getSelectionModel().getSelectedItem());
                 }
-                tab4.setStyle("-fx-background-color: #008080; -fx-text-fill: white;");
+                tab4.setStyle("-fx-background-color: "+color.BACKGROUND.getCode()+"; -fx-text-fill: white;");
             } else {
-                tab4.setStyle("-fx-background-color: #2f4f4f; -fx-text-fill: white;");
+                tab4.setStyle("-fx-background-color: "+color.MAIN.getCode()+"; -fx-text-fill: white;");
             }
         });
         tab5.selectedProperty().addListener((obs, wasSelected, isNowSelected) -> {
@@ -202,15 +296,15 @@ public class Lantern extends Application {
                 if ((!tabHistory.isEmpty() || tabHistory.peek() != tabPane.getSelectionModel().getSelectedItem())) {
                     tabHistory.push(tabPane.getSelectionModel().getSelectedItem());
                 }
-                tab5.setStyle("-fx-background-color: #008080; -fx-text-fill: white;");
+                tab5.setStyle("-fx-background-color: "+color.BACKGROUND.getCode()+"; -fx-text-fill: white;");
             } else {
-                tab5.setStyle("-fx-background-color: #2f4f4f; -fx-text-fill: white;");
+                tab5.setStyle("-fx-background-color: "+color.MAIN.getCode()+"; -fx-text-fill: white;");
             }
         });
 
         VBox layout1 = new VBox(10);
         layout1.getChildren().addAll(tabPane);
-        
+
         BorderPane pane1 = new BorderPane();
         pane1.setTop(backButton);
         pane1.setCenter(layout1);
@@ -219,11 +313,12 @@ public class Lantern extends Application {
 
         stg.setScene(scene1);
     }
-    public static void showScene1(Stage stg){
-        if(!history.isEmpty())
-        if(history.peek() != stg.getScene()){
-            history.push(stg.getScene());
-        }
+
+    public static void showScene1(Stage stg) {
+        if (!history.isEmpty())
+            if (history.peek() != stg.getScene()) {
+                history.push(stg.getScene());
+            }
         Button backButton = new Button("Back");
         Button nextButton = new Button("Next");
 
@@ -232,7 +327,7 @@ public class Lantern extends Application {
 
         VBox layout1 = new VBox(10);
         layout1.getChildren().addAll(new javafx.scene.control.Label("Scene 1"));
-        
+
         BorderPane pane1 = new BorderPane();
         pane1.setTop(backButton);
         pane1.setCenter(layout1);
@@ -243,8 +338,8 @@ public class Lantern extends Application {
         stg.setScene(scene1);
     }
 
-    public static void showScene2(Stage stg){
-        if(history.peek() != stg.getScene()){
+    public static void showScene2(Stage stg) {
+        if (history.peek() != stg.getScene()) {
             history.push(stg.getScene());
         }
         Button backButton = new Button("Back");
@@ -253,7 +348,7 @@ public class Lantern extends Application {
 
         VBox layout1 = new VBox(10);
         layout1.getChildren().addAll(new javafx.scene.control.Label("Scene 2"));
-        
+
         BorderPane pane1 = new BorderPane();
         pane1.setTop(backButton);
         pane1.setCenter(layout1);
@@ -263,20 +358,17 @@ public class Lantern extends Application {
         stg.setScene(scene1);
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    public static boolean goBack(Stage stg){
-        if(!history.isEmpty()){
+    public static boolean goBack(Stage stg) {
+        if (!history.isEmpty()) {
             stg.setScene(history.pop());
             return true;
         } else {
             return false;
         }
     }
-    public static boolean goBackTab(TabPane tabPane){
-        if(!tabHistory.isEmpty()){
+
+    public static boolean goBackTab(TabPane tabPane) {
+        if (!tabHistory.isEmpty()) {
             tabPane.getSelectionModel().select(tabHistory.pop());
             return true;
         } else {
@@ -284,10 +376,14 @@ public class Lantern extends Application {
         }
     }
 
-    public static void showSuccessScene(Stage primaryStage){
+    public static void showSuccessScene(Stage primaryStage) {
         VBox successLayout = new VBox(10);
-        successLayout.getChildren().addAll(new javafx.scene.control.Label("LOGIN SUCCESS") {{setFont(Font.font(30));}});
-        
+        successLayout.getChildren().addAll(new javafx.scene.control.Label("LOGIN SUCCESS") {
+            {
+                setFont(Font.font(30));
+            }
+        });
+
         BorderPane successPane = new BorderPane();
         successPane.setCenter(successLayout);
 
@@ -303,15 +399,15 @@ public class Lantern extends Application {
         }
     }
 
-    public static boolean checkLoginCredentials(String username, String password){
-        if(username.equals("a") && password.equals("a")){
+    public static boolean checkLoginCredentials(String username, String password) {
+        if (username.equals("a") && password.equals("a")) {
             return true;
         }
         return false;
     }
 
-    public static boolean checkRegisterCredentials(String username, String password, String role){
-        if(!(username.equals("a") && password.equals("a"))){
+    public static boolean checkRegisterCredentials(String username, String password, String role) {
+        if (!(username.equals("a") && password.equals("a"))) {
             return true;
         }
         return false;

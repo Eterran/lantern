@@ -1,4 +1,4 @@
 Use the following commands to compile and run
-javac --module-path lib --add-modules javafx.controls Lantern.java
+javac --module-path lib --add-modules javafx.controls Start.java
 
-java --module-path lib --add-modules javafx.controls Lantern
+java --module-path lib --add-modules javafx.controls Start
