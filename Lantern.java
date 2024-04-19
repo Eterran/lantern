@@ -31,7 +31,8 @@ import java.lang.Thread;
 public class Lantern extends Application {
     private static Deque<Scene> history = new ArrayDeque<Scene>();
     private static Deque<Tab> tabHistory = new ArrayDeque<Tab>();
-
+    //TODO: Implement user class
+    //private User user;
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Lantern");
@@ -215,12 +216,11 @@ public class Lantern extends Application {
         tab3.setClosable(false);
         tab4.setClosable(false);
         tab5.setClosable(false);
-        Label homeContent = new Label("Home Content");
-        homeContent.setStyle("-fx-background-color: " + color.BACKGROUND.getCode() + ";");
-        tabHome.setContent(homeContent);
-        Label profileContent = new Label("Profile Content");
-        profileContent.setStyle("-fx-background-color: " + color.BACKGROUND.getCode() + ";");
-        tabProfile.setContent(profileContent);
+
+        tabHome.setContent(loadHomeTab());
+        tabProfile.setContent(loadProfileTab());
+        
+        //TODO: Add content to tabs
         Label content3 = new Label("Content 3");
         content3.setStyle("-fx-background-color: " + color.BACKGROUND.getCode() + ";");
         tab3.setContent(content3);
@@ -229,7 +229,8 @@ public class Lantern extends Application {
         tab4.setContent(content4);
         Label content5 = new Label("Content 5");
         content5.setStyle("-fx-background-color: " + color.BACKGROUND.getCode() + ";");
-        tab5.setContent(content5);        
+        tab5.setContent(content5);
+
         tabHome.setStyle("-fx-min-width: 1000px, -fx-pref-width: 1000px;" + "-fx-min-height: 600px, -fx-pref-height: 600px;");
         tabProfile.setStyle("-fx-min-width: 1000px, -fx-pref-width: 1000px;" + "-fx-min-height: 600px, -fx-pref-height: 600px;");
         tab3.setStyle("-fx-min-width: 1000px, -fx-pref-width: 1000px;" + "-fx-min-height: 600px, -fx-pref-height: 600px;");
@@ -313,7 +314,63 @@ public class Lantern extends Application {
 
         stg.setScene(scene1);
     }
+    public static VBox loadHomeTab(){
+        VBox homeTab = new VBox(10);
+        Label homeContent = new Label("Home Content");
+        homeTab.setStyle("-fx-background-color: " + color.BACKGROUND.getCode() + ";");
+        homeTab.getChildren().add(homeContent);
+        return homeTab;
+    }
+    public static VBox loadProfileTab(){
+        VBox profileTab = new VBox(10);
+        Label profileLabel = new Label("Profile");
+        profileLabel.setFont(Font.font("Lato", FontWeight.BOLD, 30));
+        profileTab.setStyle("-fx-background-color: " + color.BACKGROUND.getCode() + ";");
+        profileTab.getChildren().add(profileLabel);
+        //TODO: Implement user class
+        Insets padding = new Insets(10, 10, 10, 10);
+        HBox usernameBox = createInfoBox("Username: ", "JohnDoe", padding);
+        HBox roleBox = createInfoBox("Role: ", "Student", padding);
+        HBox emailBox = createInfoBox("Email: ", "", padding);
+        HBox locationCoordinateBox = createInfoBox("Location: ", "", padding);
+        profileTab.getChildren().addAll(usernameBox, roleBox, emailBox, locationCoordinateBox);
 
+        if(AccessManager.hasAccess("Student", AccessManager.ContentType.STUDENT)){
+            Label studentLabel = new Label("Students");
+            profileTab.getChildren().add(studentLabel);
+            //TODO access database
+            HBox pointBox = createInfoBox("Points", "3", 10);
+            //TODO FRIENDS
+            VBox friendBox = new VBox(10);
+            
+            profileTab.getChildren().addAll(pointBox, friendBox);
+        } else if(AccessManager.hasAccess("Educator", AccessManager.ContentType.EDUCATOR)){
+            Label educatorLabel = new Label("Educators");
+            profileTab.getChildren().add(educatorLabel);
+            HBox quizBox = new HBox(10);
+            HBox eventBox = new HBox(10);
+            Text quizCreated = new Text("Quizzes Created: ");
+            Text eventCreated = new Text("Events Created: ");
+            //TODO access database 
+            Text quizCount = new Text("5");
+            Text eventCount = new Text("3");
+            quizBox.getChildren().addAll(quizCreated, quizCount);
+            eventBox.getChildren().addAll(eventCreated, eventCount);
+            profileTab.getChildren().addAll(quizBox, eventBox);
+        } else if(AccessManager.hasAccess("Parent", AccessManager.ContentType.PARENT)){
+            Label parentLabel = new Label("Parents");
+            profileTab.getChildren().add(parentLabel);
+            HBox bookingBox = new HBox(10);
+            Text bookingMade = new Text("Bookings Made: ");
+            //TODO access database 
+            Text bookingCount = new Text("5");
+            bookingBox.getChildren().addAll(bookingMade, bookingCount);
+            profileTab.getChildren().add(bookingBox);
+        } else {
+            profileTab.getChildren().add(new Label("No Profile Information"));
+        }
+        return profileTab;
+    }
     public static void showScene1(Stage stg) {
         if (!history.isEmpty())
             if (history.peek() != stg.getScene()) {
@@ -323,7 +380,7 @@ public class Lantern extends Application {
         Button nextButton = new Button("Next");
 
         backButton.setOnAction(e -> goBack(stg));
-        nextButton.setOnAction(e -> showScene2(stg));
+        //nextButton.setOnAction(e -> showScene2(stg));
 
         VBox layout1 = new VBox(10);
         layout1.getChildren().addAll(new javafx.scene.control.Label("Scene 1"));
@@ -332,26 +389,6 @@ public class Lantern extends Application {
         pane1.setTop(backButton);
         pane1.setCenter(layout1);
         pane1.setBottom(nextButton);
-
-        Scene scene1 = new Scene(pane1, 500, 450);
-
-        stg.setScene(scene1);
-    }
-
-    public static void showScene2(Stage stg) {
-        if (history.peek() != stg.getScene()) {
-            history.push(stg.getScene());
-        }
-        Button backButton = new Button("Back");
-
-        backButton.setOnAction(e -> goBack(stg));
-
-        VBox layout1 = new VBox(10);
-        layout1.getChildren().addAll(new javafx.scene.control.Label("Scene 2"));
-
-        BorderPane pane1 = new BorderPane();
-        pane1.setTop(backButton);
-        pane1.setCenter(layout1);
 
         Scene scene1 = new Scene(pane1, 500, 450);
 
@@ -377,7 +414,8 @@ public class Lantern extends Application {
     }
 
     public static void showSuccessScene(Stage primaryStage) {
-        VBox successLayout = new VBox(10);
+        VBox successLayout = new VBox(50);
+        successLayout.setAlignment(Pos.CENTER);
         successLayout.getChildren().addAll(new javafx.scene.control.Label("LOGIN SUCCESS") {
             {
                 setFont(Font.font(30));
@@ -411,5 +449,20 @@ public class Lantern extends Application {
             return true;
         }
         return false;
+    }
+    private static HBox createInfoBox(String labelText, String valueText, int spacing) {
+        Text label = new Text(labelText);
+        Text value = new Text(valueText);
+        HBox infoBox = new HBox(spacing);
+        infoBox.getChildren().addAll(label, value);
+        return infoBox;
+    }
+    private static HBox createInfoBox(String labelText, String valueText, Insets spacing) {
+        Text label = new Text(labelText);
+        Text value = new Text(valueText);
+        HBox infoBox = new HBox(0);
+        infoBox.setPadding(spacing);
+        infoBox.getChildren().addAll(label, value);
+        return infoBox;
     }
 }
