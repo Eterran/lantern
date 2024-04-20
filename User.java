@@ -15,7 +15,7 @@ public class User {
     public double points;
     public ArrayList<String>parents=new ArrayList<>();
     public ArrayList<String>childrens=new ArrayList<>();
-    
+
     
     public void userData(int id){
     String sql = "SELECT email,username ,password,role,coordinate,point FROM user WHERE id = ?";
