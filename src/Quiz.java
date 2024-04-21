@@ -3,14 +3,16 @@ public class Quiz {
     protected String description;
     protected String theme;
     protected String content;
+    protected int numOfQuizCreated;
     private boolean completed;
     
-    public Quiz(String quizTitle,String description,String theme,String content){
+    public Quiz(String quizTitle,String description,String theme,String content, int numOfQuizCreated){
         this.quizTitle= quizTitle;
         this.description= description;
         this.theme= theme;
         this.content= content;
         this.completed = false;
+        this.numOfQuizCreated = numOfQuizCreated;
     }
 
     public String getQuizTitle() {
@@ -52,6 +54,9 @@ public class Quiz {
     public void setCompleted(boolean completed) {
         this.completed = completed;
     }
+    public int getNumOfQuizCreate() {
+        return numOfQuizCreate;
+    }
 
     @Override
     public String toString() {
@@ -61,6 +66,7 @@ public class Quiz {
                 ", theme='" + theme + '\'' +
                 ", content='" + content + '\'' +
                 ", completed=" + completed +
+                ", numOfQuizCreate=" + numOfQuizCreate +
                 '}';
     }
 }
