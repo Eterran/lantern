@@ -9,12 +9,11 @@ public class Main {
     List<Quiz> completedQuizzes = new ArrayList<>();
     static List<Educators> educatorsList = new ArrayList<>();
     private static Scanner sc = new Scanner(System.in);
+    private static int numOfEventCreated = 0;
+    private static int numOfQuizCreated = 0;
     private  int points;
     public static void main(String[] args) {
-        Educators educator = new Educators();
-        educatorsList.add(educator);
-        accessCreateEventPage(eventList);
-        accessCreateQuizPage(quizzes);
+        
 
     }
 
@@ -78,6 +77,7 @@ public class Main {
 
         Event newEvent = new Event(eventTitle, descrip, venue, date, time);
         eventList.add(newEvent);
+        numOfEventCreated++;
         System.out.println("Event added successfully!");
     }
     private static void accessCreateQuizPage(List<Quiz> quizzes){
@@ -92,6 +92,7 @@ public class Main {
 
         Quiz newQuiz = new Quiz(quizTitle, description, theme, content);
         quizzes.add(newQuiz);
+        numOfQuizCreated++;
         System.out.println("Quiz added successfully!");
     }
     public void viewQuizzes(List<Quiz> quizzes){
