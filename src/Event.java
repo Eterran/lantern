@@ -4,13 +4,15 @@ public class Event {
     protected String venue;
     protected String date;
     protected String time;
+    protected int numOfEventCreated;
     
-    public Event(String eventTitle, String description, String venue, String date, String time){
+    public Event(String eventTitle, String description, String venue, String date, String time, int numOfEventCreated){
         this.eventTitle=eventTitle;
         this.description=description;
         this.venue=venue;
         this.date=date;
         this.time=time;
+        this.numOfEventCreated=numOfEventCreated;
     }
 
     public String getEventTitle() {
@@ -51,5 +53,20 @@ public class Event {
 
     public void setTime(String time) {
         this.time = time;
+    }
+    public int getNumOfEventCreated() {
+        return numOfEventCreated;
+    }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "eventTitle='" + eventTitle + '\'' +
+                ", description='" + description + '\'' +
+                ", venue='" + venue + '\'' +
+                ", date='" + date + '\'' +
+                ", time='" + time + '\'' +
+                ", numOfEventCreated=" + numOfEventCreated +
+                '}';
     }
 }
