@@ -16,7 +16,7 @@ import java.sql.*;
 
 /*public class Database {
     public static void main(String[] args) {
-        String databasePath = "jdbc:sqlite:C:\\sqlite\\sqlite3\\database.db";
+        String databasePath = "jdbc:sqlite:.\\database.db";
 
         try {
             // Establish connection to the SQLite database
