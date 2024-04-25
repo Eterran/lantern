@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package assignment.ds;
+package Database;
 
 /**
  *
@@ -11,7 +11,7 @@ package assignment.ds;
 import java.util.*;
 import java.sql.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-public class Login_Register_Gui {
+public class Login_Register {
     
     
     
