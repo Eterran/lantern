@@ -11,6 +11,8 @@ package assignment.ds;
 import java.util.*;
 import java.sql.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import Database.Database;
 public class LoginRegister {
     
     public int choose(){
