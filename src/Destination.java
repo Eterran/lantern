@@ -2,6 +2,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.ArrayList;
+import Database；
 
 public class Destination {
     private ArrayList<String> destinations;
@@ -19,7 +20,7 @@ public class Destination {
 
     private void readDataFromFile() {
         try {
-            Scanner s = new Scanner(new FileInputStream("booking.txt"));
+            Scanner s = new Scanner(new FileInputStream("Eterran/lantern/Booking.txt"));
 
             while (s.hasNextLine()) {
                 size++;
@@ -96,10 +97,9 @@ public class Destination {
             }
         }
 
-        // Print suggested destinations
-        System.out.println("Suggested destinations in ascending order of distance:");
+     //   System.out.println("Suggested destinations in ascending order of distance:");
         for (int i = 0; i < destinations.size(); i++) {
-            System.out.println(destinations.get(i) + " - Distance: " + distances.get(i));
+          //  System.out.println(destinations.get(i) + " - Distance: " + distances.get(i));
         }
     }
 }

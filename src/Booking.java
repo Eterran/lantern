@@ -1,81 +1,68 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import Database;
+
 
 public class Booking {
-    private int bookingId;
-    private String bookingDate;
-    private String eventName;
-    private String venue;
-    private String eventDate;
-    private User user; // The user who made the booking
+    private User user;
 
-    // Constructor
-    public Booking(int bookingId, String bookingDate, String eventName, String venue, String eventDate, User user) {
-        this.bookingId = bookingId;
-        this.bookingDate = bookingDate;
-        this.eventName = eventName;
-        this.venue = venue;
-        this.eventDate = eventDate;
-        this.user = user;
+    try{
+        Database database=new Database();
+        Connection connection=database.connectionDatabase();
+    }catch(SQLExeption e){
+        e.printStackTrace;
     }
 
-    // Getters and setters
-    public int getBookingId() {
-        return bookingId;
+    public Booking(User user, Double x1, Double y1){
+        Destination suggestion = new Destination();
+
+        suggestDestinations(x1, y1);
+
+        displayAvailableTimeSlots(user.getBookingDate);
     }
 
-    public void setBookingId(int bookingId) {
-        this.bookingId = bookingId;
+    public void displayAvailableTimeSlots(String selectedDate) {
+        try {
+            Date selected = new SimpleDateFormat("dd/MM/yyyy").parse(selectedDate);
+
+           // System.out.println("Available Time Slots:");
+            List<Date> availableDates = getAvailableDates(selected);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            for (int i = 0; i < availableDates.size(); i++) {
+                System.out.printf("[%d] %s%n", i + 1, dateFormat.format(availableDates.get(i)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public String getBookingDate() {
-        return bookingDate;
+    private List<Date> getAvailableDates(Date selectedDate) {
+        List<Date> availableDates = new ArrayList<>();
+        try (Connection connection = database.connectDatabase();
+             PreparedStatement statement = connection.prepareStatement("SELECT event_date FROM events")) {
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Date eventDate = resultSet.getDate("event_date");
+                    if (!isSameDay(selectedDate, eventDate) && !eventDate.before(selectedDate)) {
+                        availableDates.add(eventDate);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return availableDates;
     }
 
-    public void setBookingDate(String bookingDate) {
-        this.bookingDate = bookingDate;
+    private boolean isSameDay(Date date1, Date date2) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        return dateFormat.format(date1).equals(dateFormat.format(date2));
     }
 
-    public String getEventName() {
-        return eventName;
-    }
-
-    public void setEventName(String eventName) {
-        this.eventName = eventName;
-    }
-
-    public String getVenue() {
-        return venue;
-    }
-
-    public void setVenue(String venue) {
-        this.venue = venue;
-    }
-
-    public String getEventDate() {
-        return eventDate;
-    }
-
-    public void setEventDate(String eventDate) {
-        this.eventDate = eventDate;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    // Override toString method for easy printing
-    @Override
-    public String toString() {
-        return "Booking{" +
-                "bookingId=" + bookingId +
-                ", bookingDate=" + bookingDate +
-                ", eventName='" + eventName + '\'' +
-                ", venue='" + venue + '\'' +
-                ", eventDate=" + eventDate +
-                ", user=" + user.getUsername() + // Print username for user who made the booking
-                '}';
-    }
 }

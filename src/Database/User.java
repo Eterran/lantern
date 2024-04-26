@@ -11,7 +11,8 @@ package Database;
 import java.util.*;
 import java.sql.*;
 public class User {
-    public String email,username,password,role,coordinate;
+    public String email,username,password,role;
+    public double x,y;
     public double points;
     public ArrayList<String>parents=new ArrayList<>();
     public ArrayList<String>childrens=new ArrayList<>();
@@ -30,7 +31,8 @@ public class User {
         username=resultSet.getString("username");
         password=resultSet.getString("password");
         role=resultSet.getString("role");
-        coordinate=resultSet.getString("coordinate");
+        x=resultSet.getDouble("x");
+        y=resultSet.getDouble("y");
         points=resultSet.getDouble("point");
      }
      getParents(connection,id);
@@ -89,8 +91,11 @@ public class User {
      public String getPassword(){
      return password;}
      
-     public String getCoordinate(){
-     return coordinate;}
+     public Double getXCoordinate(){
+     return x;}
+
+     public Double getYCoordinate(){
+     return y;}
      
      public String getRole(){
      return role;}
