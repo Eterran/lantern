@@ -1,0 +1,5 @@
+.background {
+    -fx-background-image: url('assets/lantern_background.jpg');
+    -fx-background-size: cover;
+    -fx-background-color: rgba(121, 53, 53, 0.7);
+}

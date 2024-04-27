@@ -1,4 +1,9 @@
 Use the following commands to compile and run
-javac --module-path lib --add-modules javafx.controls Start.java
+cd to src if your directory isnt at src already:
+cd src
 
-java --module-path lib --add-modules javafx.controls Start
+To compile:
+javac -d ../bin --module-path ../lib --add-modules javafx.controls ./Start.java
+
+To run:
+java --module-path ../lib --add-modules javafx.controls -cp ../bin Start

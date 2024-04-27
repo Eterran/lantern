@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
@@ -20,6 +21,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
@@ -119,12 +121,11 @@ public class Lantern extends Application {
         rootBox.getChildren().addAll(labelBox, inputBox, buttonBox);
 
         StackPane rootPane = new StackPane();
-        rootPane.setStyle("-fx-background-image: url('assets/lantern_background.jpg'); "
-                + "-fx-background-size: cover; "
-                + "-fx-background-color: rgba(255, 255, 255, 0.7);");
+        rootPane.getStyleClass().add("background");
         rootPane.getChildren().add(rootBox);
 
         Scene scene = new Scene(rootPane, 800, 500);
+        scene.getStylesheets().add("resources/style.css");
         stg.setScene(scene);
         history.push(stg.getScene());
     }
