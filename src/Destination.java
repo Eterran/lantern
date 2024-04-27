@@ -2,7 +2,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.ArrayList;
-import Database；
+import Database.Database;
 
 public class Destination {
     private ArrayList<String> destinations;
