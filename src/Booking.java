@@ -7,32 +7,32 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import com.example.Database;
+import Database.User;
 
 public class Booking {
     private User user;
-    private Database database; 
+    private Date currentdate;
+    private int destinationid;
 
     
-    public Booking(User user) {
+    public Booking(User user, Date date, int destinationid) {
         this.user = user;
-        this.database = new Database(); 
-        try {
-            Destination suggestion = new Destination();
-            suggestion.suggestDestinations(user.getXCoordinate(), user.getYCoordinate()); 
-            displayAvailableTimeSlots(user.getBookingDate()); 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        this.currentdate = date;
+        this.destinationid = destinationid;
+            BookingSystem suggestion = new BookingSystem();
+            ArrayList<Destination> destinations = suggestion.suggestDestinations(user.getXCoordinate(), user.getYCoordinate()); 
+            ArrayList<String> availableDates = suggestion.getTimeSlots(destinationid, date, user);
+                         
     }
+    
 
+    /* 
     public void displayAvailableTimeSlots(String selectedDate) {
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             Date selected = dateFormat.parse(selectedDate);
 
-            List<Date> availableDates = getAvailableDates(selected);
+            ArrayList<Date> availableDates = getAvailableDates(selected);
             System.out.println("Available Time Slots:");
             for (int i = 0; i < availableDates.size(); i++) {
                 System.out.printf("[%d] %s%n", i + 1, dateFormat.format(availableDates.get(i)));
@@ -43,6 +43,7 @@ public class Booking {
         }
     }
 
+    
     
     private List<Date> getAvailableDates(Date selectedDate) throws SQLException {
         List<Date> availableDates = new ArrayList<>();
@@ -66,4 +67,5 @@ public class Booking {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         return sdf.format(date1).equals(sdf.format(date2));
     }
+    */
 }
