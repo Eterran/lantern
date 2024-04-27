@@ -1,4 +1,5 @@
 package GUI;
+
 public class AccessManager {
     public static boolean hasAccess(String userType, ContentType contentKey) {
         if ("Educator".equals(userType) && ContentType.EDUCATOR.equals(contentKey)) {

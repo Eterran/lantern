@@ -1,4 +1,5 @@
 package GUI;
+
 public enum color {
     MAIN("#FF8F00"),
     ACCENT("#FDB85F"),
