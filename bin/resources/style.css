@@ -1,5 +1,5 @@
 .background {
-    -fx-background-image: url('assets/lantern_background.jpg');
+    -fx-background-image: url('./assets/lantern_background.jpg');
     -fx-background-size: cover;
-    -fx-background-color: rgba(121, 53, 53, 0.7);
+    -fx-background-color: rgba(165, 106, 106, 0.5);
 }

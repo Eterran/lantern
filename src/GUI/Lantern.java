@@ -2,7 +2,9 @@ package GUI;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
@@ -25,6 +27,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
+import javafx.scene.control.SplitPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.control.ComboBox;
@@ -198,18 +201,19 @@ public class Lantern extends Application {
                 .setBackground(new Background(new BackgroundFill(Color.SANDYBROWN, CornerRadii.EMPTY, Insets.EMPTY)));
         // root.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,
         // CornerRadii.EMPTY, Insets.EMPTY)));
-        backgroundPane.setStyle("-fx-background-image: url('assets/lantern_background.jpg'); "
-                + "-fx-background-size: cover; " + "-fx-opacity: 0.7;");
+        backgroundPane.getStyleClass().add("background");
 
         root.getChildren().add(backgroundPane);
         root.getChildren().add(vbox);
 
         Scene scene = new Scene(root, 800, 500);
+        scene.getStylesheets().add("resources/style.css");
         stg.setScene(scene);
     }
 
     public static void showHomeScene(Stage stg) {
         history.clear();
+        BorderPane root = new BorderPane();
         Button backButton = new Button("Back");
         TabPane tabPane = new TabPane();
         Tab tabHome = new Tab("Home");
@@ -312,11 +316,10 @@ public class Lantern extends Application {
         VBox layout1 = new VBox(10);
         layout1.getChildren().addAll(tabPane);
 
-        BorderPane pane1 = new BorderPane();
-        pane1.setTop(backButton);
-        pane1.setCenter(layout1);
+        root.setLeft(layout1);
+        root.setTop(backButton);
 
-        Scene scene1 = new Scene(pane1, 1000, 650);
+        Scene scene1 = new Scene(root, 1000, 650);
 
         stg.setScene(scene1);
     }
