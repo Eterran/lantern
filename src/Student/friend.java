@@ -13,7 +13,7 @@ import java.util.*;
 public class friend {
     
     public boolean checkExistingFriend(Connection connection ,String Friendname,String username ){
-        Login_Register_Gui lg=new Login_Register_Gui();
+        Login_Register lg=new Login_Register();
         boolean check=false;
         int id =lg.getID(username, connection);
      try{
@@ -37,7 +37,7 @@ public class friend {
     
     
     public void friendRequest(Connection connection,String friendName,String username){
-        Login_Register_Gui lg=new Login_Register_Gui();
+        Login_Register lg=new Login_Register();
         int id =lg.getID(username, connection);
      try{
        String query = "INSERT INTO friends(pending,main_id) VALUES (?,?)";
@@ -54,7 +54,7 @@ public class friend {
     
      public int getFriendId(Connection connection ,String friendName,String username ){
         
-        Login_Register_Gui lg=new Login_Register_Gui();
+        Login_Register lg=new Login_Register();
         int id =lg.getID(username, connection);
         int userId=0;
      try{
@@ -77,7 +77,7 @@ public class friend {
     
     public void acceptFriend(Connection connection,String friendName,String username){
         int id=getFriendId(connection,friendName,username);
-        Login_Register_Gui lr=new Login_Register_Gui();
+        Login_Register lr=new Login_Register();
         int main_id=lr.getID(username, connection);
     try{
        String query = "UPDATE friends SET complete=?,pending=? WHERE id=?";
@@ -100,7 +100,7 @@ public class friend {
     }
     
     public ArrayList<String> showPending(Connection connection,String username){
-        Login_Register_Gui lr=new Login_Register_Gui();
+        Login_Register lr=new Login_Register();
         int main_id=lr.getID(username, connection);
         ArrayList <String>list=new ArrayList<>();
          try{
@@ -126,7 +126,7 @@ public class friend {
     }
     
     public ArrayList<String> showFriend(Connection connection,String username){
-        Login_Register_Gui lr=new Login_Register_Gui();
+        Login_Register lr=new Login_Register();
         int main_id=lr.getID(username, connection);
         ArrayList <String>list=new ArrayList<>();
          try{
