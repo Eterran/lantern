@@ -31,7 +31,7 @@ public class Login_Register {
         user.userData(id);
         boolean comfirmPw=passwordEncoder.matches(pw,user.password);
         if ((name_email.equalsIgnoreCase(user.username)&&comfirmPw)||(name_email.equalsIgnoreCase(user.email)&&comfirmPw)){
-            glb.updateXpState(connection, id);
+            //glb.updateXpState(connection, id);
         return true ;
         }
         else {
@@ -90,7 +90,7 @@ public class Login_Register {
         }
         
          id =getID(username,connection);
-        glb.insertXpState(connection, id);
+        //glb.insertXpState(connection, id);
         insertParent(connection,id,parent);
         insertChildren(connection,id,children);
         
