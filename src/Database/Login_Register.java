@@ -11,7 +11,7 @@ package Database;
 import java.util.*;
 import java.sql.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-public class Login_Register_Gui {
+public class Login_Register {
     
     
     int id =0;
