@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #000000;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="globalLController">
+   <children>
+      <BorderPane fx:id="leaderBoardPane" prefHeight="81.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <center>
+            <Label fx:id="gLTitle" alignment="CENTER" contentDisplay="CENTER" prefHeight="75.0" prefWidth="387.0" style="-fx-text-fill: #FFFFFF;" text="Global Leaderbaord" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="Arial Black" size="36.0" />
+               </font>
+            </Label>
+         </center>
+      </BorderPane>
+      <TableView fx:id="LeaderboardTable" layoutX="60.0" layoutY="88.0" prefHeight="270.0" prefWidth="487.0" style="-fx-background-color: #ADD8E6;" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="90.0">
+        <columns>
+          <TableColumn fx:id="rank" maxWidth="1.7976931348623157E308" minWidth="33.0" prefWidth="99.99996948242188" resizable="false" sortType="DESCENDING" text="Rank" />
+          <TableColumn fx:id="username" maxWidth="1.7976931348623157E308" minWidth="33.0" prefWidth="225.3333740234375" resizable="false" sortType="DESCENDING" text="Username" />
+            <TableColumn fx:id="points" maxWidth="1.7976931348623157E308" minWidth="33.0" prefWidth="133.99996948242188" resizable="false" sortType="DESCENDING" text="Points" />
+        </columns>
+      </TableView>
+   </children>
+   <opaqueInsets>
+      <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+   </opaqueInsets>
+</AnchorPane>
