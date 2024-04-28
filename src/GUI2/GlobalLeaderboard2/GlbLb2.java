@@ -12,7 +12,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 //Problem: No of ListView must be depends on the number of students
-public class Gui extends Application {
+public class GlbLb2 extends Application {
 
     public static void main(String[] args) {
         launch(args);
