@@ -316,7 +316,7 @@ public class Lantern extends Application {
         VBox layout1 = new VBox(10);
         layout1.getChildren().addAll(tabPane);
 
-        root.setLeft(layout1);
+        root.setCenter(layout1);
         root.setTop(backButton);
 
         Scene scene1 = new Scene(root, 1000, 650);
