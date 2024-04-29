@@ -55,7 +55,7 @@ public class Quiz {
         this.completed = completed;
     }
     public int getNumOfQuizCreate() {
-        return numOfQuizCreate;
+        return numOfQuizCreated;
     }
 
     @Override

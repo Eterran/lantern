@@ -10,6 +10,7 @@ package Database;
  */
 import java.util.*;
 import java.sql.*;
+import Student.GlobalLeaderBoard;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class Login_Register {
     

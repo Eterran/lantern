@@ -10,6 +10,7 @@ package Student;
  */
 import java.sql.*;
 import java.util.*;
+import Database.Login_Register;
 public class friend {
     
     public boolean checkExistingFriend(Connection connection ,String Friendname,String username ){
