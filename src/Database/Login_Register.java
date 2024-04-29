@@ -14,14 +14,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class Login_Register {
     
     
-    
+    int id =0;
     public boolean login(String name_email,String pw,Connection connection)throws SQLException{
         User user=new User();
-        //GlobalLeaderBoard glb=new GlobalLeaderBoard();
+        GlobalLeaderBoard glb=new GlobalLeaderBoard();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         Database database=new Database();
         //Connection connection=database.connectionDatabase();
-        int id =0;
+        
          Random rand=new Random();
         int x_coordinate=rand.nextInt(1001)-500;
         int y_coordinate=rand.nextInt(1001)-500;
@@ -31,6 +31,7 @@ public class Login_Register {
         user.userData(id);
         boolean comfirmPw=passwordEncoder.matches(pw,user.password);
         if ((name_email.equalsIgnoreCase(user.username)&&comfirmPw)||(name_email.equalsIgnoreCase(user.email)&&comfirmPw)){
+            //glb.updateXpState(connection, id);
         return true ;
         }
         else {
@@ -38,7 +39,9 @@ public class Login_Register {
          }
         }
          
-        
+        public int getId(){
+        return id;
+        }
         
         
         
@@ -48,7 +51,7 @@ public class Login_Register {
         Database database=new Database();
         Random rand=new Random();
         Connection connection=database.connectionDatabase();
-        
+        GlobalLeaderBoard glb=new GlobalLeaderBoard();
         String encyrptPw=encrypt(password);
         int x_coordinate=rand.nextInt(1001)-500;
         int y_coordinate=rand.nextInt(1001)-500;
@@ -85,7 +88,9 @@ public class Login_Register {
         catch(SQLException e){
             e.printStackTrace();
         }
-        int id =getID(username,connection);
+        
+         id =getID(username,connection);
+        //glb.insertXpState(connection, id);
         insertParent(connection,id,parent);
         insertChildren(connection,id,children);
         
@@ -97,9 +102,9 @@ public class Login_Register {
     return passwordEncoder.encode(password);
     }
     
-    public static int getID(String name_email, Connection connection){
-        int id=0 ;
-    String query = "SELECT id FROM users WHERE username=? OR email=?";
+    public int getID(String name_email, Connection connection){
+        int Id=0 ;
+    String query = "SELECT id FROM user WHERE username=? OR email=?";
 
     try{
     PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -107,15 +112,15 @@ public class Login_Register {
       preparedStatement.setString(2, name_email);
     ResultSet resultSet = preparedStatement.executeQuery();
       if (resultSet.next()) {
-        id = resultSet.getInt("id");
-        System.out.println("ID found: " + id);
+        Id = resultSet.getInt("id");
+        System.out.println("ID found: " + Id);
     } else {
         System.out.println("No ID found for the given name and email.");
     }
     }
     catch (SQLException e){
         e.printStackTrace();}
-    return id;
+    return Id;
     }
     
     
