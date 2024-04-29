@@ -215,15 +215,17 @@ public class Lantern extends Application {
         history.clear();
         BorderPane root = new BorderPane();
         Button backButton = new Button("Back");
-        HBox layout1 = new HBox(10);
+        HBox layout1 = new HBox();
+        layout1.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        layout1.setBackground(new Background(new BackgroundFill(Color.web(color.BACKGROUND.getCode()), new CornerRadii(0), Insets.EMPTY)));
         VBox tabs = new VBox(10);
         BorderStroke borderStroke = new BorderStroke(
-            Paint.valueOf("#8B0000"),
+            Paint.valueOf(color.SIDEBAR.getCode()),
             BorderStrokeStyle.SOLID,
             new CornerRadii(0),
             new BorderWidths(1)
         );
-        tabs.setBackground(new Background(new BackgroundFill(Color.web(color.SIDEBAR.getCode()), new CornerRadii(5), Insets.EMPTY)));
+        tabs.setBackground(new Background(new BackgroundFill(Color.web(color.SIDEBAR.getCode()), new CornerRadii(0), Insets.EMPTY)));
         Border border = new Border(borderStroke);
 
         tabs.setBorder(border);
@@ -418,6 +420,7 @@ public class Lantern extends Application {
         profileLabel.setFont(Font.font("Lato", FontWeight.BOLD, 30));
         profileTab.setStyle("-fx-background-color: " + color.BACKGROUND.getCode() + ";");
         profileTab.getChildren().add(profileLabel);
+        profileTab.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         //TODO: Implement user class
         Insets padding = new Insets(10, 10, 10, 10);
         HBox usernameBox = createInfoBox("Username: ", "JohnDoe", padding);
