@@ -66,7 +66,7 @@ public class Quiz {
                 ", theme='" + theme + '\'' +
                 ", content='" + content + '\'' +
                 ", completed=" + completed +
-                ", numOfQuizCreate=" + numOfQuizCreate +
+                ", numOfQuizCreate=" + numOfQuizCreated +
                 '}';
     }
 }
