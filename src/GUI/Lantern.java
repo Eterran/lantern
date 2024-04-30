@@ -49,7 +49,8 @@ public class Lantern extends Application {
         return history.pop();
     }
     public static void Push_History(Scene scene){
-        history.push(scene);
+        if(history.peek() != scene)
+            history.push(scene);
     }
     public static boolean History_isEmpty(){
         return history.isEmpty();
@@ -65,7 +66,8 @@ public class Lantern extends Application {
         return tabHistory.pop();
     }
     public static void Push_TabHistory(Tab tab){
-        tabHistory.push(tab);
+        if(tabHistory.peek() != tab)
+            tabHistory.push(tab);
     }
     public static boolean TabHistory_isEmpty(){
         return tabHistory.isEmpty();
