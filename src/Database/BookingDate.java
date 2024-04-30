@@ -16,7 +16,7 @@ public class BookingDate {
     
     
     public void insertDate(Connection connection,String date,String username){
-         Login_Register_Gui lg=new Login_Register_Gui();
+         Login_Register lg=new Login_Register();
         int id =lg.getID(username, connection);
      String sql = "INSERT INTO BookingDate(main_id, bookingDate) VALUES (?, ?)";
       try{
@@ -32,7 +32,7 @@ public class BookingDate {
     }
     
     public void updateDate(Connection connection,String date,String username){
-    Login_Register_Gui lg=new Login_Register_Gui();
+    Login_Register lg=new Login_Register();
         int id =lg.getID(username, connection);
      String sql = "UPDATE BookingDate SET bookingDate=? WHERE main_id=?";
       try{
@@ -50,7 +50,7 @@ public class BookingDate {
     //false mean no same date
     public boolean checkExistingDate(Connection connection,String username,String Date){
         ArrayList<String>datesList=new ArrayList<>();
-        Login_Register_Gui lg=new Login_Register_Gui();
+        Login_Register lg=new Login_Register();
         int id =lg.getID(username, connection);
     String query = "SELECT bookingDate FROM BookingDate WHERE main_id=?";
     try{
@@ -79,7 +79,7 @@ public class BookingDate {
     //datesList contain all the bookingdate made by user
     public ArrayList<String> viewDate(Connection connection,String username){
      ArrayList<String>datesList=new ArrayList<>();
-        Login_Register_Gui lg=new Login_Register_Gui();
+        Login_Register lg=new Login_Register();
         int id =lg.getID(username, connection);
     String query = "SELECT bookingDate FROM BookingDate WHERE main_id=?";
     try{
