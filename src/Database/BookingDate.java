@@ -96,4 +96,22 @@ public class BookingDate {
       }
     return datesList;
     }
+
+    public ArrayList<String>allDateBooked(Connection connection){
+    
+     ArrayList<String>datesList=new ArrayList<>();
+       
+    String query = "SELECT bookingDate FROM BookingDate ";
+    try{
+      Statement stm = connection.createStatement();
+     ResultSet result= stm.executeQuery(query);
+     while(result.next()){
+     datesList.add(result.getString("bookingDate"));
+     }
+      }
+      
+      catch(SQLException e){
+      e.printStackTrace();
+      }
+    return datesList;}
 }
