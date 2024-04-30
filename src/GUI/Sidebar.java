@@ -2,6 +2,7 @@ package GUI;
 
 import java.util.Stack;
 
+import GUI.GlobalLeaderboard1.GlobalLBgui;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -49,7 +50,7 @@ public class Sidebar {
         Button tab4 = null;
         Button tab5 = null;
         VBox profileBox = Profile.loadProfileTab();
-        VBox discussionBox = new VBox(10);
+        VBox discussionBox = EducatorCreateQuiz.tabCreateQuiz();
         VBox leaderboardBox = new VBox(10);
         VBox box4 = new VBox(10);
         VBox box5 = new VBox(10);

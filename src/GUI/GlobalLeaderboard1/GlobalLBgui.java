@@ -1,6 +1,7 @@
-package GUI2.GlobalLeaderboard2;
-import javafx.application.Application;
-import javafx.scene.Scene;
+package GUI.GlobalLeaderboard1;
+import java.io.IOException;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
@@ -9,26 +10,40 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
 
-//Problem: No of ListView must be depends on the number of students
-public class GlbLb2 extends Application {
+//find the launch.json file in .vscode then paste your JavaFX SDK path to run
+public class GlobalLBgui {
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+    // public static void main(String[] args) {
+    //     launch(args);
+    // }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
+    // @Override
+    // public void start(Stage primaryStage) throws Exception {
+      
+    //     Scene scene = new Scene(loadGL());
+    //     primaryStage.setResizable(true);
+    //     primaryStage.setTitle("Global Leaderboard");
+    //     primaryStage.setScene(scene);
+    //     primaryStage.show();
+
+    // }
+    public  VBox loadGL() throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("GLScene.fxml"));
+        Parent root = loader.load();
+
+        // Set the controller for the FXML file
+        globalLController controller = loader.getController();
         
-        Scene scene = new Scene(loadGL(), 600, 500);
-        primaryStage.setTitle("Global Leaderboard");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    
+        VBox vbox = new VBox();
+        vbox.setStyle("-fx-background-color:black"); 
+        vbox.getChildren().add(root); 
+        
+        
+        return vbox;
     }
-    
-    public static VBox loadGL(){
+
+    public static VBox loadGL1(){
         Label title = new Label("Global Leaderboard") ;
         HBox titleBox = new HBox(title);
         title.setFont(Font.font("Lato", FontWeight.BOLD, 30));

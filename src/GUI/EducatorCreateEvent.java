@@ -1,8 +1,6 @@
-package GUI2;
-import javafx.application.Application;
+package GUI;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -10,24 +8,23 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
-public class EducatorCreateEvent extends Application {
+public class EducatorCreateEvent {
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+    // public static void main(String[] args) {
+    //     launch(args);
+    // }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
+    // @Override
+    // public void start(Stage primaryStage) throws Exception {
         
-        Scene scene = new Scene(tabCreateEvent(), 650, 400);
-        primaryStage.setResizable(false);
-        primaryStage.setTitle("Create Event");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+    //     Scene scene = new Scene(tabCreateEvent(), 650, 400);
+    //     primaryStage.setResizable(false);
+    //     primaryStage.setTitle("Create Event");
+    //     primaryStage.setScene(scene);
+    //     primaryStage.show();
     
-    }
+    // }
     
     public static VBox tabCreateEvent(){
         Label title = new Label("Create Event") ;
