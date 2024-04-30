@@ -8,24 +8,32 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #000000;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="globalLController">
+<AnchorPane maxHeight="Infinity" maxWidth="Infinity" minHeight="0.00"  minWidth="0.00" prefHeight="400.0" prefWidth="600.0"  style="-fx-background-color: #000000;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="globalLController">
    <children>
-      <BorderPane fx:id="leaderBoardPane" prefHeight="81.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-         <center>
-            <Label fx:id="gLTitle" alignment="CENTER" contentDisplay="CENTER" prefHeight="75.0" prefWidth="387.0" style="-fx-text-fill: #FFFFFF;" text="Global Leaderbaord" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" BorderPane.alignment="CENTER">
+      <BorderPane fx:id="leaderBoardPane" prefHeight="81.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+            <Label fx:id="gLTitle" alignment="CENTER" contentDisplay="CENTER" prefHeight="59.0" prefWidth="387.0" style="-fx-text-fill: #FFFFFF;" text="Global Leaderbaord" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" BorderPane.alignment="CENTER">
                <font>
                   <Font name="Arial Black" size="36.0" />
                </font>
+               <BorderPane.margin>
+                  <Insets top="15.0" />
+               </BorderPane.margin>
             </Label>
+         </top>
+         <center>
+            <TableView fx:id="LeaderboardTable" fixedCellSize="20.0" minHeight="200.0" minWidth="200.0" prefHeight="300.0" prefWidth="500.0" style="-fx-background-color: #ADD8E6;" BorderPane.alignment="CENTER">
+              <columns>
+                <TableColumn fx:id="rank" editable="true" maxWidth="154.66665649414062" minWidth="92.6666259765625" prefWidth="92.6666259765625" sortType="DESCENDING" text="Rank" />
+                <TableColumn fx:id="username" maxWidth="296.66668701171875" minWidth="33.0" prefWidth="296.66668701171875" resizable="false" sortType="DESCENDING" text="Username" />
+                  <TableColumn fx:id="points" maxWidth="433.99999237060547" minWidth="22.0" prefWidth="110.0" resizable="false" sortType="DESCENDING" text="Points" />
+              </columns>
+               <BorderPane.margin>
+                  <Insets bottom="20.0" left="50.0" right="50.0" top="20.0" />
+               </BorderPane.margin>
+            </TableView>
          </center>
       </BorderPane>
-      <TableView fx:id="LeaderboardTable" layoutX="60.0" layoutY="88.0" prefHeight="270.0" prefWidth="487.0" style="-fx-background-color: #ADD8E6;" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="90.0">
-        <columns>
-          <TableColumn fx:id="rank" maxWidth="1.7976931348623157E308" minWidth="33.0" prefWidth="99.99996948242188" resizable="false" sortType="DESCENDING" text="Rank" />
-          <TableColumn fx:id="username" maxWidth="1.7976931348623157E308" minWidth="33.0" prefWidth="225.3333740234375" resizable="false" sortType="DESCENDING" text="Username" />
-            <TableColumn fx:id="points" maxWidth="1.7976931348623157E308" minWidth="33.0" prefWidth="133.99996948242188" resizable="false" sortType="DESCENDING" text="Points" />
-        </columns>
-      </TableView>
    </children>
    <opaqueInsets>
       <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />

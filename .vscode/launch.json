@@ -6,6 +6,22 @@
     "configurations": [
         {
             "type": "java",
+            "name": "EducatorCreateEvent",
+            "request": "launch",
+            "mainClass": "GUI2.EducatorCreateEvent",
+            "projectName": "lantern_14a445b6",
+            "vmArgs": "--module-path \"C:\\Users\\User\\Downloads\\openjfx-22.0.1_windows-x64_bin-sdk\\javafx-sdk-22.0.1\\lib\" --add-modules javafx.controls,javafx.fxml"
+        },
+        {
+            "type": "java",
+            "name": "GlbLb2",
+            "request": "launch",
+            "mainClass": "GUI2.GlobalLeaderboard2.GlbLb2",
+            "projectName": "lantern_14a445b6",
+            "vmArgs": "--module-path \"C:\\Users\\User\\Downloads\\openjfx-22.0.1_windows-x64_bin-sdk\\javafx-sdk-22.0.1\\lib\" --add-modules javafx.controls,javafx.fxml"
+        },
+        {
+            "type": "java",
             "name": "Gui",
             "request": "launch",
             "mainClass": "GUI2.GlobalLeaderboard2.Gui",

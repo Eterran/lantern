@@ -34,6 +34,7 @@ public class GlobalLBgui extends Application {
         globalLController controller = loader.getController();
         
         VBox vbox = new VBox();
+        vbox.setStyle("-fx-background-color:black"); 
         vbox.getChildren().add(root); 
         
         
