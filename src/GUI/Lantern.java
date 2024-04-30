@@ -42,6 +42,7 @@ import java.lang.Thread;
 public class Lantern extends Application {
     private static Deque<Scene> history = new ArrayDeque<Scene>();
     private static Deque<Tab> tabHistory = new ArrayDeque<Tab>();
+    
     //TODO: Implement user class
     //private User user;
 

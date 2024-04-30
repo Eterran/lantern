@@ -10,3 +10,10 @@
     -fx-font-size: 20;
     -fx-font-weight: bold;
 }
+
+.button:pressed {
+    -fx-background-color: #750101;
+    -fx-text-fill: white;
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+}

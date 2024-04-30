@@ -119,7 +119,7 @@ public class LoginPage {
 
         try {
             Thread.sleep(1000);
-            Profile.showHomeScene2(primaryStage);
+            Sidebar.showHomeScene2(primaryStage);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -15,6 +15,7 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -24,90 +25,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Profile {
-    public static void showHomeScene2(Stage stg){
-        Lantern.Clear_History();
-        BorderPane root = new BorderPane();
-        Button backButton = new Button("Back");
-        HBox layout1 = new HBox();
-        layout1.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        layout1.setBackground(new Background(new BackgroundFill(Color.web(color.BACKGROUND.getCode()), new CornerRadii(0), Insets.EMPTY)));
-        VBox tabs = new VBox(10);
-        BorderStroke borderStroke = new BorderStroke(
-            Paint.valueOf(color.SIDEBAR.getCode()),
-            BorderStrokeStyle.SOLID,
-            new CornerRadii(0),
-            new BorderWidths(1)
-        );
-        tabs.setBackground(new Background(new BackgroundFill(Color.web(color.SIDEBAR.getCode()), new CornerRadii(0), Insets.EMPTY)));
-        Border border = new Border(borderStroke);
-
-        tabs.setBorder(border);
-        Button tab1 = new Button("Profile");
-        Button tab2 = new Button("Discussion Page");
-        Button tab3 = new Button("Global Leaderboard");
-        Button tab4 = null;
-        Button tab5 = null;
-        backButton.setOnAction(e -> {
-            Lantern.goBack(stg);
-        });
-        tab1.setOnAction(e -> {
-            Lantern.Push_History(stg.getScene());
-            layout1.getChildren().clear();
-            layout1.getChildren().add(tabs);
-            layout1.getChildren().add(Profile.loadProfileTab());
-        });
-        tab2.setOnAction(e -> {
-            Lantern.Push_History(stg.getScene());
-            layout1.getChildren().clear();
-            layout1.getChildren().add(tabs);
-            layout1.getChildren().add(new Label("Discussion Page Content"));
-        });
-        tab3.setOnAction(e -> {
-            Lantern.Push_History(stg.getScene());
-            layout1.getChildren().clear();
-            layout1.getChildren().add(tabs);
-            layout1.getChildren().add(new Label("Global Leaderboard Content"));
-        });
-        
-        if(AccessManager.hasAccess("Student", AccessManager.ContentType.STUDENT)){
-            tab4 = new Button("Quizzes");
-            tab4.setOnAction(e -> {
-                layout1.getChildren().clear();
-                layout1.getChildren().add(new Label("Quizzes"));
-            });
-        } else if(AccessManager.hasAccess("Educator", AccessManager.ContentType.EDUCATOR)){
-            tab4 = new Button("Create Quizzes");
-            tab5 = new Button("Create Events");
-            tab4.setOnAction(e -> {
-                layout1.getChildren().clear();
-                layout1.getChildren().add(new Label("Create Quizzes"));
-            });
-            tab5.setOnAction(e -> {
-                layout1.getChildren().clear();
-                layout1.getChildren().add(new Label("Create Events"));
-            });
-        } else if(AccessManager.hasAccess("Parent", AccessManager.ContentType.PARENT)){
-            tab4 = new Button("Make Bookings");
-            tab4.setOnAction(e -> {
-                layout1.getChildren().clear();
-                layout1.getChildren().add(new Label("Make Bookings"));
-            });
-        }
-        layout1.getChildren().add(tabs);
-        tabs.getChildren().addAll(tab1, tab2, tab3);
-        root.setTop(backButton);
-        root.setCenter(layout1);
-        Scene scene1 = new Scene(root, 1000, 650);
-        tab1.getStyleClass().add("button");
-        tab2.getStyleClass().add("button");
-        tab3.getStyleClass().add("button");
-        if(tab4 != null)
-            tab4.getStyleClass().add("button");
-        if(tab5 != null)
-            tab5.getStyleClass().add("button");
-        scene1.getStylesheets().add("resources/style.css");
-        stg.setScene(scene1);
-    }
     public static void showHomeScene(Stage stg) {
         Lantern.Clear_History();
         BorderPane root = new BorderPane();
