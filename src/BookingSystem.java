@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import Database.BookingDate;
 import Database.User;
 
 import java.util.*;
@@ -102,26 +103,45 @@ public class BookingSystem {
     }
 
     private ArrayList<Date> getAvailableDates(User user) {
-        ArrayList<Date> availableDates = new ArrayList<>();
+    ArrayList<Date> availableDates = new ArrayList<>();
 
-        try {        
-              if ("parent".equals(user.getRole())) {
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/lantern", "root", "root");
+    try {
+        if ("parent".equals(user.getRole())) {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/lantern", "username", "password");
             Statement statement = connection.createStatement();
-            String query = "SELECT * FROM bookings WHERE user_date = " + user.getDate() + " AND date >= CURDATE()";
+            String username = user.getUsername(); 
+
+            // Construct the SQL query to retrieve bookings for the user
+            String query = "SELECT * FROM bookings WHERE user_date = '" + username + "' AND date >= CURDATE()";
+
+            // Execute the query
             ResultSet resultSet = statement.executeQuery(query);
 
+            // Iterate through the result set
             while (resultSet.next()) {
                 Date date = resultSet.getDate("date");
-             availableDates.add(date);
-            }
-        }
-             
-            } catch (SQLException e) {
-        }
 
-        return availableDates;
+                // Convert date to string in format "yyyy-MM-dd"
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String dateString = sdf.format(date);
+
+                // Check if the date exists
+                if (!new BookingDate().checkExistingDate(connection, username, dateString)) {
+                    availableDates.add(date);
+                }
+            }
+            
+            resultSet.close();
+            statement.close();
+            connection.close();
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+
+    return availableDates;
+}
+
 
     private ArrayList<Date> getBookedDatesForDestination(int destinationId) {
         ArrayList<Date> bookedDates = new ArrayList<>();
