@@ -17,20 +17,6 @@ public class Main {
 
     }
 
-    public static void viewEvent(List<Event> eventList){
-        if(eventList.isEmpty()){
-            System.out.println("No events available.");
-            return;
-        }
-        //Display live event
-        System.out.println("Live Events : "+ eventList.get(0));
-        //Display closest 3 upcoming events
-        System.out.println("Closest 3 Upcoming Events : ");
-        for(int i =0; i<3; i++) {
-            System.out.println((i + 1) + "." + eventList.get(i));
-        }
-
-    }
     public void register(Event event){
         System.out.println("Select an event: ");
         String choice = sc.nextLine();
