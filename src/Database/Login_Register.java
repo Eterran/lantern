@@ -155,4 +155,12 @@ public class Login_Register {
 
     }
 
+    public User getuser(String username,Connection connection){
+     User user=new User();
+     int id=getID(username,connection);
+     user.userData(id);
+     return user;
+     
+     }
+
 }
