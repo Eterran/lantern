@@ -155,6 +155,8 @@ public class Lantern extends Application {
     public static HBox createInfoBox(String labelText, String valueText, int spacing) {
         Text label = new Text(labelText);
         Text value = new Text(valueText);
+        label.getStyleClass().add("normal_text");
+        value.getStyleClass().add("normal_text");
         HBox infoBox = new HBox(spacing);
         infoBox.getChildren().addAll(label, value);
         return infoBox;
@@ -162,6 +164,8 @@ public class Lantern extends Application {
     public static HBox createInfoBox(String labelText, String valueText, Insets spacing) {
         Text label = new Text(labelText);
         Text value = new Text(valueText);
+        label.getStyleClass().add("normal_text");
+        value.getStyleClass().add("normal_text");
         HBox infoBox = new HBox(0);
         infoBox.setPadding(spacing);
         infoBox.getChildren().addAll(label, value);
@@ -170,6 +174,8 @@ public class Lantern extends Application {
     public static HBox createInfoBox(String labelText, Double valueText, Insets spacing) {
         Text label = new Text(labelText);
         Text value = new Text(valueText.toString());
+        label.getStyleClass().add("normal_text");
+        value.getStyleClass().add("normal_text");
         HBox infoBox = new HBox(0);
         infoBox.setPadding(spacing);
         infoBox.getChildren().addAll(label, value);
@@ -178,6 +184,8 @@ public class Lantern extends Application {
     public static HBox createInfoBox(String labelText, Double valueText, int spacing) {
         Text label = new Text(labelText);
         Text value = new Text(valueText.toString());
+        label.getStyleClass().add("normal_text");
+        value.getStyleClass().add("normal_text");
         HBox infoBox = new HBox(spacing);
         infoBox.getChildren().addAll(label, value);
         return infoBox;

@@ -47,6 +47,11 @@ public class RegistrationPage {
 
         Button registerButton = new Button();
         registerButton.setText("Register");
+        registerButton.setPadding(new Insets(8, 100, 8, 100));
+        registerButton.setStyle("-fx-background-color: " + color.MAIN.getCode() +
+                                "; -fx-text-fill: white; -fx-font-size: 18px;" +
+                                "-fx-border-color: black; -fx-border-width: 2px;" +
+                                "-fx-background-radius: 10px; -fx-border-radius: 10px;");
         registerButton.setOnAction(e -> {
             if (Lantern.checkRegisterCredentials(usernameTF.getText(), passwordTF.getText(), comboBox.getValue())) {
                 LoginPage.showSuccessScene(stg);
@@ -55,6 +60,11 @@ public class RegistrationPage {
 
         Button backButton = new Button();
         backButton.setText("Back");
+        backButton.setPadding(new Insets(8, 100, 8, 100));
+        backButton.setStyle("-fx-background-color: " + color.ACCENT.getCode() +
+                            "; -fx-text-fill: white; -fx-font-size: 18px;" +
+                            "-fx-border-color: black; -fx-border-width: 2px;" +
+                            "-fx-background-radius: 10px; -fx-border-radius: 10px;");
         backButton.setOnAction(e -> Lantern.goBack(stg));
 
         VBox vbox = new VBox(10);

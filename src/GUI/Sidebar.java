@@ -103,16 +103,22 @@ public class Sidebar {
         VBox leaderboardBox = GlobalLeaderboard.globalLeaderBoardTab();
         VBox box4 = new VBox(10);
         VBox box5 = new VBox(10);
+        profileBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        discussionBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        leaderboardBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        box4.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        box5.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         pages[1] = profileBox;
         pages[2] = discussionBox;
         pages[3] = leaderboardBox;
         pages[4] = box4;
         pages[5] = box5;
         StackPane stackPane = new StackPane();
+        stackPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        HBox.setHgrow(stackPane, Priority.ALWAYS);
         stackPane.getChildren().addAll(profileBox, discussionBox, leaderboardBox, box4, box5);
         //TEMP
         discussionBox.getChildren().add(new Label("Discussion Page"));
-        leaderboardBox.getChildren().add(new Label("Global Leaderboard"));
         box4.getChildren().add(new Label("Box 4"));
         box5.getChildren().add(new Label("Box 5"));
         //
@@ -157,8 +163,7 @@ public class Sidebar {
                 setOneVisible(4);
             });
         }
-        layout1.getChildren().add(tabs);
-        layout1.getChildren().add(stackPane);
+        layout1.getChildren().addAll(tabs, stackPane);
         tab1.setMaxWidth(Double.MAX_VALUE);
         tab2.setMaxWidth(Double.MAX_VALUE);
         tab3.setMaxWidth(Double.MAX_VALUE);

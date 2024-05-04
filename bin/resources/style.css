@@ -42,3 +42,17 @@
     -fx-max-height: 1;
     -fx-pref-width: 200;
 }
+
+.normal_text {
+    -fx-font-family: "Gill Sans", sans-serif;
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.title {
+    -fx-font-family: "Gill Sans";
+    -fx-font-size: 40;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+}

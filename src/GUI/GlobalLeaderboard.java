@@ -116,7 +116,7 @@ public class GlobalLeaderboard {
         // mainvbox.setStyle("-fx-background-color:white;");
         mainvbox.getChildren().add(borderPane);
         VBox.setVgrow(borderPane, Priority.ALWAYS); //ensure borderPane grow together with Vbox
-
+        mainvbox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         return mainvbox;
     }
  

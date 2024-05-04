@@ -141,11 +141,11 @@ public class Profile {
     public static VBox loadProfileTab(){
         VBox profileTab = new VBox(10);
         Label profileLabel = new Label("Profile");
-        profileLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 30));
+        profileLabel.getStyleClass().add("title");
         profileTab.setStyle("-fx-background-color: " + color.BACKGROUND.getCode() + ";");
         profileTab.getChildren().add(profileLabel);
         profileTab.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        Insets padding = new Insets(10, 10, 10, 10);
+        Insets padding = new Insets(4, 10, 4, 15);
         HBox usernameBox = Lantern.createInfoBox("Username: ", User.getCurrentUser().getUsername(), padding);
         HBox roleBox = Lantern.createInfoBox("Role: ", User.getCurrentUser().getRole(), padding);
         HBox emailBox = Lantern.createInfoBox("Email: ", User.getCurrentUser().getEmail(), padding);
@@ -154,8 +154,9 @@ public class Profile {
 
         if(AccessManager.hasAccess("Student", AccessManager.ContentType.STUDENT)){
             Label studentLabel = new Label("Students");
+            studentLabel.getStyleClass().add("title");
             profileTab.getChildren().add(studentLabel);
-            HBox pointBox = Lantern.createInfoBox("Points", User.getCurrentUser().getPoints(), 10);
+            HBox pointBox = Lantern.createInfoBox("Points: ", User.getCurrentUser().getPoints(), padding);
             //TODO FRIENDS
             VBox friendBox = new VBox(10);
             
