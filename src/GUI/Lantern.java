@@ -167,4 +167,19 @@ public class Lantern extends Application {
         infoBox.getChildren().addAll(label, value);
         return infoBox;
     }
+    public static HBox createInfoBox(String labelText, Double valueText, Insets spacing) {
+        Text label = new Text(labelText);
+        Text value = new Text(valueText.toString());
+        HBox infoBox = new HBox(0);
+        infoBox.setPadding(spacing);
+        infoBox.getChildren().addAll(label, value);
+        return infoBox;
+    }
+    public static HBox createInfoBox(String labelText, Double valueText, int spacing) {
+        Text label = new Text(labelText);
+        Text value = new Text(valueText.toString());
+        HBox infoBox = new HBox(spacing);
+        infoBox.getChildren().addAll(label, value);
+        return infoBox;
+    }
 }

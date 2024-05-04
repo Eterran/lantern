@@ -14,6 +14,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -21,13 +22,25 @@ public class RegistrationPage {
     public static void showRegistrationScene(Stage stg) {
         Lantern.Push_History(stg.getScene());
         Label label = new Label("Register");
-        label.setFont(Font.font(30));
+        label.setFont(Font.font("Lato", FontWeight.BOLD, 30));
         label.setPadding(new Insets(0, 0, 10, 4));
         label.setTextFill(Color.WHITE);
         TextField usernameTF = new TextField();
         usernameTF.setPadding(new Insets(0, 0, 10, 0));
+        usernameTF.setPromptText("Username");
+        usernameTF.setPrefWidth(100);
+        TextField emailTF = new TextField();
+        emailTF.setPadding(new Insets(0, 0, 10, 0));
+        emailTF.setPromptText("Email");
+        emailTF.setPrefWidth(100);
         TextField passwordTF = new TextField();
         passwordTF.setPadding(new Insets(0, 0, 10, 0));
+        passwordTF.setPromptText("Password");
+        passwordTF.setPrefWidth(100);
+        TextField confirmPasswordTF = new TextField();
+        confirmPasswordTF.setPadding(new Insets(0, 0, 10, 0));
+        confirmPasswordTF.setPromptText("Confirm Password");
+        confirmPasswordTF.setPrefWidth(100);
 
         ComboBox<String> comboBox = new ComboBox<String>();
         comboBox.getItems().addAll("Student", "Parent", "Educator");
@@ -56,6 +69,16 @@ public class RegistrationPage {
             }
         });
         vbox.getChildren().add(usernameTF);
+        vbox.getChildren().add(new VBox(new Text("Email:") {
+            {
+                setFill(Color.WHITE);
+            }
+        }) {
+            {
+                setPadding(new Insets(0, 0, 0, 4));
+            }
+        });
+        vbox.getChildren().add(emailTF);
         vbox.getChildren().add(new VBox(new Text("Password:") {
             {
                 setFill(Color.WHITE);
@@ -66,6 +89,16 @@ public class RegistrationPage {
             }
         });
         vbox.getChildren().add(passwordTF);
+        vbox.getChildren().add(new VBox(new Text("Confirm Password:") {
+            {
+                setFill(Color.WHITE);
+            }
+        }) {
+            {
+                setPadding(new Insets(0, 0, 0, 4));
+            }
+        });
+        vbox.getChildren().add(confirmPasswordTF);
         vbox.getChildren().add(new VBox(new Text("Role:") {
             {
                 setFill(Color.WHITE);
@@ -78,7 +111,7 @@ public class RegistrationPage {
         vbox.getChildren().add(comboBox);
         vbox.getChildren().add(registerButton);
         vbox.getChildren().add(backButton);
-
+        vbox.setAlignment(javafx.geometry.Pos.CENTER);
         StackPane root = new StackPane();
 
         Pane backgroundPane = new Pane();

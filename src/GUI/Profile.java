@@ -1,5 +1,6 @@
 package GUI;
 
+import Database.User;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -140,23 +141,21 @@ public class Profile {
     public static VBox loadProfileTab(){
         VBox profileTab = new VBox(10);
         Label profileLabel = new Label("Profile");
-        profileLabel.setFont(Font.font("Lato", FontWeight.BOLD, 30));
+        profileLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 30));
         profileTab.setStyle("-fx-background-color: " + color.BACKGROUND.getCode() + ";");
         profileTab.getChildren().add(profileLabel);
         profileTab.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        //TODO: Implement user class
         Insets padding = new Insets(10, 10, 10, 10);
-        HBox usernameBox = Lantern.createInfoBox("Username: ", "JohnDoe", padding);
-        HBox roleBox = Lantern.createInfoBox("Role: ", "Student", padding);
-        HBox emailBox = Lantern.createInfoBox("Email: ", "", padding);
-        HBox locationCoordinateBox = Lantern.createInfoBox("Location: ", "", padding);
+        HBox usernameBox = Lantern.createInfoBox("Username: ", User.getCurrentUser().getUsername(), padding);
+        HBox roleBox = Lantern.createInfoBox("Role: ", User.getCurrentUser().getRole(), padding);
+        HBox emailBox = Lantern.createInfoBox("Email: ", User.getCurrentUser().getEmail(), padding);
+        HBox locationCoordinateBox = Lantern.createInfoBox("Location: ", "("+User.getCurrentUser().getXCoordinate()+", "+ User.getCurrentUser().getYCoordinate()+")", padding);
         profileTab.getChildren().addAll(usernameBox, roleBox, emailBox, locationCoordinateBox);
 
         if(AccessManager.hasAccess("Student", AccessManager.ContentType.STUDENT)){
             Label studentLabel = new Label("Students");
             profileTab.getChildren().add(studentLabel);
-            //TODO access database
-            HBox pointBox = Lantern.createInfoBox("Points", "3", 10);
+            HBox pointBox = Lantern.createInfoBox("Points", User.getCurrentUser().getPoints(), 10);
             //TODO FRIENDS
             VBox friendBox = new VBox(10);
             
