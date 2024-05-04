@@ -108,6 +108,20 @@ public class friend {
 
     }
 
+     public void declineFriend(Connection connection,String friendName,String username){
+        int id=getFriendId(connection,friendName,username);
+    try{
+       String query = "DELETE FROM friends WHERE id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1,id);
+            preparedStatement.executeUpdate();
+        }
+         catch(SQLException e){
+            e.printStackTrace();
+        }
+    
+    }
+
     public ArrayList<String> showPending(Connection connection, String username) {
         Login_Register lr = new Login_Register();
         int main_id = lr.getID(username, connection);
