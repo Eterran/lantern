@@ -114,12 +114,10 @@ public class LoginPage {
         successPane.setCenter(successLayout);
 
         Scene successScene = new Scene(successPane, 500, 450);
-
         primaryStage.setScene(successScene);
-
         try {
             Thread.sleep(1000);
-            Sidebar.showHomeScene2(primaryStage);
+            Sidebar.showHomeScene(primaryStage);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -2,31 +2,16 @@ package GUI;
 
 import Database.User;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 public class Profile {
-    public static VBox loadProfileTab(){
+    public static VBox loadProfileTab(User user){
+        if(user == null){
+            user = User.getCurrentUser();
+        }
         VBox profileTab = new VBox(10);
         Label profileLabel = new Label("Profile");
         profileLabel.getStyleClass().add("title");
@@ -34,20 +19,20 @@ public class Profile {
         profileTab.getChildren().add(profileLabel);
         profileTab.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         Insets padding = new Insets(4, 10, 4, 15);
-        HBox usernameBox = Lantern.createInfoBox("Username: ", User.getCurrentUser().getUsername(), padding);
-        HBox roleBox = Lantern.createInfoBox("Role: ", User.getCurrentUser().getRole(), padding);
-        HBox emailBox = Lantern.createInfoBox("Email: ", User.getCurrentUser().getEmail(), padding);
-        HBox locationCoordinateBox = Lantern.createInfoBox("Location: ", "("+User.getCurrentUser().getXCoordinate()+", "+ User.getCurrentUser().getYCoordinate()+")", padding);
+        HBox usernameBox = Lantern.createInfoBox("Username: ", user.getUsername(), padding);
+        HBox roleBox = Lantern.createInfoBox("Role: ", user.getRole(), padding);
+        HBox emailBox = Lantern.createInfoBox("Email: ", user.getEmail(), padding);
+        HBox locationCoordinateBox = Lantern.createInfoBox("Location: ", "("+user.getXCoordinate()+", "+ user.getYCoordinate()+")", padding);
         profileTab.getChildren().addAll(usernameBox, roleBox, emailBox, locationCoordinateBox);
 
         if(AccessManager.hasAccess("Student", AccessManager.ContentType.STUDENT)){
             Label studentLabel = new Label("Students");
             studentLabel.getStyleClass().add("title");
             profileTab.getChildren().add(studentLabel);
-            HBox pointBox = Lantern.createInfoBox("Points: ", User.getCurrentUser().getPoints(), padding);
+            HBox pointBox = Lantern.createInfoBox("Points: ", user.getPoints(), padding);
             //TODO FRIENDS
             VBox friendBox = new VBox(10);
-            
+            friendBox.getChildren().add(new Label("Friends"));
             profileTab.getChildren().addAll(pointBox, friendBox);
         } else if(AccessManager.hasAccess("Educator", AccessManager.ContentType.EDUCATOR)){
             Label educatorLabel = new Label("Educators");

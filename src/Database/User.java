@@ -60,8 +60,7 @@ public class User {
     public void userData(int id) {
         String sql = "SELECT email,username ,password,role,coordinate,point FROM user WHERE id = ?";
         try {
-            Database database = new Database();
-            Connection connection = database.connectionDatabase();
+            Connection connection = Database.connectionDatabase();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();

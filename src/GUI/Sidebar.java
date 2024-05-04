@@ -13,11 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -26,7 +22,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
 
@@ -35,7 +30,7 @@ public class Sidebar {
     private static Stack<Integer> sidebarHistory = new Stack<Integer>();
     private static int currentPage = 1;
 
-    public static void showHomeScene2(Stage stg){
+    public static void showHomeScene(Stage stg){
         Lantern.Clear_History();
         BorderPane root = new BorderPane();
         LinearGradient gradientRoot = new LinearGradient(
@@ -60,12 +55,6 @@ public class Sidebar {
         layout1.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         layout1.setBackground(new Background(new BackgroundFill(Color.web(color.BACKGROUND.getCode()), new CornerRadii(0), Insets.EMPTY)));
         VBox tabs = new VBox(4);
-        BorderStroke borderStroke = new BorderStroke(
-            Paint.valueOf(color.SIDEBAR.getCode()),
-            BorderStrokeStyle.SOLID,
-            new CornerRadii(0),
-            new BorderWidths(1)
-        );
         LinearGradient gradient = new LinearGradient(
             0.6,
             0,
@@ -98,7 +87,7 @@ public class Sidebar {
         sep2Box.setAlignment(Pos.CENTER);
         sep3Box.setAlignment(Pos.CENTER);
 
-        VBox profileBox = Profile.loadProfileTab();
+        VBox profileBox = Profile.loadProfileTab(null);
         VBox discussionBox = new VBox();
         VBox leaderboardBox = GlobalLeaderboard.globalLeaderBoardTab();
         VBox box4 = new VBox(10);
@@ -140,9 +129,15 @@ public class Sidebar {
         });
         if(AccessManager.hasAccess("Student", AccessManager.ContentType.STUDENT)){
             tab4 = new Button("Quizzes");
+            tab5 = new Button("Friends");
+            box5 = FriendList.loadFriendList();
             tab4.setOnAction(e -> {
                 push_SidebarHistory(4);
                 setOneVisible(4);
+            });
+            tab5.setOnAction(e -> {
+                push_SidebarHistory(5);
+                setOneVisible(5);
             });
         } else if(AccessManager.hasAccess("Educator", AccessManager.ContentType.EDUCATOR)){
             tab4 = new Button("Create Quizzes");

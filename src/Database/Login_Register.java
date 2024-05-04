@@ -35,6 +35,7 @@ public class Login_Register {
         if ((name_email.equalsIgnoreCase(User.getCurrentUser().getUsername()) && comfirmPw)
                 || (name_email.equalsIgnoreCase(User.getCurrentUser().getEmail()) && comfirmPw)) {
             // glb.updateXpState(connection, id);
+            User.setCurrentUser(user);
             return true;
         } else {
             return false;

@@ -56,24 +56,20 @@ while (resultSet.next()) {
     }
 }*/
 public class Database {
-
-  public Connection connectionDatabase(){
+  public static Connection connectionDatabase(){
        String databasePath = "jdbc:sqlite:.\\database.db";
         Connection connection=null;
         try {
            connection = DriverManager.getConnection(databasePath);
            Statement stmt = connection.createStatement();
            stmt.execute("PRAGMA foreign_keys = ON;");
-  }
+        }
         catch (SQLException e) {
             // Handle any SQL errors
             e.printStackTrace();
         }
         
-        
         return connection;
-        
-
 }
   
     public void deleteUser(Connection conn, int id) throws SQLException {
