@@ -50,14 +50,14 @@ public class Sidebar {
         Button tab4 = null;
         Button tab5 = null;
         VBox profileBox = Profile.loadProfileTab();
-        VBox discussionBox = EducatorCreateQuiz.tabCreateQuiz();
+        VBox discussionBox = new VBox();
         VBox leaderboardBox = new VBox(10);
         VBox box4 = new VBox(10);
         VBox box5 = new VBox(10);
         pages[1] = profileBox;
         pages[2] = discussionBox;
         pages[3] = leaderboardBox;
-        pages[4] = box4;
+        pages[4] = EducatorCreateQuiz.tabCreateQuiz();
         pages[5] = box5;
         StackPane stackPane = new StackPane();
         stackPane.getChildren().addAll(profileBox, discussionBox, leaderboardBox, box4, box5);
@@ -92,6 +92,7 @@ public class Sidebar {
         } else if(AccessManager.hasAccess("Educator", AccessManager.ContentType.EDUCATOR)){
             tab4 = new Button("Create Quizzes");
             tab5 = new Button("Create Events");
+            box4 = EducatorCreateQuiz.tabCreateQuiz();
             tab4.setOnAction(e -> {
                 push_SidebarHistory(4);
                 setOneVisible(4);
