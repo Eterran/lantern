@@ -127,42 +127,46 @@ public class Lantern extends Application {
         }
         return false;
     }
-    public static HBox createInfoBox(String labelText, String valueText, int spacing) {
+    public static VBox createInfoBox(String labelText, String valueText, int spacing) {
         Text label = new Text(labelText);
         Text value = new Text(valueText);
-        label.getStyleClass().add("normal_text");
-        value.getStyleClass().add("normal_text");
-        HBox infoBox = new HBox(spacing);
+        label.getStyleClass().add("normal_text_label");
+        value.getStyleClass().add("normal_text_content");
+        VBox infoBox = new VBox(spacing);
         infoBox.getChildren().addAll(label, value);
+        infoBox.getStylesheets().add("resources/style.css");
         return infoBox;
     }
-    public static HBox createInfoBox(String labelText, String valueText, Insets spacing) {
+    public static VBox createInfoBox(String labelText, String valueText, Insets spacing) {
         Text label = new Text(labelText);
         Text value = new Text(valueText);
-        label.getStyleClass().add("normal_text");
-        value.getStyleClass().add("normal_text");
-        HBox infoBox = new HBox(0);
+        label.getStyleClass().add("normal_text_label");
+        value.getStyleClass().add("normal_text_content");
+        VBox infoBox = new VBox(0);
         infoBox.setPadding(spacing);
         infoBox.getChildren().addAll(label, value);
+        infoBox.getStylesheets().add("resources/style.css");
         return infoBox;
     }
-    public static HBox createInfoBox(String labelText, Double valueText, Insets spacing) {
+    public static VBox createInfoBox(String labelText, Double valueText, Insets spacing) {
         Text label = new Text(labelText);
         Text value = new Text(valueText.toString());
-        label.getStyleClass().add("normal_text");
-        value.getStyleClass().add("normal_text");
-        HBox infoBox = new HBox(0);
+        label.getStyleClass().add("normal_text_label");
+        value.getStyleClass().add("normal_text_content");
+        VBox infoBox = new VBox(0);
         infoBox.setPadding(spacing);
         infoBox.getChildren().addAll(label, value);
+        infoBox.getStylesheets().add("resources/style.css");
         return infoBox;
     }
     public static HBox createInfoBox(String labelText, Double valueText, int spacing) {
         Text label = new Text(labelText);
         Text value = new Text(valueText.toString());
-        label.getStyleClass().add("normal_text");
-        value.getStyleClass().add("normal_text");
+        label.getStyleClass().add("normal_text_label");
+        value.getStyleClass().add("normal_text_content");
         HBox infoBox = new HBox(spacing);
         infoBox.getChildren().addAll(label, value);
+        infoBox.getStylesheets().add("resources/style.css");
         return infoBox;
     }
 }

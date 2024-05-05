@@ -14,14 +14,13 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class LoginPage {
     public static void showLoginScene(Stage stg) {
         Label label = new Label("Welcome to Lantern");
-        label.setFont(Font.font("Lato", FontWeight.BOLD, 30));
+        label.getStyleClass().add("title");
         label.setPadding(new Insets(10, 0, 6, 0));
         TextField usernameTF = new TextField();
         usernameTF.setPadding(new Insets(0, 0, 10, 0));
@@ -30,7 +29,7 @@ public class LoginPage {
 
         Button loginButton = new Button();
         loginButton.setText("Login");
-        loginButton.setFont(Font.font("Montserrat", FontWeight.NORMAL, 12));
+        loginButton.getStyleClass().add("normal_text_label");
         loginButton.setPadding(new Insets(8, 179, 8, 179));
         loginButton.setStyle("-fx-background-color: " + color.MAIN.getCode() +
                      "; -fx-text-fill: white; -fx-font-size: 18px;" +
@@ -44,7 +43,7 @@ public class LoginPage {
 
         Button registerButton = new Button();
         registerButton.setText("Register");
-        registerButton.setFont(Font.font("Montserrat", FontWeight.NORMAL, 12));
+        registerButton.getStyleClass().add("normal_text_label");
         registerButton.setPadding(new Insets(8, 170, 8, 170));
         registerButton.setStyle("-fx-background-color: " + color.ACCENT.getCode() +
                         "; -fx-text-fill: white; -fx-font-size: 18px;" +
@@ -59,14 +58,14 @@ public class LoginPage {
         VBox inputBox = new VBox(10);
         inputBox.setPadding(new Insets(0, 10, 0, 14));
         Text usernameText = new Text("Username:");
-        usernameText.setFont(Font.font("Montserrat", FontWeight.NORMAL, 14));
+        usernameText.getStyleClass().add("normal_text_content");
         VBox usernameBox = new VBox(usernameText);
         usernameBox.setPadding(new Insets(0, 10, 0, 14));
         inputBox.getChildren().add(usernameBox);
         inputBox.getChildren().add(usernameTF);
 
         Text passwordText = new Text("Password:");
-        passwordText.setFont(Font.font("Montserrat", FontWeight.NORMAL, 14));
+        passwordText.getStyleClass().add("normal_text_content");
         VBox passwordBox = new VBox(passwordText);
         passwordBox.setPadding(new Insets(0, 10, 0, 14));
         inputBox.getChildren().add(passwordBox);

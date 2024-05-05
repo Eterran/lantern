@@ -57,7 +57,7 @@ while (resultSet.next()) {
 }*/
 public class Database {
   public static Connection connectionDatabase(){
-       String databasePath = "jdbc:sqlite:.\\database.db";
+       String databasePath = "jdbc:sqlite:..\\database.db";
         Connection connection=null;
         try {
            connection = DriverManager.getConnection(databasePath);

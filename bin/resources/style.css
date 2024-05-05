@@ -1,7 +1,30 @@
+@font-face {
+    font-family: 'UnisansHeavy';
+    src: url('./fonts/UniSans-Trial-Heavy.otf');
+}
+
+@font-face {
+    font-family: 'UnisansBold';
+    src: url('./fonts/UniSans-Trial-Bold.otf');
+}
+
+@font-face {
+    font-family: 'UnisansRegular';
+    src: url('./fonts/UniSans-Trial-Regular.otf');
+}
+
 .background {
     -fx-background-image: url('./assets/lantern_background.jpg');
     -fx-background-size: cover;
     -fx-background-color: rgba(165, 106, 106, 0.5);
+}
+
+.content_box_background {
+    -fx-background-color: rgb(255, 252, 241);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 10, 0, 0, 0);
+    -fx-padding: 20 40 20 10;
 }
 
 .back_button {
@@ -50,16 +73,18 @@
     -fx-pref-width: 200;
 }
 
-.normal_text {
-    -fx-font-family: "Gill Sans", sans-serif;
+.normal_text_label {
+    -fx-font-family: "UnisansBold";
+    -fx-font-size: 18;
+    -fx-text-fill: rgb(154, 154, 154);
+}
+.normal_text_content {
+    -fx-font-family: "UnisansRegular";
     -fx-font-size: 20;
-    -fx-font-weight: bold;
     -fx-text-fill: white;
 }
-
 .title {
-    -fx-font-family: "Gill Sans";
+    -fx-font-family: "UnisansHeavy";
     -fx-font-size: 40;
-    -fx-font-weight: bold;
     -fx-text-fill: black;
 }

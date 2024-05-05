@@ -1,10 +1,15 @@
 package GUI;
 
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 import Database.User;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 public class Profile {
@@ -13,27 +18,37 @@ public class Profile {
             user = User.getCurrentUser();
         }
         VBox profileTab = new VBox(10);
-        Label profileLabel = new Label("Profile");
+        Label profileLabel = new Label("My Profile");
         profileLabel.getStyleClass().add("title");
+        HBox profileLabelBox = new HBox();
+        profileLabelBox.getChildren().add(profileLabel);
+        profileLabelBox.setPadding(new Insets(12, 0, 12, 12));
+
         profileTab.setStyle("-fx-background-color: " + color.BACKGROUND.getCode() + ";");
-        profileTab.getChildren().add(profileLabel);
+        profileTab.getChildren().add(profileLabelBox);
         profileTab.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        Insets padding = new Insets(4, 10, 4, 15);
-        HBox usernameBox = Lantern.createInfoBox("Username: ", user.getUsername(), padding);
-        HBox roleBox = Lantern.createInfoBox("Role: ", user.getRole(), padding);
-        HBox emailBox = Lantern.createInfoBox("Email: ", user.getEmail(), padding);
-        HBox locationCoordinateBox = Lantern.createInfoBox("Location: ", "("+user.getXCoordinate()+", "+ user.getYCoordinate()+")", padding);
-        profileTab.getChildren().addAll(usernameBox, roleBox, emailBox, locationCoordinateBox);
+
+        Insets padding = new Insets(8, 10, 8, 15);
+        VBox usernameBox = Lantern.createInfoBox("USERNAME: ", user.getUsername(), padding);
+        VBox roleBox = Lantern.createInfoBox("ROLE: ", user.getRole(), padding);
+        VBox emailBox = Lantern.createInfoBox("EMAIL: ", user.getEmail(), padding);
+        VBox locationCoordinateBox = Lantern.createInfoBox("LOCATION: ", "("+user.getXCoordinate()+", "+ user.getYCoordinate()+")", padding);
+
+        VBox profileContents = new VBox();
+        profileContents.getChildren().addAll(usernameBox, roleBox, emailBox, locationCoordinateBox);
+        profileContents.getStyleClass().add("content_box_background");
+        profileContents.maxWidthProperty().bind(profileTab.widthProperty().multiply(0.9));
+        profileContents.setPadding(new Insets(30, 10, 30, 10));
+        profileTab.getChildren().addAll(profileContents);
+        profileTab.setAlignment(javafx.geometry.Pos.TOP_CENTER);
 
         if(AccessManager.hasAccess("Student", AccessManager.ContentType.STUDENT)){
             Label studentLabel = new Label("Students");
             studentLabel.getStyleClass().add("title");
             profileTab.getChildren().add(studentLabel);
-            HBox pointBox = Lantern.createInfoBox("Points: ", user.getPoints(), padding);
-            //TODO FRIENDS
-            VBox friendBox = new VBox(10);
-            friendBox.getChildren().add(new Label("Friends"));
-            profileTab.getChildren().addAll(pointBox, friendBox);
+            VBox pointBox = Lantern.createInfoBox("Points: ", user.getPoints(), padding);
+            profileTab.getChildren().addAll(pointBox);
+
         } else if(AccessManager.hasAccess("Educator", AccessManager.ContentType.EDUCATOR)){
             Label educatorLabel = new Label("Educators");
             profileTab.getChildren().add(educatorLabel);
@@ -47,6 +62,7 @@ public class Profile {
             quizBox.getChildren().addAll(quizCreated, quizCount);
             eventBox.getChildren().addAll(eventCreated, eventCount);
             profileTab.getChildren().addAll(quizBox, eventBox);
+
         } else if(AccessManager.hasAccess("Parent", AccessManager.ContentType.PARENT)){
             Label parentLabel = new Label("Parents");
             profileTab.getChildren().add(parentLabel);
@@ -59,6 +75,7 @@ public class Profile {
         } else {
             profileTab.getChildren().add(new Label("No Profile Information"));
         }
+
         return profileTab;
     }
 }
