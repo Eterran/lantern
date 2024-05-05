@@ -2,6 +2,7 @@ package GUI;
 
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -18,8 +19,16 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import Database.Database;
+import Database.Login_Register;
+
 public class RegistrationPage {
     public static void showRegistrationScene(Stage stg) {
+        Connection conn = Database.connectionDatabase();
         Lantern.Push_History(stg.getScene());
         Label label = new Label("Register");
         label.setFont(Font.font("Lato", FontWeight.BOLD, 30));
@@ -53,9 +62,34 @@ public class RegistrationPage {
                                 "-fx-border-color: black; -fx-border-width: 2px;" +
                                 "-fx-background-radius: 10px; -fx-border-radius: 10px;");
         registerButton.setOnAction(e -> {
-            if (Lantern.checkRegisterCredentials(usernameTF.getText(), passwordTF.getText(), comboBox.getValue())) {
-                LoginPage.showSuccessScene(stg);
+            String password = passwordTF.getText();
+            String confirmPassword = confirmPasswordTF.getText();
+            boolean passwordMatch = password.equals(confirmPassword);
+            boolean usernameExists = true;
+            if (!passwordMatch) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Password Mismatch");
+                alert.setHeaderText(null);
+                alert.setContentText("The password does not match the confirm password.");
+                alert.showAndWait();
+            } try {
+                if (Database.usernameExists(conn, usernameTF.getText())){
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Duplicate Username");
+                    alert.setHeaderText(null);
+                    alert.setContentText("The username is taken.");
+                    alert.showAndWait();
+                    usernameExists = true;
+                } else {
+                    usernameExists = false;
+                }
+            } catch (SQLException e1) {
+                e1.printStackTrace();
             }
+            if(passwordMatch && !usernameExists)
+                if (Login_Register.register(new ArrayList<String>(), new ArrayList<String>(), usernameTF.getText(), emailTF.getText(), password, comboBox.getValue())) {
+                    LoginPage.showSuccessScene(stg);
+                }
         });
 
         Button backButton = new Button();

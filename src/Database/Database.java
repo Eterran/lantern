@@ -98,7 +98,7 @@ public class Database {
         }
     }
     
-     public boolean usernameExists(Connection conn, String username) throws SQLException {
+     public static boolean usernameExists(Connection conn, String username) throws SQLException {
         String SQL_SELECT = "SELECT username FROM user WHERE username = ?";
         PreparedStatement preparedStatement = conn.prepareStatement(SQL_SELECT);
         preparedStatement.setString(1, username);

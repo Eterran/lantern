@@ -15,9 +15,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class Login_Register {
 
-    int id = 0;
+    private static int id = 0;
 
-    public boolean login(String name_email, String pw, Connection connection) throws SQLException {
+    public static boolean login(String name_email, String pw, Connection connection) throws SQLException {
         User user = new User();
         GlobalLeaderBoard glb = new GlobalLeaderBoard();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -46,7 +46,7 @@ public class Login_Register {
         return id;
     }
 
-    public void register(ArrayList<String> parent, ArrayList<String> children, String username, String email,
+    public static boolean register(ArrayList<String> parent, ArrayList<String> children, String username, String email,
             String password, String role) {
         Database database = new Database();
         Random rand = new Random();
@@ -94,7 +94,7 @@ public class Login_Register {
         // glb.insertXpState(connection, id);
         insertParent(connection, id, parent);
         insertChildren(connection, id, children);
-
+        return true;
     }
 
     public static String encrypt(String password) {
