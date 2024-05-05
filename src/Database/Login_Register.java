@@ -102,7 +102,7 @@ public class Login_Register {
         return passwordEncoder.encode(password);
     }
 
-    public int getID(String name_email, Connection connection) {
+    public static int getID(String name_email, Connection connection) {
         int Id = 0;
         String query = "SELECT id FROM user WHERE username=? OR email=?";
 
@@ -155,12 +155,11 @@ public class Login_Register {
 
     }
 
-    public User getuser(String username,Connection connection){
-     User user=new User();
-     int id=getID(username,connection);
-     user.userData(id);
-     return user;
-     
-     }
+    public static User getUser(String username, Connection connection) {
+        User user = new User();
+        int id = getID(username, connection);
+        user.userData(id);
+        return user;
+    }
 
 }

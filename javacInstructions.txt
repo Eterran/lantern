@@ -3,7 +3,7 @@ cd to src if your directory isnt at src already:
 cd src
 
 To compile:
-javac -d ../bin --module-path ../lib --add-modules javafx.controls ./Start.java
+javac -d ../bin -cp ".;../lib/*" ./Start.java
 
 To run:
-java --module-path ../lib --add-modules javafx.controls -cp ../bin Start
+java --module-path "../lib" --add-modules javafx.controls,javafx.fxml -cp "../bin;../lib/*;../lib/sqlite-jdbc-3.34.0.jar" Start
