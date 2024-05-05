@@ -31,7 +31,7 @@ public class RegistrationPage {
         Connection conn = Database.connectionDatabase();
         Lantern.Push_History(stg.getScene());
         Label label = new Label("Register");
-        label.setFont(Font.font("Lato", FontWeight.BOLD, 30));
+        label.getStyleClass().add("title");
         label.setPadding(new Insets(0, 0, 10, 4));
         label.setTextFill(Color.WHITE);
         TextField usernameTF = new TextField();
@@ -53,6 +53,8 @@ public class RegistrationPage {
 
         ComboBox<String> comboBox = new ComboBox<String>();
         comboBox.getItems().addAll("Student", "Parent", "Educator");
+        VBox roleBox = new VBox();
+        roleBox.getChildren().add(comboBox);
 
         Button registerButton = new Button();
         registerButton.setText("Register");
@@ -107,6 +109,9 @@ public class RegistrationPage {
             {
                 setFill(Color.WHITE);
             }
+            {
+                getStyleClass().add("normal_text_label");
+            }
         }) {
             {
                 setPadding(new Insets(0, 0, 0, 4));
@@ -116,6 +121,9 @@ public class RegistrationPage {
         vbox.getChildren().add(new VBox(new Text("Email:") {
             {
                 setFill(Color.WHITE);
+            }
+            {
+                getStyleClass().add("normal_text_label");
             }
         }) {
             {
@@ -127,6 +135,9 @@ public class RegistrationPage {
             {
                 setFill(Color.WHITE);
             }
+            {
+                getStyleClass().add("normal_text_label");
+            }
         }) {
             {
                 setPadding(new Insets(0, 0, 0, 4));
@@ -136,6 +147,9 @@ public class RegistrationPage {
         vbox.getChildren().add(new VBox(new Text("Confirm Password:") {
             {
                 setFill(Color.WHITE);
+            }
+            {
+                getStyleClass().add("normal_text_label");
             }
         }) {
             {
@@ -147,12 +161,15 @@ public class RegistrationPage {
             {
                 setFill(Color.WHITE);
             }
+            {
+                getStyleClass().add("normal_text_label");
+            }
         }) {
             {
                 setPadding(new Insets(0, 0, 0, 4));
             }
         });
-        vbox.getChildren().add(comboBox);
+        vbox.getChildren().add(roleBox);
         vbox.getChildren().add(registerButton);
         vbox.getChildren().add(backButton);
         vbox.setAlignment(javafx.geometry.Pos.CENTER);
@@ -168,7 +185,7 @@ public class RegistrationPage {
         root.getChildren().add(backgroundPane);
         root.getChildren().add(vbox);
 
-        Scene scene = new Scene(root, 800, 500);
+        Scene scene = new Scene(root, 1000, 650);
         scene.getStylesheets().add("resources/style.css");
         stg.setScene(scene);
     }

@@ -94,7 +94,7 @@ public class LoginPage {
         rootPane.getStyleClass().add("background");
         rootPane.getChildren().add(rootBox);
 
-        Scene scene = new Scene(rootPane, 800, 500);
+        Scene scene = new Scene(rootPane, 1000, 650);
         scene.getStylesheets().add("resources/style.css");
         stg.setScene(scene);
         Lantern.Push_History(stg.getScene());
