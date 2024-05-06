@@ -1,5 +1,6 @@
 package GUI;
 
+import java.io.PrintWriter;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,13 @@ public class Profile {
         if(user == null){
             user = User.getCurrentUser();
         }
+        try {
+            PrintWriter writer = new PrintWriter("profile.txt");
+            writer.println(user.getUsername());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(System.getProperty("user.dir"));;
         VBox profileTab = new VBox(10);
         Label profileLabel = new Label("My Profile");
         profileLabel.getStyleClass().add("title");

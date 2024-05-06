@@ -3,8 +3,8 @@
     src: url('./fonts/UniSansDemo-HeavyCAPS.ttf');
 }
 @font-face {
-    font-family: 'Unisans Heavy';
-    src: url('./fonts/UniSans-Trial-Heavy.otf');
+    font-family: 'Uni Sans Trial Heavy';
+    src: url('./fonts/UniSans-Trial-Heavy.ttf');
 }
 @font-face {
     font-family: 'Unisans Bold';
@@ -31,7 +31,6 @@
     font-family: 'Ubuntu Bold';
     src: url('./fonts/ubuntu.bold.ttf');
 }
-
 
 .background {
     -fx-background-image: url('./assets/lantern_background.jpg');
@@ -108,20 +107,21 @@
     -fx-border-color: transparent;
 }
 
-.normal_text_label {
-    -fx-font-family: 'Unisans Regular';
+.text_label {
+    -fx-font-family: 'Uni Sans-Trial Regular';
     -fx-font-size: 18;
     -fx-text-fill: rgb(154, 154, 154);
 }
-.normal_text_content {
-    -fx-font-family: 'Unisans Regular';
-    -fx-font-size: 20;
+.text_content {
+    -fx-font-family: 'Uni Sans-Trial Regular';
+    -fx-font-size: 18;
     -fx-text-fill: white;
 }
 .title {
-    -fx-font-family: 'Unisans Heavy';
+    -fx-font-family: 'Uni Sans-Trial Heavy';
     -fx-font-size: 40;
 }
+
 .subtext {
     -fx-font-size: 16;
     -fx-text-fill: rgb(154, 154, 154);

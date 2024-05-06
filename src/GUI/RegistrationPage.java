@@ -118,7 +118,7 @@ public class RegistrationPage {
                 setFill(Color.WHITE);
             }
             {
-                getStyleClass().add("normal_text_label");
+                getStyleClass().add("text_label");
             }
         }) {
             {
@@ -131,7 +131,7 @@ public class RegistrationPage {
                 setFill(Color.WHITE);
             }
             {
-                getStyleClass().add("normal_text_label");
+                getStyleClass().add("text_label");
             }
         }) {
             {
@@ -144,7 +144,7 @@ public class RegistrationPage {
                 setFill(Color.WHITE);
             }
             {
-                getStyleClass().add("normal_text_label");
+                getStyleClass().add("text_label");
             }
         }) {
             {
@@ -157,7 +157,7 @@ public class RegistrationPage {
                 setFill(Color.WHITE);
             }
             {
-                getStyleClass().add("normal_text_label");
+                getStyleClass().add("text_label");
             }
         }) {
             {
@@ -170,7 +170,7 @@ public class RegistrationPage {
                 setFill(Color.WHITE);
             }
             {
-                getStyleClass().add("normal_text_label");
+                getStyleClass().add("text_label");
             }
         }) {
             {

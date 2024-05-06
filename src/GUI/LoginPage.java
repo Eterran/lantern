@@ -43,7 +43,7 @@ public class LoginPage {
 
         Button loginButton = new Button();
         loginButton.setText("Login");
-        loginButton.getStyleClass().add("normal_text_label");
+        loginButton.getStyleClass().add("text_label");
         loginButton.setPadding(new Insets(8, 179, 8, 179));
         loginButton.setStyle("-fx-background-color: " + color.MAIN.getCode() +
                      "; -fx-text-fill: white; -fx-font-size: 18px;" +
@@ -57,7 +57,7 @@ public class LoginPage {
 
         Button registerButton = new Button();
         registerButton.setText("Register");
-        registerButton.getStyleClass().add("normal_text_label");
+        registerButton.getStyleClass().add("text_label");
         registerButton.setPadding(new Insets(8, 170, 8, 170));
         registerButton.setStyle("-fx-background-color: " + color.ACCENT.getCode() +
                         "; -fx-text-fill: white; -fx-font-size: 18px;" +
@@ -72,14 +72,14 @@ public class LoginPage {
         VBox inputBox = new VBox(10);
         inputBox.setPadding(new Insets(0, 10, 0, 14));
         Text usernameText = new Text("Username:");
-        usernameText.getStyleClass().add("normal_text_content");
+        usernameText.getStyleClass().add("text_content");
         VBox usernameBox = new VBox(usernameText);
         usernameBox.setPadding(new Insets(0, 10, 0, 14));
         inputBox.getChildren().add(usernameBox);
         inputBox.getChildren().add(usernameTF);
 
         Text passwordText = new Text("Password:");
-        passwordText.getStyleClass().add("normal_text_content");
+        passwordText.getStyleClass().add("text_content");
         VBox passwordBox = new VBox(passwordText);
         passwordBox.setPadding(new Insets(0, 10, 0, 14));
         inputBox.getChildren().add(passwordBox);
