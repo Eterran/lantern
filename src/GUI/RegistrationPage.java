@@ -68,6 +68,13 @@ public class RegistrationPage {
             String confirmPassword = confirmPasswordTF.getText();
             boolean passwordMatch = password.equals(confirmPassword);
             boolean usernameExists = true;
+            if(usernameTF.getText().isEmpty() || emailTF.getText().isEmpty() || passwordTF.getText().isEmpty() || confirmPasswordTF.getText().isEmpty()){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Empty Field(s)");
+                alert.setHeaderText(null);
+                alert.setContentText("Please fill in all fields.");
+                alert.showAndWait();
+            } else {
             if (!passwordMatch) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Password Mismatch");
@@ -92,6 +99,7 @@ public class RegistrationPage {
                 if (Login_Register.register(new ArrayList<String>(), new ArrayList<String>(), usernameTF.getText(), emailTF.getText(), password, comboBox.getValue())) {
                     LoginPage.showSuccessScene(stg);
                 }
+            }
         });
 
         Button backButton = new Button();
@@ -173,7 +181,14 @@ public class RegistrationPage {
         vbox.getChildren().add(registerButton);
         vbox.getChildren().add(backButton);
         vbox.setAlignment(javafx.geometry.Pos.CENTER);
+
+        VBox registerBox = new VBox();
+        registerBox.getChildren().add(vbox);
+
         StackPane root = new StackPane();
+        registerBox.prefWidthProperty().bind(root.widthProperty().multiply(0.85));
+        registerBox.prefHeightProperty().bind(root.heightProperty().multiply(0.85));
+        registerBox.setMaxSize(850, 600);
 
         Pane backgroundPane = new Pane();
         backgroundPane
@@ -183,9 +198,9 @@ public class RegistrationPage {
         backgroundPane.getStyleClass().add("background");
 
         root.getChildren().add(backgroundPane);
-        root.getChildren().add(vbox);
+        root.getChildren().add(registerBox);
 
-        Scene scene = new Scene(root, 1000, 650);
+        Scene scene = new Scene(root, 1200, 700);
         scene.getStylesheets().add("resources/style.css");
         stg.setScene(scene);
     }

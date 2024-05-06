@@ -1,15 +1,25 @@
 package GUI;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -19,9 +29,13 @@ import javafx.stage.Stage;
 
 public class LoginPage {
     public static void showLoginScene(Stage stg) {
+        Image icon = new Image("resources/assets/lantern_icon.jpg");
+        ImageView iconView = new ImageView(icon);
+        iconView.setFitHeight(350);
+        iconView.setFitWidth(350);
         Label label = new Label("Welcome to Lantern");
         label.getStyleClass().add("title");
-        label.setPadding(new Insets(10, 0, 6, 0));
+        label.setPadding(new Insets(14, 0, 10, 0));
         TextField usernameTF = new TextField();
         usernameTF.setPadding(new Insets(0, 0, 10, 0));
         TextField passwordTF = new TextField();
@@ -51,9 +65,9 @@ public class LoginPage {
                         "-fx-background-radius: 10px; -fx-border-radius: 10px;");
         registerButton.setOnAction(e -> RegistrationPage.showRegistrationScene(stg));
 
-        VBox labelBox = new VBox(10);
+        VBox labelBox = new VBox();
         labelBox.setAlignment(Pos.CENTER);
-        labelBox.getChildren().add(label);
+        labelBox.getChildren().addAll(label);
         
         VBox inputBox = new VBox(10);
         inputBox.setPadding(new Insets(0, 10, 0, 14));
@@ -77,24 +91,38 @@ public class LoginPage {
         buttonBox.getChildren().add(loginButton);
         buttonBox.getChildren().add(registerButton);
 
-        VBox rootBox = new VBox(15);
-        rootBox.setPrefSize(300, 300);
-        rootBox.setMaxSize(500, 450);
-        rootBox.setMinSize(500, 450);
+        VBox loginBox = new VBox(15);
+        loginBox.setPrefSize(600, 500);
+        loginBox.setMaxSize(600, 500);
+        loginBox.setMinSize(600, 500);
         
-        rootBox.setBackground(new Background(new BackgroundFill(
+        loginBox.setBackground(new Background(new BackgroundFill(
             Color.web(color.BACKGROUND.getCode()), new CornerRadii(6), Insets.EMPTY)));
         //rootBox.setBorder(new Border(new BorderStroke(
             //Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(10), BorderWidths.DEFAULT)));
         // root.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,
         // CornerRadii.EMPTY, Insets.EMPTY)));
-        rootBox.getChildren().addAll(labelBox, inputBox, buttonBox);
+        loginBox.getChildren().addAll(labelBox, inputBox, buttonBox);
 
+        Separator separator = new Separator();
+        separator.setPadding(new Insets(0, 0, 0, 0));
+        separator.getStyleClass().add("separator_vertical");
+        separator.setOrientation(javafx.geometry.Orientation.VERTICAL);
+
+        HBox rootBox = new HBox();
+        rootBox.setAlignment(Pos.CENTER);
+        rootBox.setBackground(new Background(new BackgroundFill(
+            Color.web(color.BACKGROUND.getCode()), new CornerRadii(6), Insets.EMPTY)));
+        rootBox.getChildren().addAll(iconView, separator, loginBox);
         StackPane rootPane = new StackPane();
+        rootBox.prefWidthProperty().bind(rootPane.widthProperty().multiply(0.85));
+        rootBox.prefHeightProperty().bind(rootPane.heightProperty().multiply(0.85));
+        rootBox.setMaxSize(850, 600);
+        
         rootPane.getStyleClass().add("background");
         rootPane.getChildren().add(rootBox);
 
-        Scene scene = new Scene(rootPane, 1000, 650);
+        Scene scene = new Scene(rootPane, 1200, 700);
         scene.getStylesheets().add("resources/style.css");
         stg.setScene(scene);
         Lantern.Push_History(stg.getScene());

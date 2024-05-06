@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -58,18 +59,11 @@ public class Lantern extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Lantern");
+        Image icon = new Image("resources/assets/lantern_icon.jpg");
+        primaryStage.getIcons().add(icon);
         LoginPage.showLoginScene(primaryStage);
         primaryStage.setResizable(false);
         primaryStage.show();
-    }
-
-    
-    public static VBox loadHomeTab(){
-        VBox homeTab = new VBox(10);
-        Label homeContent = new Label("Home Content");
-        homeTab.setStyle("-fx-background-color: " + color.BACKGROUND.getCode() + ";");
-        homeTab.getChildren().add(homeContent);
-        return homeTab;
     }
     
     public static void showScene1(Stage stg) {

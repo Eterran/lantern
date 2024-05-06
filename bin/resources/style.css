@@ -1,17 +1,37 @@
 @font-face {
-    font-family: 'UnisansHeavy';
+    font-family: 'Unisans HeavyCAPS';
+    src: url('./fonts/UniSansDemo-HeavyCAPS.ttf');
+}
+@font-face {
+    font-family: 'Unisans Heavy';
     src: url('./fonts/UniSans-Trial-Heavy.otf');
 }
-
 @font-face {
-    font-family: 'UnisansBold';
+    font-family: 'Unisans Bold';
     src: url('./fonts/UniSans-Trial-Bold.otf');
 }
-
 @font-face {
-    font-family: 'UnisansRegular';
+    font-family: 'Unisans Regular';
     src: url('./fonts/UniSans-Trial-Regular.otf');
 }
+
+@font-face {
+    font-family: 'Ubuntu Regular';
+    src: url('./fonts/ubuntu.regular.ttf');
+}
+@font-face {
+    font-family: 'Ubuntu Light';
+    src: url('./fonts/ubuntu.light.ttf');
+}
+@font-face {
+    font-family: 'Ubuntu Medium';
+    src: url('./fonts/ubuntu.medium.ttf');
+}
+@font-face {
+    font-family: 'Ubuntu Bold';
+    src: url('./fonts/ubuntu.bold.ttf');
+}
+
 
 .background {
     -fx-background-image: url('./assets/lantern_background.jpg');
@@ -58,6 +78,10 @@
     -fx-font-size: 20;
     -fx-font-weight: bold;
 }
+.separator .line {
+    -fx-border-width: 0;
+    -fx-background-color: white;
+}
 
 .profile_button {
     -fx-background-color: transparent;
@@ -69,21 +93,36 @@
 .separator {
     -fx-alignment: center;
     -fx-background-color: linear-gradient(to right, transparent, white, transparent);
+    -fx-border-width: 0;
     -fx-max-height: 1;
     -fx-pref-width: 200;
+    -fx-border-color: transparent;
+}
+.separator_vertical {
+    -fx-alignment: center;
+    -fx-background-color: linear-gradient(to bottom, transparent, white, transparent);
+    -fx-border-width: 0;
+    -fx-max-height: 550;
+    -fx-pref-width: 1;
+    -fx-padding: 4 1 4 1;
+    -fx-border-color: transparent;
 }
 
 .normal_text_label {
-    -fx-font-family: "UnisansBold";
+    -fx-font-family: 'Unisans Regular';
     -fx-font-size: 18;
     -fx-text-fill: rgb(154, 154, 154);
 }
 .normal_text_content {
-    -fx-font-family: "UnisansRegular";
+    -fx-font-family: 'Unisans Regular';
     -fx-font-size: 20;
     -fx-text-fill: white;
 }
 .title {
-    -fx-font-family: "UnisansHeavy";
+    -fx-font-family: 'Unisans Heavy';
     -fx-font-size: 40;
+}
+.subtext {
+    -fx-font-size: 16;
+    -fx-text-fill: rgb(154, 154, 154);
 }
