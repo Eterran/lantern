@@ -1,35 +1,64 @@
 @font-face {
     font-family: 'Unisans HeavyCAPS';
-    src: url('./fonts/UniSansDemo-HeavyCAPS.ttf');
+    src: url('./fonts/UniSans/UniSansDemo-HeavyCAPS.ttf');
 }
 @font-face {
     font-family: 'Uni Sans Trial Heavy';
-    src: url('./fonts/UniSans-Trial-Heavy.ttf');
+    src: url('./fonts/UniSans/UniSans-Trial-Heavy.ttf');
 }
 @font-face {
     font-family: 'Unisans Bold';
-    src: url('./fonts/UniSans-Trial-Bold.otf');
+    src: url('./fonts/UniSans/UniSans-Trial-Bold.ttf');
 }
 @font-face {
     font-family: 'Unisans Regular';
-    src: url('./fonts/UniSans-Trial-Regular.otf');
+    src: url('./fonts/UniSans/UniSans-Trial-Regular.ttf');
 }
 
 @font-face {
     font-family: 'Ubuntu Regular';
-    src: url('./fonts/ubuntu.regular.ttf');
+    src: url('./fonts/Ubuntu/ubuntu.regular.ttf');
 }
 @font-face {
     font-family: 'Ubuntu Light';
-    src: url('./fonts/ubuntu.light.ttf');
+    src: url('./fonts/Ubuntu/ubuntu.light.ttf');
 }
 @font-face {
     font-family: 'Ubuntu Medium';
-    src: url('./fonts/ubuntu.medium.ttf');
+    src: url('./fonts/Ubuntu/ubuntu.medium.ttf');
 }
 @font-face {
     font-family: 'Ubuntu Bold';
-    src: url('./fonts/ubuntu.bold.ttf');
+    src: url('./fonts/Ubuntu/ubuntu.bold.ttf');
+}
+
+@font-face {
+    font-family: 'Nunito';
+    src: url('./fonts/Nunito/Nunito-Regular.ttf');
+}
+@font-face {
+    font-family: 'Nunito';
+    src: url('./fonts/Nunito/Nunito-Black.ttf');
+}
+@font-face {
+    font-family: 'Nunito';
+    src: url('./fonts/Nunito/Nunito-ExtraBold.ttf');
+}
+@font-face {
+    font-family: 'Nunito';
+    src: url('./fonts/Nunito/Nunito-Medium.ttf');
+}
+@font-face {
+    font-family: 'Nunito';
+    src: url('./fonts/Nunito/Nunito-SemiBold.ttf');
+}
+@font-face {
+    font-family: 'Nunito';
+    src: url('./fonts/Nunito/Nunito-Light.ttf');
+}
+@font-face {
+    font-family: 'Nunito';
+    src: url('./fonts/Nunito/Nunito-Bold.ttf');
 }
 
 .background {
@@ -108,21 +137,32 @@
 }
 
 .text_label {
-    -fx-font-family: 'Uni Sans-Trial Regular';
+    -fx-font-family: 'Nunito SemiBold';
     -fx-font-size: 18;
     -fx-text-fill: rgb(154, 154, 154);
 }
 .text_content {
-    -fx-font-family: 'Uni Sans-Trial Regular';
+    -fx-font-family: 'Nunito Medium';
     -fx-font-size: 18;
     -fx-text-fill: white;
 }
 .title {
-    -fx-font-family: 'Uni Sans-Trial Heavy';
+    -fx-font-family: 'Nunito Bold';
     -fx-font-size: 40;
 }
 
 .subtext {
     -fx-font-size: 16;
     -fx-text-fill: rgb(154, 154, 154);
+}
+
+.text_field {
+    -fx-background-color: #fff;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 5px;
+    -fx-padding: 10px;
+    -fx-font-size: 16px;
+    -fx-font-family: 'Nunito Regular';
+    -fx-text-fill: #333;
+    -fx-prompt-text-fill: #aaa;
 }

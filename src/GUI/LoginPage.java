@@ -37,9 +37,9 @@ public class LoginPage {
         label.getStyleClass().add("title");
         label.setPadding(new Insets(14, 0, 10, 0));
         TextField usernameTF = new TextField();
-        usernameTF.setPadding(new Insets(0, 0, 10, 0));
+        usernameTF.setPadding(new Insets(0, 0, 10, 10));
         TextField passwordTF = new TextField();
-        passwordTF.setPadding(new Insets(0, 0, 10, 0));
+        passwordTF.setPadding(new Insets(0, 0, 10, 10));
 
         Button loginButton = new Button();
         loginButton.setText("Login");
@@ -95,6 +95,9 @@ public class LoginPage {
         loginBox.setPrefSize(600, 500);
         loginBox.setMaxSize(600, 500);
         loginBox.setMinSize(600, 500);
+        inputBox.prefWidthProperty().bind(loginBox.widthProperty());
+        usernameTF.maxWidthProperty().bind(inputBox.widthProperty().multiply(0.6));
+        passwordTF.maxWidthProperty().bind(inputBox.widthProperty().multiply(0.6));
         
         loginBox.setBackground(new Background(new BackgroundFill(
             Color.web(color.BACKGROUND.getCode()), new CornerRadii(6), Insets.EMPTY)));
