@@ -2,13 +2,13 @@ package GUI;
 
 public class AccessManager {
     public static boolean hasAccess(String userType, ContentType contentKey) {
-        if ("Educator".equals(userType) && ContentType.EDUCATOR.equals(contentKey)) {
+        if ("educator".equals(userType) && ContentType.EDUCATOR.equals(contentKey)) {
             return true;
         }
-        if("Student".equals(userType) && ContentType.STUDENT.equals(contentKey)) {
+        if("student".equals(userType) && ContentType.STUDENT.equals(contentKey)) {
             return true;
         }
-        if("Parent".equals(userType) && ContentType.PARENT.equals(contentKey)) {
+        if("parent".equals(userType) && ContentType.PARENT.equals(contentKey)) {
             return true;
         }
         return false;

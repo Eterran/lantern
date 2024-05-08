@@ -27,7 +27,7 @@ public class Login_Register {
         Random rand = new Random();
         int x_coordinate = rand.nextInt(1001) - 500;
         int y_coordinate = rand.nextInt(1001) - 500;
-        String coordinate = "(" + x_coordinate + "," + y_coordinate + ")";
+        String coordinate =  x_coordinate + "," + y_coordinate;
         database.updateCoordinate(connection, coordinate);
         id = getID(name_email, connection);
         user.userData(id);
@@ -94,6 +94,7 @@ public class Login_Register {
         // glb.insertXpState(connection, id);
         insertParent(connection, id, parent);
         insertChildren(connection, id, children);
+        User.setCurrentUser(getUser(username, connection));
         return true;
     }
 

@@ -130,7 +130,7 @@ public class Database {
       }
       
        public void updateCoordinate(Connection conn,String coordinate)throws SQLException{
-       String SQL_SELECT = "UPDATE user SET coordainate = ? WHERE id = ?";
+       String SQL_SELECT = "UPDATE user SET coordinate = ? WHERE id = ?";
         PreparedStatement preparedStatement = conn.prepareStatement(SQL_SELECT);
         preparedStatement.setString(1, coordinate);
         preparedStatement.executeUpdate();

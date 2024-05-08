@@ -50,14 +50,14 @@ public class Profile {
         profileTab.getChildren().addAll(profileContents);
         profileTab.setAlignment(javafx.geometry.Pos.TOP_CENTER);
 
-        if(AccessManager.hasAccess("Student", AccessManager.ContentType.STUDENT)){
+        if(AccessManager.hasAccess(User.getCurrentUser().getRole(), AccessManager.ContentType.STUDENT)){
             Label studentLabel = new Label("Students");
             studentLabel.getStyleClass().add("title");
             profileTab.getChildren().add(studentLabel);
             VBox pointBox = Lantern.createInfoBox("Points: ", user.getPoints(), padding);
             profileTab.getChildren().addAll(pointBox);
 
-        } else if(AccessManager.hasAccess("Educator", AccessManager.ContentType.EDUCATOR)){
+        } else if(AccessManager.hasAccess(User.getCurrentUser().getRole(), AccessManager.ContentType.EDUCATOR)){
             Label educatorLabel = new Label("Educators");
             profileTab.getChildren().add(educatorLabel);
             HBox quizBox = new HBox(10);
@@ -71,7 +71,7 @@ public class Profile {
             eventBox.getChildren().addAll(eventCreated, eventCount);
             profileTab.getChildren().addAll(quizBox, eventBox);
 
-        } else if(AccessManager.hasAccess("Parent", AccessManager.ContentType.PARENT)){
+        } else if(AccessManager.hasAccess(User.getCurrentUser().getRole(), AccessManager.ContentType.PARENT)){
             Label parentLabel = new Label("Parents");
             profileTab.getChildren().add(parentLabel);
             HBox bookingBox = new HBox(10);

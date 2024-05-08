@@ -2,6 +2,7 @@ package GUI;
 
 import java.util.Stack;
 
+import Database.User;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -97,21 +98,14 @@ public class Sidebar {
         leaderboardBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         box4.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         box5.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        pages[1] = profileBox;
-        pages[2] = discussionBox;
-        pages[3] = leaderboardBox;
-        pages[4] = box4;
-        pages[5] = box5;
+        
         StackPane stackPane = new StackPane();
         stackPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         HBox.setHgrow(stackPane, Priority.ALWAYS);
         stackPane.getChildren().addAll(profileBox, discussionBox, leaderboardBox, box4, box5);
         //TEMP
         discussionBox.getChildren().add(new Label("Discussion Page"));
-        box4.getChildren().add(new Label("Box 4"));
-        box5.getChildren().add(new Label("Box 5"));
         //
-        setOneVisible(1);
         backButton.setOnAction(e -> {
             goBackSidebar();
         });
@@ -127,7 +121,7 @@ public class Sidebar {
             push_SidebarHistory(3);
             setOneVisible(3);
         });
-        if(AccessManager.hasAccess("Student", AccessManager.ContentType.STUDENT)){
+        if(AccessManager.hasAccess(User.getCurrentUser().getRole(), AccessManager.ContentType.STUDENT)){
             tab4 = new Button("Quizzes");
             tab5 = new Button("Friends");
             box5 = FriendList.loadFriendList();
@@ -139,7 +133,7 @@ public class Sidebar {
                 push_SidebarHistory(5);
                 setOneVisible(5);
             });
-        } else if(AccessManager.hasAccess("Educator", AccessManager.ContentType.EDUCATOR)){
+        } else if(AccessManager.hasAccess(User.getCurrentUser().getRole(), AccessManager.ContentType.EDUCATOR)){
             tab4 = new Button("Create Quizzes");
             tab5 = new Button("Create Events");
             box4 = EducatorCreateQuiz.tabCreateQuiz();
@@ -151,13 +145,19 @@ public class Sidebar {
                 push_SidebarHistory(5);
                 setOneVisible(5);
             });
-        } else if(AccessManager.hasAccess("Parent", AccessManager.ContentType.PARENT)){
+        } else if(AccessManager.hasAccess(User.getCurrentUser().getRole(), AccessManager.ContentType.PARENT)){
             tab4 = new Button("Make Bookings");
             tab4.setOnAction(e -> {
                 push_SidebarHistory(4);
                 setOneVisible(4);
             });
         }
+        pages[1] = profileBox;
+        pages[2] = discussionBox;
+        pages[3] = leaderboardBox;
+        pages[4] = box4;
+        pages[5] = box5;
+        setOneVisible(1);
         layout1.getChildren().addAll(tabs, stackPane);
         tab1.setMaxWidth(Double.MAX_VALUE);
         tab2.setMaxWidth(Double.MAX_VALUE);

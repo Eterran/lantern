@@ -1,14 +1,12 @@
 package GUI;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
+import java.sql.SQLException;
 
+import Database.Login_Register;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
@@ -27,6 +25,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import Database.Database;
+
 public class LoginPage {
     public static void showLoginScene(Stage stg) {
         Image icon = new Image("resources/assets/lantern_icon.jpg");
@@ -40,6 +40,26 @@ public class LoginPage {
         usernameTF.setPadding(new Insets(0, 0, 10, 10));
         TextField passwordTF = new TextField();
         passwordTF.setPadding(new Insets(0, 0, 10, 10));
+        ImageView user_icon = new ImageView(new Image("resources/assets/user_icon.jpg"));
+        user_icon.setFitWidth(40);
+        user_icon.setFitHeight(40);
+        ImageView pw_icon = new ImageView(new Image("resources/assets/padlock_icon.jpg"));
+        pw_icon.setFitWidth(40);
+        pw_icon.setFitHeight(40);
+        usernameTF.getStyleClass().add("text_field_with_icon");
+        passwordTF.getStyleClass().add("text_field_with_icon");
+        HBox username_hbox = new HBox();
+        HBox password_hbox = new HBox();
+        Separator sep1 = new Separator();
+        Separator sep2 = new Separator();
+        sep1.getStyleClass().add("separator_vertical");
+        sep2.getStyleClass().add("separator_vertical");
+        username_hbox.getChildren().addAll(user_icon, sep1, usernameTF);
+        password_hbox.getChildren().addAll(pw_icon, sep2, passwordTF);
+        username_hbox.setAlignment(Pos.CENTER_LEFT);
+        password_hbox.setAlignment(Pos.CENTER_LEFT);
+        username_hbox.getStyleClass().add("background_white");
+        password_hbox.getStyleClass().add("background_white");
 
         Button loginButton = new Button();
         loginButton.setText("Login");
@@ -50,8 +70,22 @@ public class LoginPage {
                      "-fx-border-color: black; -fx-border-width: 2px;" +
                      "-fx-background-radius: 10px; -fx-border-radius: 10px;");
         loginButton.setOnAction(e -> {
-            if (Lantern.checkLoginCredentials(usernameTF.getText(), passwordTF.getText())) {
-                showSuccessScene(stg);
+            //TODO TESTING CODE
+            // if (Lantern.checkLoginCredentials(usernameTF.getText(), passwordTF.getText())) {
+            //     showSuccessScene(stg);
+            // }
+            try {
+                if(Login_Register.login(usernameTF.getText(), passwordTF.getText(), Database.connectionDatabase())) {
+                    showSuccessScene(stg);
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Login Failed");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Invalid username or password. Please try again.");
+                    alert.showAndWait();
+                }
+            } catch (SQLException e1) {
+                e1.printStackTrace();
             }
         });
 
@@ -76,14 +110,14 @@ public class LoginPage {
         VBox usernameBox = new VBox(usernameText);
         usernameBox.setPadding(new Insets(0, 10, 0, 14));
         inputBox.getChildren().add(usernameBox);
-        inputBox.getChildren().add(usernameTF);
+        inputBox.getChildren().add(username_hbox);
 
         Text passwordText = new Text("Password:");
         passwordText.getStyleClass().add("text_content");
         VBox passwordBox = new VBox(passwordText);
         passwordBox.setPadding(new Insets(0, 10, 0, 14));
         inputBox.getChildren().add(passwordBox);
-        inputBox.getChildren().add(passwordTF);
+        inputBox.getChildren().add(password_hbox);
 
         VBox buttonBox = new VBox(10);
         buttonBox.setPadding(new Insets(80, 0, 0, 0));
