@@ -7,9 +7,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -78,8 +76,8 @@ public class QuizPage {
 
     public static BorderPane BPForEveryQuiz(String labelText1, String labelText2, String buttonText, String backgroundColor) {
         BorderPane borderPane = new BorderPane();
-        borderPane.setPrefWidth(211);
-        borderPane.setPrefHeight(120);
+        borderPane.setPrefWidth(180);
+        borderPane.setPrefHeight(100);
         borderPane.setStyle("-fx-background-color: " + backgroundColor + ";");
         borderPane.setPadding(new Insets(10));
 

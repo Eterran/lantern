@@ -89,7 +89,8 @@ public class Sidebar {
         sep3Box.setAlignment(Pos.CENTER);
 
         VBox profileBox = Profile.loadProfileTab(null);
-        VBox discussionBox = new VBox();
+        //VBox discussionBox = new VBox();
+        VBox discussionBox = QuizPage.quizPageTab();
         VBox leaderboardBox = GlobalLeaderboard.globalLeaderBoardTab();
         VBox box4 = new VBox(10);
         VBox box5 = new VBox(10);

@@ -48,8 +48,8 @@ public class GlobalLeaderboard {
         VBox.setVgrow(vBox, javafx.scene.layout.Priority.ALWAYS); 
         HBox headerBox = new HBox();
         HBox.setHgrow(headerBox, javafx.scene.layout.Priority.ALWAYS); 
-        headerBox.setStyle("-fx-background-color:#730099;");
-        
+        headerBox.setStyle("-fx-background-color:#004b3a;");
+        //730099
         
         Label rankLabel = new Label("Rank");
         rankLabel.setPadding(new Insets(5));
@@ -76,9 +76,9 @@ public class GlobalLeaderboard {
         for (int i = 0; i < numberOfBoxes; i++) {
             HBox dataBox = new HBox();
             dataBox.setPadding(new Insets(5)); //padding for the databox
-           
+           //f2ccff
             if (i % 2 == 0) {
-                dataBox.setStyle("-fx-background-color: #f2ccff;");
+                dataBox.setStyle("-fx-background-color: #ADEFD1;");
             } else {
                 dataBox.setStyle("-fx-background-color: #ffffff;");
             }
