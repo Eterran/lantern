@@ -27,10 +27,9 @@ public class Login_Register {
         double min = -500.0;
         double max = 500.0;
         Random random = new Random();
-        double randomValue = random.nextDouble();
-        double x_coordinate = min + (randomValue * (max - min));
-        double y_coordinate=min + (randomValue * (max - min));;
-        String coordinate =  x_coordinate + "," + y_coordinate;
+        double x_coordinate = min + (random.nextDouble() * (max - min));
+        double y_coordinate=min + (random.nextDouble() * (max - min));;
+        String coordinate=String.format("%.1f", x_coordinate)+","+String.format("%.1f", y_coordinate);
         database.updateCoordinate(connection, coordinate);
         id = getID(name_email, connection);
         user.userData(id);
@@ -59,10 +58,9 @@ public class Login_Register {
         double min = -500.0;
         double max = 500.0;
         Random random = new Random();
-        double randomValue = random.nextDouble();
-        double x_coordinate = min + (randomValue * (max - min));
-        double y_coordinate=min + (randomValue * (max - min));;
-        String coordinate = "(" + x_coordinate + "," + y_coordinate + ")";
+        double x_coordinate = min + (random.nextDouble() * (max - min));
+        double y_coordinate=min + (random.nextDouble() * (max - min));;
+        String coordinate=String.format("%.1f", x_coordinate)+","+String.format("%.1f", y_coordinate);
         /*
          * if(role.equalsIgnoreCase("parent")){
          * String name ="";
