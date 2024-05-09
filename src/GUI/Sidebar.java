@@ -118,7 +118,7 @@ public class Sidebar {
         Button tab3 = new Button("Global Leaderboard");
 
         VBox profileBox = Profile.loadProfileTab(User.getCurrentUser());
-        VBox quizBox = EventPage.vboxput();
+        VBox quizBox = EventPage.viewEventTab();
         VBox leaderboardBox = GlobalLeaderboard.globalLeaderBoardTab();
         VBox box4 = new VBox(10);
         VBox box5 = new VBox(10);

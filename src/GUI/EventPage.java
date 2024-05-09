@@ -16,7 +16,7 @@ import javafx.scene.text.FontWeight;
 
 public class EventPage {
 
-    public static VBox vboxput() {
+    public static VBox viewEventTab() {
         VBox vbox1 = new VBox();
         vbox1.setStyle("-fx-background-color:lightyellow");
         vbox1.setPrefSize(600, 80); //adjust 
