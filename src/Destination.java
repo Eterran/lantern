@@ -5,25 +5,36 @@ import java.util.Scanner;
 
 public class Destination {
     private String name;
-    private double x;
-    private double y;
+    private String coordinate;
+    private double X;
+    private double Y;
+    
 
-    public Destination(String name, double x, double y) {
+    public Destination(String name, String coordinate) {
         this.name = name;
-        this.x = x;
-        this.y = y;
+        this.coordinate = coordinate;
+        convert(coordinate);
+    }
+    public void convert(String value){
+        String[] coordinates = value.split(",");
+        X = Double.parseDouble(coordinates[0]);
+        Y = Double.parseDouble(coordinates[1]);
     }
 
     public String getName() {
         return name;
     }
 
-    public double getX() {
-        return x;
+    public String getCoordinate() {
+        return coordinate;
     }
 
-    public double getY() {
-        return y;
+    public double getX() {
+        return X;
+    }
+
+    public double getY() {  
+        return Y;
     }
 }
 

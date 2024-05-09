@@ -25,11 +25,8 @@ public class BookingSystem {
         while (s.hasNextLine()) {
             String line = s.nextLine();
             String name = line;
-            line = s.nextLine();
-            String[] parts = line.split(",");
-            double x = Double.parseDouble(parts[1].trim());
-            double y = Double.parseDouble(parts[2].trim());
-            Destination destination = new Destination(name, x, y);
+            String coordinate = s.nextLine();
+            Destination destination = new Destination(name, coordinate);
             destinations.add(destination);
         }
     } catch (FileNotFoundException ex) {
