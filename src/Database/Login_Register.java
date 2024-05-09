@@ -24,9 +24,12 @@ public class Login_Register {
         Database database = new Database();
         // Connection connection=database.connectionDatabase();
 
-        Random rand = new Random();
-        int x_coordinate = rand.nextInt(1001) - 500;
-        int y_coordinate = rand.nextInt(1001) - 500;
+        double min = -500.0;
+        double max = 500.0;
+        Random random = new Random();
+        double randomValue = random.nextDouble();
+        double x_coordinate = min + (randomValue * (max - min));
+        double y_coordinate=min + (randomValue * (max - min));;
         String coordinate =  x_coordinate + "," + y_coordinate;
         database.updateCoordinate(connection, coordinate);
         id = getID(name_email, connection);
@@ -53,8 +56,12 @@ public class Login_Register {
         Connection connection = database.connectionDatabase();
         GlobalLeaderBoard glb = new GlobalLeaderBoard();
         String encyrptPw = encrypt(password);
-        int x_coordinate = rand.nextInt(1001) - 500;
-        int y_coordinate = rand.nextInt(1001) - 500;
+        double min = -500.0;
+        double max = 500.0;
+        Random random = new Random();
+        double randomValue = random.nextDouble();
+        double x_coordinate = min + (randomValue * (max - min));
+        double y_coordinate=min + (randomValue * (max - min));;
         String coordinate = "(" + x_coordinate + "," + y_coordinate + ")";
         /*
          * if(role.equalsIgnoreCase("parent")){
