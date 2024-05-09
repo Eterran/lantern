@@ -172,12 +172,16 @@ public class LoginPage {
             {
                 setFont(Font.font(30));
             }
+            {
+                getStyleClass().add("title");
+            }
         });
 
         BorderPane successPane = new BorderPane();
         successPane.setCenter(successLayout);
-
+        
         Scene successScene = new Scene(successPane, 500, 450);
+        successScene.getStylesheets().add("resources/style.css");
         primaryStage.setScene(successScene);
         try {
             Thread.sleep(1000);

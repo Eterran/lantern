@@ -1,11 +1,9 @@
 package GUI;
 
-import java.io.PrintWriter;
-import java.sql.Array;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.SQLException;
 
 import Database.User;
+import Database.Database;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -14,14 +12,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 public class Profile {
+    private final static AccessManager accessManager = Sidebar.getAccessManager();
     public static VBox loadProfileTab(User user){
-        if(user == null){
-            user = User.getCurrentUser();
-        }
         try {
-            PrintWriter writer = new PrintWriter("profile.txt");
-            writer.println(user.getUsername());
-        } catch (Exception e) {
+            if(!Database.usernameExists(Database.connectionDatabase(), user.getUsername())){
+                user = User.getCurrentUser();
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         System.out.println(System.getProperty("user.dir"));;
@@ -37,52 +34,22 @@ public class Profile {
         profileTab.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
         Insets padding = new Insets(8, 10, 8, 15);
-        VBox usernameBox = Lantern.createInfoBox("USERNAME: ", user.getUsername(), padding);
-        VBox roleBox = Lantern.createInfoBox("ROLE: ", user.getRole(), padding);
-        VBox emailBox = Lantern.createInfoBox("EMAIL: ", user.getEmail(), padding);
-        VBox locationCoordinateBox = Lantern.createInfoBox("LOCATION: ", "("+user.getXCoordinate()+", "+ user.getYCoordinate()+")", padding);
+        VBox usernameBox = Lantern.createInfoVBox("USERNAME: ", user.getUsername(), padding);
+        VBox roleBox = Lantern.createInfoVBox("ROLE: ", user.getRole(), padding);
+        VBox emailBox = Lantern.createInfoVBox("EMAIL: ", user.getEmail(), padding);
+        VBox locationCoordinateBox = Lantern.createInfoVBox("LOCATION: ", "("+user.getXCoordinate()+", "+ user.getYCoordinate()+")", padding);
 
         VBox profileContents = new VBox();
         profileContents.getChildren().addAll(usernameBox, roleBox, emailBox, locationCoordinateBox);
         profileContents.getStyleClass().add("content_box_background");
         profileContents.maxWidthProperty().bind(profileTab.widthProperty().multiply(0.9));
         profileContents.setPadding(new Insets(30, 10, 30, 10));
+
+        accessManager.getAccessibleVBoxes(accessManager.getUserRole(User.getCurrentUser())).forEach(
+                    vBoxSupplier -> profileContents.getChildren().add(vBoxSupplier.get()));
+
         profileTab.getChildren().addAll(profileContents);
         profileTab.setAlignment(javafx.geometry.Pos.TOP_CENTER);
-
-        if(AccessManager.hasAccess(User.getCurrentUser().getRole(), AccessManager.ContentType.STUDENT)){
-            Label studentLabel = new Label("Students");
-            studentLabel.getStyleClass().add("title");
-            profileTab.getChildren().add(studentLabel);
-            VBox pointBox = Lantern.createInfoBox("Points: ", user.getPoints(), padding);
-            profileTab.getChildren().addAll(pointBox);
-
-        } else if(AccessManager.hasAccess(User.getCurrentUser().getRole(), AccessManager.ContentType.EDUCATOR)){
-            Label educatorLabel = new Label("Educators");
-            profileTab.getChildren().add(educatorLabel);
-            HBox quizBox = new HBox(10);
-            HBox eventBox = new HBox(10);
-            Text quizCreated = new Text("Quizzes Created: ");
-            Text eventCreated = new Text("Events Created: ");
-            //TODO access database 
-            Text quizCount = new Text("5");
-            Text eventCount = new Text("3");
-            quizBox.getChildren().addAll(quizCreated, quizCount);
-            eventBox.getChildren().addAll(eventCreated, eventCount);
-            profileTab.getChildren().addAll(quizBox, eventBox);
-
-        } else if(AccessManager.hasAccess(User.getCurrentUser().getRole(), AccessManager.ContentType.PARENT)){
-            Label parentLabel = new Label("Parents");
-            profileTab.getChildren().add(parentLabel);
-            HBox bookingBox = new HBox(10);
-            Text bookingMade = new Text("Bookings Made: ");
-            //TODO access database 
-            Text bookingCount = new Text("5");
-            bookingBox.getChildren().addAll(bookingMade, bookingCount);
-            profileTab.getChildren().add(bookingBox);
-        } else {
-            profileTab.getChildren().add(new Label("No Profile Information"));
-        }
 
         return profileTab;
     }
