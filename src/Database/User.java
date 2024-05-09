@@ -12,7 +12,7 @@ import java.util.*;
 import java.sql.*;
 
 public class User {
-    private String email, username, password, role;
+    private String email, username, password, role,coordinate;
     private double x, y;
     private double points;
     private ArrayList<String> parents = new ArrayList<>();
@@ -69,8 +69,7 @@ public class User {
                 username = resultSet.getString("username");
                 password = resultSet.getString("password");
                 role = resultSet.getString("role");
-                x = resultSet.getDouble("x");
-                y = resultSet.getDouble("y");
+                coordinate=resultSet.getString("coordinate");
                 points = resultSet.getDouble("point");
             }
             getParents(connection, id);
