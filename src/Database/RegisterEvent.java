@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package assignment.ds;
+package Database;
 
 /**
  *
@@ -13,7 +13,7 @@ import java.sql.*;
 public class RegisterEvent {
     
     public static void registerEvent(Connection connection,EventData event,String username) throws IllegalArgumentException{
-        Login_Register_Gui lg=new Login_Register_Gui();
+        Login_Register lg=new Login_Register();
       int id =lg.getID(username, connection);
       int event_id=-1;
       String sql2="SELECT id FROM event WHERE (EventTitle=? AND Description=? AND Venue=? AND Date=?)";
@@ -44,7 +44,7 @@ public class RegisterEvent {
         ArrayList<Integer>data=new ArrayList<>();
         String description="",venue="",time="",eventName="",date="";
         ArrayList<EventData>events=new ArrayList<>();
-        Login_Register_Gui lg=new Login_Register_Gui();
+        Login_Register lg=new Login_Register();
       int id =lg.getID(username, connection);
       String query2="SELECT EventTitle,Description,Venue,Date,Time FROM event WHERE id=? ";
         String query = "SELECT event_id FROM EventRegistered WHERE main_id=?";
