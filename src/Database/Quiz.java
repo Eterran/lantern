@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package assignment.ds;
+package database;
 
 /**
  *
@@ -14,7 +14,7 @@ import java.sql.*;
 public class Quiz {
     public void createQuiz(Connection connection,String title,String description,String theme,String content,String username){
     
-        Login_Register_Gui lg=new Login_Register_Gui();
+        Login_Register lg=new Login_Register();
         int id =lg.getID(username, connection);
          String sql = "INSERT INTO Quiz(main_id,quizTitle,description,theme,content) VALUES (?,?,?,?,?)";
       try{
@@ -35,7 +35,7 @@ public class Quiz {
     
     public static void increaseQuizNumber(Connection connection,int num,String username){
       int count =num+1;
-      Login_Register_Gui lg=new Login_Register_Gui();
+      Login_Register lg=new Login_Register();
       int id =lg.getID(username, connection);
       String sql = "UPDATE Quiz SET numQuizCreated = ? WHERE main_id= ?";
       try{
@@ -51,7 +51,7 @@ public class Quiz {
     }
     
     public static int getNumberOfQuiz(Connection connection,String username){
-    Login_Register_Gui lg=new Login_Register_Gui();
+    Login_Register lg=new Login_Register();
       int id =lg.getID(username, connection);
       int count=-1;
          String query = "SELECT numQuizCreated FROM Quiz WHERE main_id=?";
@@ -214,7 +214,7 @@ public class Quiz {
     //use to set a user to all quiz become 0  // 0 mean not attempted,1 attempted
     public static void initializeRow(Connection connection,String username){
     
-        Login_Register_Gui lg=new Login_Register_Gui();
+        Login_Register lg=new Login_Register();
       int id =lg.getID(username, connection);
       
       try{
@@ -237,7 +237,7 @@ public class Quiz {
     
     //pass the quiz parameter in q1,q2,q3.....format
     public static void attempQuiz(Connection connection,String quiz,String username){
-          Login_Register_Gui lg=new Login_Register_Gui();
+          Login_Register lg=new Login_Register();
           int id =lg.getID(username, connection);
     
         String query = "UPDATE QuizAttempt SET " + quiz + " = ? WHERE main_id = ?";
