@@ -1,5 +1,6 @@
 package GUI;
 
+import java.sql.Connection;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -10,12 +11,16 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import Database.User;
+import Database.Database;
+import Database.Event;
+import Database.Quiz;
 
 public class AccessManager {
     private final Map<UserRole, List<Supplier<Button>>> buttonAccessRules;
     private final Map<UserRole, List<Supplier<VBox>>> vBoxAccessRules;
     private final Map<UserRole, List<Supplier<VBox>>> sidebarAccessRules1;
     private final Map<UserRole, List<Supplier<VBox>>> sidebarAccessRules2;
+    private Connection conn = Database.connectionDatabase();
 
     public AccessManager() {
         buttonAccessRules = new EnumMap<>(UserRole.class);
@@ -112,9 +117,8 @@ public class AccessManager {
     }
     private VBox createEducatorProfileVBox() {
         VBox vBox = new VBox();
-        //TODO database get quizzes created
-        HBox quizzes = Lantern.createInfoHBox("QUIZZES CREATED: ", "User.getCurrentUser().get", new Insets(8, 10, 8, 15));
-        HBox events = Lantern.createInfoHBox("EVENTS CREATED: ", "User.getCurrentUser().get", new Insets(8, 10, 8, 15));
+        HBox quizzes = Lantern.createInfoHBox("QUIZZES CREATED: ", Quiz.getNumberOfQuiz(conn, User.getCurrentUser().getUsername()), new Insets(8, 10, 8, 15));
+        HBox events = Lantern.createInfoHBox("EVENTS CREATED: ", Event.getNumberOfEvent(conn, User.getCurrentUser().getUsername()), new Insets(8, 10, 8, 15));
         vBox.getChildren().addAll(quizzes, events);
         return vBox;
     }

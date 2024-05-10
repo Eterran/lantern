@@ -153,6 +153,17 @@ public class Lantern extends Application {
         infoBox.getStylesheets().add("resources/style.css");
         return infoBox;
     }
+    public static VBox createInfoVBox(String labelText, Integer valueText, Insets spacing) {
+        Text label = new Text(labelText);
+        Text value = new Text(valueText.toString());
+        label.getStyleClass().add("text_label");
+        value.getStyleClass().add("text_content");
+        VBox infoBox = new VBox(0);
+        infoBox.setPadding(spacing);
+        infoBox.getChildren().addAll(label, value);
+        infoBox.getStylesheets().add("resources/style.css");
+        return infoBox;
+    }
     public static HBox createInfoHBox(String labelText, Double valueText, int spacing) {
         Text label = new Text(labelText);
         Text value = new Text(valueText.toString());
@@ -164,6 +175,27 @@ public class Lantern extends Application {
         return infoBox;
     }
     public static HBox createInfoHBox(String labelText, Double valueText, Insets spacing) {
+        Text label = new Text(labelText);
+        Text value = new Text(valueText.toString());
+        label.getStyleClass().add("text_label");
+        value.getStyleClass().add("text_content");
+        HBox infoBox = new HBox(0);
+        infoBox.setPadding(spacing);
+        infoBox.getChildren().addAll(label, value);
+        infoBox.getStylesheets().add("resources/style.css");
+        return infoBox;
+    }
+    public static HBox createInfoHBox(String labelText, Integer valueText, int spacing) {
+        Text label = new Text(labelText);
+        Text value = new Text(valueText.toString());
+        label.getStyleClass().add("text_label");
+        value.getStyleClass().add("text_content");
+        HBox infoBox = new HBox(spacing);
+        infoBox.getChildren().addAll(label, value);
+        infoBox.getStylesheets().add("resources/style.css");
+        return infoBox;
+    }
+    public static HBox createInfoHBox(String labelText, Integer valueText, Insets spacing) {
         Text label = new Text(labelText);
         Text value = new Text(valueText.toString());
         label.getStyleClass().add("text_label");
