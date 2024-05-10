@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package assignment.ds;
+package database;
 
 /**
  *
@@ -15,9 +15,9 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 public class Event {
     
-    //date all in format of local date 2024/05/04
+    //date all in format of local date 2024-05-04
     public static void createEvent(Connection connection,EventData event,String username){
-      Login_Register_Gui lg=new Login_Register_Gui();
+      Login_Register lg=new Login_Register();
       int id =lg.getID(username, connection);
      /* LocalDate date=LocalDate.now();
       LocalTime time=LocalTime.now();
@@ -46,7 +46,7 @@ public class Event {
     
     public static void increaseEventNumber(Connection connection,int num,String username){
       int count =num+1;
-      Login_Register_Gui lg=new Login_Register_Gui();
+      Login_Register lg=new Login_Register();
       int id =lg.getID(username, connection);
       
       String sql = "UPDATE event SET EventCount = ? WHERE main_id= ?";
@@ -104,7 +104,7 @@ public class Event {
     }
     
     public static int getNumberOfEvent(Connection connection,String username){
-    Login_Register_Gui lg=new Login_Register_Gui();
+    Login_Register lg=new Login_Register();
       int id =lg.getID(username, connection);
       int count=-1;
          String query = "SELECT EventCount FROM event WHERE main_id="+id;
@@ -316,7 +316,7 @@ public class Event {
     public static ArrayList<EventData>getEventOfUser(Connection connection,String username){
     String description="",venue="",time="",eventName="",date="";
         ArrayList<EventData>events=new ArrayList<>();
-        Login_Register_Gui lg=new Login_Register_Gui();
+        Login_Register lg=new Login_Register();
       int id =lg.getID(username, connection);
     
       
