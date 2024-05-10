@@ -121,10 +121,6 @@ public class LoginPage {
         
         loginBox.setBackground(new Background(new BackgroundFill(
             Color.web(color.BACKGROUND.getCode()), new CornerRadii(6), Insets.EMPTY)));
-        //rootBox.setBorder(new Border(new BorderStroke(
-            //Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(10), BorderWidths.DEFAULT)));
-        // root.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,
-        // CornerRadii.EMPTY, Insets.EMPTY)));
         loginBox.getChildren().addAll(labelBox, inputBox, buttonBox);
 
         Separator separator = new Separator();

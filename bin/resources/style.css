@@ -138,7 +138,18 @@
     -fx-font-size: 20;
     -fx-underline: true;
 }
-
+.add_friend_button{
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+}
+.add_friend_button:pressed{
+    -fx-background-color: #ffa44e;
+    -fx-text-fill: white;
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+}
 .separator {
     -fx-alignment: center;
     -fx-background-color: linear-gradient(to right, transparent, white, transparent);
