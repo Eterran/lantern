@@ -40,8 +40,11 @@ public class BookingSystem {
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 
-    public ArrayList<Destination> suggestDestinations(double userX, double userY) {
+    public ArrayList<Destination> suggestDestinations(String coordinate) {
         ArrayList<Double> distances = new ArrayList<>();
+        String data[] = coordinate.split(",");
+        double userX = Double.parseDouble(data[0]);
+        double userY = Double.parseDouble(data[1]);
     
         for (int i = 0; i < destinations.size(); i++) {
             double x = destinations.get(i).getX();
@@ -162,13 +165,13 @@ public class BookingSystem {
     }
     return bookedDates;
 }
-private boolean isDateBooked(Date specificDate, ArrayList<Date> bookedDates) {
-    for (Date bookedDate : bookedDates) {
-        if (specificDate.equals(bookedDate)) {
-            return true; // Date is booked
-        }
-    }
-    return false; // Date is not booked
-}
+       private boolean isDateBooked(Date specificDate, ArrayList<Date> bookedDates) {
+           for (Date bookedDate : bookedDates) {
+              if (specificDate.equals(bookedDate)) {
+                return true; // Date is booked
+                 }
+              }
+               return false; // Date is not booked
+            }
 
 }

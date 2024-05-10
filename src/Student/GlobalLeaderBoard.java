@@ -18,6 +18,7 @@ import java.time.LocalDate;
         String[]username2 ;
         LocalDate[]xpLastUpdated2;
         double[]XP2;
+        ArrayList<Integer>idStudent=new ArrayList<>();
     
     public void loadGlobal(Connection connection)throws IOException,SQLException{
        
@@ -25,35 +26,37 @@ import java.time.LocalDate;
         LocalDate xpLastUpdated=null;
         double XP=0;
         int count=0;
+             
         
-        
-        for(int i=1;i<Integer.MAX_VALUE;i++){
             try{
-            String sql = "SELECT username FROM user WHERE id = ? ";
+            String sql = "SELECT id FROM user WHERE role = ? ";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, i);
+            preparedStatement.setString(1,"Student");
             ResultSet result= preparedStatement.executeQuery();
-            if(!result.next()){
-             break;}
-             count++;}
+            while(result.next()){
+                int pend=result.getInt("id");
+                idStudent.add(pend);
+             count++;
+            }
+            }
             
             catch(SQLException e){
             e.printStackTrace();}
-        }
+        
             
         
         username2 = new String[count];
         xpLastUpdated2 = new LocalDate[count];
         XP2=new double[count];
         
-        for(int i=0;i<count;i++){
+        for(int i=0;i<idStudent.size();i++){
             try{
             String sql = "SELECT username,point FROM user WHERE id = ? ";
             String sql2 = "SELECT xpLastUpdated FROM XpLastUpdated WHERE main_id = ? ";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             PreparedStatement preparedStatement2 = connection.prepareStatement(sql2);
-            preparedStatement.setInt(1, i+1);
-            preparedStatement2.setInt(1,i+1);
+            preparedStatement.setInt(1, idStudent.get(i));
+            preparedStatement2.setInt(1,idStudent.get(i));
             ResultSet resultSet = preparedStatement.executeQuery();
             ResultSet resultSet2 = preparedStatement2.executeQuery();
             if (resultSet.next()) {
@@ -106,7 +109,7 @@ import java.time.LocalDate;
         for(int i=1;i<count;i++){
             for(int j=0;j<count-1;j++){
                 if(XP2[j]==XP2[j+1]){
-                    if(xpLastUpdated2[j].compareTo(xpLastUpdated2[j+1])<0){
+                    if(xpLastUpdated2[j].compareTo(xpLastUpdated2[j+1])>0){
                         double hold = XP2[j+1];
                         XP2[j+1] = XP2[j];
                         XP2[j]=hold;
@@ -123,7 +126,7 @@ import java.time.LocalDate;
         
     
     }
-        
+        System.out.println("This is the global leader part");
         for(int i=0;i<count;i++){
             System.out.println(username2[i]);
             System.out.println(XP2[i]);

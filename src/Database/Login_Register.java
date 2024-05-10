@@ -24,10 +24,12 @@ public class Login_Register {
         Database database = new Database();
         // Connection connection=database.connectionDatabase();
 
-        Random rand = new Random();
-        int x_coordinate = rand.nextInt(1001) - 500;
-        int y_coordinate = rand.nextInt(1001) - 500;
-        String coordinate =  x_coordinate + "," + y_coordinate;
+        double min = -500.0;
+        double max = 500.0;
+        Random random = new Random();
+        double x_coordinate = min + (random.nextDouble() * (max - min));
+        double y_coordinate=min + (random.nextDouble() * (max - min));;
+        String coordinate=String.format("%.1f", x_coordinate)+","+String.format("%.1f", y_coordinate);
         database.updateCoordinate(connection, coordinate);
         id = getID(name_email, connection);
         user.userData(id);
@@ -53,9 +55,12 @@ public class Login_Register {
         Connection connection = database.connectionDatabase();
         GlobalLeaderBoard glb = new GlobalLeaderBoard();
         String encyrptPw = encrypt(password);
-        int x_coordinate = rand.nextInt(1001) - 500;
-        int y_coordinate = rand.nextInt(1001) - 500;
-        String coordinate = "(" + x_coordinate + "," + y_coordinate + ")";
+        double min = -500.0;
+        double max = 500.0;
+        Random random = new Random();
+        double x_coordinate = min + (random.nextDouble() * (max - min));
+        double y_coordinate=min + (random.nextDouble() * (max - min));;
+        String coordinate=String.format("%.1f", x_coordinate)+","+String.format("%.1f", y_coordinate);
         /*
          * if(role.equalsIgnoreCase("parent")){
          * String name ="";
