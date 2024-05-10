@@ -59,7 +59,7 @@ public class Lantern extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Lantern");
-        Image icon = new Image("resources/assets/lantern_icon.jpg");
+        Image icon = new Image("resources/assets/lantern_icon_square.png");
         primaryStage.getIcons().add(icon);
         LoginPage.showLoginScene(primaryStage);
         primaryStage.setResizable(false);

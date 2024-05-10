@@ -29,10 +29,9 @@ import Database.Database;
 
 public class LoginPage {
     public static void showLoginScene(Stage stg) {
-        Image icon = new Image("resources/assets/lantern_icon.jpg");
-        ImageView iconView = new ImageView(icon);
-        iconView.setFitHeight(350);
-        iconView.setFitWidth(350);
+        Button registerButton = new Button();
+        registerButton.setMinSize(274, 387);
+        registerButton.getStyleClass().add("lantern_button");
         Label label = new Label("Welcome to Lantern");
         label.getStyleClass().add("title");
         label.setPadding(new Insets(14, 0, 10, 0));
@@ -58,13 +57,13 @@ public class LoginPage {
         password_hbox.getChildren().addAll(pw_icon, sep2, passwordTF);
         username_hbox.setAlignment(Pos.CENTER_LEFT);
         password_hbox.setAlignment(Pos.CENTER_LEFT);
-        username_hbox.getStyleClass().add("background_white");
-        password_hbox.getStyleClass().add("background_white");
+        username_hbox.getStyleClass().add("background_transparent");
+        password_hbox.getStyleClass().add("background_transparent");
 
         Button loginButton = new Button();
         loginButton.setText("Login");
         loginButton.getStyleClass().add("text_label");
-        loginButton.setPadding(new Insets(8, 179, 8, 179));
+        loginButton.setPadding(new Insets(8, 150, 8, 150));
         loginButton.setStyle("-fx-background-color: " + color.MAIN.getCode() +
                      "; -fx-text-fill: white; -fx-font-size: 18px;" +
                      "-fx-border-color: black; -fx-border-width: 2px;" +
@@ -85,14 +84,6 @@ public class LoginPage {
             }
         });
 
-        Button registerButton = new Button();
-        registerButton.setText("Register");
-        registerButton.getStyleClass().add("text_label");
-        registerButton.setPadding(new Insets(8, 170, 8, 170));
-        registerButton.setStyle("-fx-background-color: " + color.ACCENT.getCode() +
-                        "; -fx-text-fill: white; -fx-font-size: 18px;" +
-                        "-fx-border-color: black; -fx-border-width: 2px;" +
-                        "-fx-background-radius: 10px; -fx-border-radius: 10px;");
         registerButton.setOnAction(e -> RegistrationPage.showRegistrationScene(stg));
 
         VBox labelBox = new VBox();
@@ -100,18 +91,18 @@ public class LoginPage {
         labelBox.getChildren().addAll(label);
         
         VBox inputBox = new VBox(10);
-        inputBox.setPadding(new Insets(0, 10, 0, 14));
+        inputBox.setPadding(new Insets(0, 0, 0, 14));
         Text usernameText = new Text("Username:");
         usernameText.getStyleClass().add("text_content");
         VBox usernameBox = new VBox(usernameText);
-        usernameBox.setPadding(new Insets(0, 10, 0, 14));
+        usernameBox.setPadding(new Insets(0, 0, 0, 14));
         inputBox.getChildren().add(usernameBox);
         inputBox.getChildren().add(username_hbox);
 
         Text passwordText = new Text("Password:");
         passwordText.getStyleClass().add("text_content");
         VBox passwordBox = new VBox(passwordText);
-        passwordBox.setPadding(new Insets(0, 10, 0, 14));
+        passwordBox.setPadding(new Insets(0, 0, 0, 14));
         inputBox.getChildren().add(passwordBox);
         inputBox.getChildren().add(password_hbox);
 
@@ -119,15 +110,14 @@ public class LoginPage {
         buttonBox.setPadding(new Insets(80, 0, 0, 0));
         buttonBox.setAlignment(Pos.CENTER);
         buttonBox.getChildren().add(loginButton);
-        buttonBox.getChildren().add(registerButton);
 
         VBox loginBox = new VBox(15);
         loginBox.setPrefSize(600, 500);
         loginBox.setMaxSize(600, 500);
         loginBox.setMinSize(600, 500);
-        inputBox.prefWidthProperty().bind(loginBox.widthProperty());
-        usernameTF.maxWidthProperty().bind(inputBox.widthProperty().multiply(0.6));
-        passwordTF.maxWidthProperty().bind(inputBox.widthProperty().multiply(0.6));
+        // inputBox.prefWidthProperty().bind(loginBox.widthProperty());
+        // usernameTF.maxWidthProperty().bind(inputBox.widthProperty().multiply(1));
+        // passwordTF.maxWidthProperty().bind(inputBox.widthProperty().multiply(1));
         
         loginBox.setBackground(new Background(new BackgroundFill(
             Color.web(color.BACKGROUND.getCode()), new CornerRadii(6), Insets.EMPTY)));
@@ -146,7 +136,16 @@ public class LoginPage {
         rootBox.setAlignment(Pos.CENTER);
         rootBox.setBackground(new Background(new BackgroundFill(
             Color.web(color.BACKGROUND.getCode()), new CornerRadii(6), Insets.EMPTY)));
-        rootBox.getChildren().addAll(iconView, separator, loginBox);
+        VBox leftBox = new VBox(0);
+        leftBox.setAlignment(Pos.CENTER);
+        leftBox.setPadding(new Insets(0, 50, 0, 50));
+        leftBox.getChildren().add(registerButton);
+        Text registerText = new Text("Don't have an account?");
+        Text registerText2 = new Text("Click the lantern to register!");
+        registerText.getStyleClass().add("text_content");
+        registerText2.getStyleClass().add("text_content");
+        leftBox.getChildren().addAll(registerText, registerText2);
+        rootBox.getChildren().addAll(leftBox, separator, loginBox);
         StackPane rootPane = new StackPane();
         rootBox.prefWidthProperty().bind(rootPane.widthProperty().multiply(0.85));
         rootBox.prefHeightProperty().bind(rootPane.heightProperty().multiply(0.85));
