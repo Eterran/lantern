@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package assignment.ds;
+package database;
 
 /**
  *
@@ -14,7 +14,7 @@ public class EventData {
     protected String venue;
     protected String date;
     protected String time;
-    protected int numOfEventCreated;
+    //protected int numOfEventCreated;
     
     public EventData(String eventTitle, String description, String venue, String date, String time){
         this.eventTitle=eventTitle;
