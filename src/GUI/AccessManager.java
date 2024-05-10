@@ -86,7 +86,8 @@ public class AccessManager {
         VBox vBox = new VBox();
         //TODO database get quizzes created
         HBox quizzes = Lantern.createInfoHBox("QUIZZES CREATED: ", "User.getCurrentUser().get", new Insets(8, 10, 8, 15));
-        vBox.getChildren().add(quizzes);
+        HBox events = Lantern.createInfoHBox("EVENTS CREATED: ", "User.getCurrentUser().get", new Insets(8, 10, 8, 15));
+        vBox.getChildren().addAll(quizzes, events);
         return vBox;
     }
     private VBox createStudentProfileVBox() {

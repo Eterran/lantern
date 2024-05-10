@@ -70,10 +70,6 @@ public class LoginPage {
                      "-fx-border-color: black; -fx-border-width: 2px;" +
                      "-fx-background-radius: 10px; -fx-border-radius: 10px;");
         loginButton.setOnAction(e -> {
-            //TODO TESTING CODE
-            // if (Lantern.checkLoginCredentials(usernameTF.getText(), passwordTF.getText())) {
-            //     showSuccessScene(stg);
-            // }
             try {
                 if(Login_Register.login(usernameTF.getText(), passwordTF.getText(), Database.connectionDatabase())) {
                     showSuccessScene(stg);
