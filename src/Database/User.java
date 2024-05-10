@@ -12,8 +12,8 @@ import java.util.*;
 import java.sql.*;
 
 public class User {
-    private String email, username, password, role;
-    private double x, y;
+    private String email, username, password, role, coordinate;
+    //private double x, y;
     private double points;
     private ArrayList<String> parents = new ArrayList<>();
     private ArrayList<String> childrens = new ArrayList<>();
@@ -34,8 +34,9 @@ public class User {
         username = "dumStudent";
         password = "s";
         role = "student";
-        x = 10.0;
-        y = 10.0;
+       // x = 10.0;
+       // y = 10.0;
+        coordinate = "10,10";
         points = 3.0;
         parents.add("dumParent");
     }
@@ -44,8 +45,9 @@ public class User {
         username = "dumParent";
         password = "p";
         role = "parent";
-        x = 11.0;
-        y = 11.0;
+       // x = 11.0;
+       // y = 11.0;
+        coordinate = "11,11";
         childrens.add("dumStudent");
     }
     public void dummyEducator() {
@@ -53,8 +55,9 @@ public class User {
         username = "dumEducator";
         password = "e";
         role = "educator";
-        x = 12.0;
-        y = 12.0;
+        //x = 12.0;
+        // y = 12.0;
+        coordinate = "12,12";
     }
     //End of tester code
     public void userData(int id) {
@@ -69,8 +72,9 @@ public class User {
                 username = resultSet.getString("username");
                 password = resultSet.getString("password");
                 role = resultSet.getString("role");
-                x = resultSet.getDouble("x");
-                y = resultSet.getDouble("y");
+               // x = resultSet.getDouble("x");
+               // y = resultSet.getDouble("y");
+               coordinate = resultSet.getString("coordinate");
                 points = resultSet.getDouble("point");
             }
             getParents(connection, id);
@@ -126,13 +130,17 @@ public class User {
     public String getPassword() {
         return password;
     }
-
+/* 
     public Double getXCoordinate() {
         return x;
     }
 
     public Double getYCoordinate() {
         return y;
+    }
+    */
+    public String getCoordinate() {
+        return coordinate;
     }
 
     public String getRole() {
