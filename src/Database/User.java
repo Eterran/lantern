@@ -28,35 +28,6 @@ public class User {
     public User() {
         setCurrentUser(this);
     }
-    //Used for testing Only
-    public void dummyStudent() {
-        email = "dumStudentEmail@gmail.com";
-        username = "dumStudent";
-        password = "s";
-        role = "student";
-        x = 10.0;
-        y = 10.0;
-        points = 3.0;
-        parents.add("dumParent");
-    }
-    public void dummyParent() {
-        email = "dumParentEmail@gmail.com";
-        username = "dumParent";
-        password = "p";
-        role = "parent";
-        x = 11.0;
-        y = 11.0;
-        childrens.add("dumStudent");
-    }
-    public void dummyEducator() {
-        email = "";
-        username = "dumEducator";
-        password = "e";
-        role = "educator";
-        x = 12.0;
-        y = 12.0;
-    }
-    //End of tester code
     public void userData(int id) {
         String sql = "SELECT email,username ,password,role,coordinate,point FROM user WHERE id = ?";
         try {
