@@ -38,10 +38,8 @@ public class FriendList {
         addFriendButton.setOnAction(e -> {
             String friendUsername = addFriendTF.getText();
             if (Login_Register.getUser(friendUsername, Database.connectionDatabase()) != null) {
-                //friend friends = new friend(user.getUsername());
-                //TODO addFriend
-                //friends.addFriend(friendUsername);
-                //friendVBox.getChildren().add(new Button(friendUsername));
+                friendVBox.getChildren().clear();
+                friendVBox.getChildren().add(Profile.loadProfileTab(Login_Register.getUser(friendUsername, Database.connectionDatabase())));
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");

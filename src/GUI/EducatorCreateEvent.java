@@ -89,7 +89,8 @@ public class EducatorCreateEvent {
         VBox mainvBox = new VBox();
         mainvBox.getChildren().addAll(title,gridPane);
         mainvBox.setStyle("-fx-background-color: #e1e8f0; -fx-font-weight: bold;");
-        
+        mainvBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        VBox.setVgrow(mainvBox, javafx.scene.layout.Priority.ALWAYS);
 
         return mainvBox;
     }

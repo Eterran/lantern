@@ -62,12 +62,8 @@ public class LoginPage {
 
         Button loginButton = new Button();
         loginButton.setText("Login");
-        loginButton.getStyleClass().add("text_label");
         loginButton.setPadding(new Insets(8, 150, 8, 150));
-        loginButton.setStyle("-fx-background-color: " + color.MAIN.getCode() +
-                     "; -fx-text-fill: white; -fx-font-size: 18px;" +
-                     "-fx-border-color: black; -fx-border-width: 2px;" +
-                     "-fx-background-radius: 10px; -fx-border-radius: 10px;");
+        loginButton.getStyleClass().add("login_button");
         loginButton.setOnAction(e -> {
             try {
                 if(Login_Register.login(usernameTF.getText(), passwordTF.getText(), Database.connectionDatabase())) {
