@@ -28,38 +28,6 @@ public class User {
     public User() {
         setCurrentUser(this);
     }
-    //Used for testing Only
-    public void dummyStudent() {
-        email = "dumStudentEmail@gmail.com";
-        username = "dumStudent";
-        password = "s";
-        role = "student";
-       // x = 10.0;
-       // y = 10.0;
-        coordinate = "10,10";
-        points = 3.0;
-        parents.add("dumParent");
-    }
-    public void dummyParent() {
-        email = "dumParentEmail@gmail.com";
-        username = "dumParent";
-        password = "p";
-        role = "parent";
-        //x = 11.0;
-        //y = 11.0;
-        coordinate = "11,11";
-        childrens.add("dumStudent");
-    }
-    public void dummyEducator() {
-        email = "";
-        username = "dumEducator";
-        password = "e";
-        role = "educator";
-        //x = 12.0;
-        //y = 12.0;
-        coordinate = "12,12";
-    }
-    //End of tester code
     public void userData(int id) {
         String sql = "SELECT email,username ,password,role,coordinate,point FROM user WHERE id = ?";
         try {
@@ -72,7 +40,8 @@ public class User {
                 username = resultSet.getString("username");
                 password = resultSet.getString("password");
                 role = resultSet.getString("role");
-                coordinate = resultSet.getString("coordinate");
+                //x = resultSet.getDouble("x");
+                //y = resultSet.getDouble("y");
                 points = resultSet.getDouble("point");
             }
             getParents(connection, id);
