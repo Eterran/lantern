@@ -1,7 +1,8 @@
 package GUI;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -12,24 +13,15 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
+
+import java.sql.Connection;
+import Database.Event;
+import Database.Database;
+import Database.EventData;
+import Database.User;
+
 
 public class EducatorCreateEvent  {
-
-    // public static void main(String[] args) {
-    //     launch(args);
-    // }
-
-    // @Override
-    // public void start(Stage primaryStage) throws Exception {
-
-    //     Scene scene = new Scene(tabCreateEvent(), 650, 400);
-    //     primaryStage.setResizable(true);
-    //     primaryStage.setTitle("Create Event");
-    //     primaryStage.setScene(scene);
-    //     primaryStage.show();
-
-    // }
 
     public static VBox tabCreateEvent() {
         Label title = new Label("Create Event");
@@ -104,6 +96,32 @@ public class EducatorCreateEvent  {
         mainvBox.setStyle("-fx-background-color: #e1e8f0; -fx-font-weight: bold;");
         VBox.setVgrow(mainvBox, Priority.ALWAYS);
 
+        User user = User.getCurrentUser();
+       // user.userData(1);
+        saveBtn.setOnAction(e -> {
+            String ETitle = eventTitleTF.getText();
+            String Edescription = eventDescriptionTA.getText();
+            String Evenue = eventVenueTF.getText();
+            String Edate = eventDateTF.getText();
+            String Etime = eventTimeTF.getText();
+        
+           // User user = User.getCurrentUser();
+            EventData events = new EventData(ETitle, Edescription, Evenue, Edate, Etime);
+        
+            boolean savedSuccessfully = Event.createEvent(Database.connectionDatabase(), events, user.getUsername());
+            if (savedSuccessfully) {
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Success");
+                alert.setContentText("Event saved successfully!");
+                alert.showAndWait();
+            } else {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText("Failed to save event.");
+                alert.showAndWait();
+            }
+        });
+        
         return mainvBox;
     }
 }

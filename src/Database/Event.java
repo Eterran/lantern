@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 public class Event {
     
     //date all in format of local date 2024-05-04
-    public static void createEvent(Connection connection,EventData event,String username){
+    public static boolean createEvent(Connection connection,EventData event,String username){
       Login_Register lg=new Login_Register();
       int id =lg.getID(username, connection);
      /* LocalDate date=LocalDate.now();
@@ -34,15 +34,21 @@ public class Event {
       preparedStatement.setString(5, event.date);
       preparedStatement.setString(6, event.time);
       preparedStatement.executeUpdate();
+      //trying to check for the saving updates
+      int rowsInserted = preparedStatement.executeUpdate();
+        if (rowsInserted > 0) {
+            increaseEventNumber(connection, getNumberOfEvent(connection, username), username);
+            return true;
+        }
       }
       
       catch(SQLException e){
-      e.printStackTrace();
+        e.printStackTrace();
       }
-      
-      increaseEventNumber(connection,getNumberOfEvent(connection,username),username);
-      
+     // increaseEventNumber(connection,getNumberOfEvent(connection,username),username);
+      return false;
     }
+
     
     public static void increaseEventNumber(Connection connection,int num,String username){
       int count =num+1;
