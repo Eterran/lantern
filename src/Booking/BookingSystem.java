@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import Database.BookingDate;
 import Database.User;
+import Database.Database;
 
 import java.util.*;
 import java.sql.*;
@@ -105,20 +106,16 @@ public class BookingSystem {
 
     private ArrayList<Date> getAvailableDates(User user) {
     ArrayList<Date> availableDates = new ArrayList<>();
-
     try {
         if ("parent".equals(user.getRole())) {
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/lantern", "username", "password");
+            Connection connection = Database.connectionDatabase();
             Statement statement = connection.createStatement();
             String username = user.getUsername(); 
 
-            // Construct the SQL query to retrieve bookings for the user
             String query = "SELECT * FROM bookings WHERE user_date = '" + username + "' AND date >= CURDATE()";
 
-            // Execute the query
             ResultSet resultSet = statement.executeQuery(query);
-
-            // Iterate through the result set
+            
             while (resultSet.next()) {
                 Date date = resultSet.getDate("date");
 
