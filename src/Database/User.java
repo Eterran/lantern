@@ -72,8 +72,7 @@ public class User {
                 username = resultSet.getString("username");
                 password = resultSet.getString("password");
                 role = resultSet.getString("role");
-                x = resultSet.getDouble("x");
-                y = resultSet.getDouble("y");
+                coordinate = resultSet.getString("coordinate");
                 points = resultSet.getDouble("point");
             }
             getParents(connection, id);
