@@ -44,9 +44,19 @@ public class Sidebar {
     private static BorderPane root = new BorderPane();
     private static DoubleProperty availableWidth = new SimpleDoubleProperty();
     private static double sidebarWidth = 200;
+    private static Button tab1 = new Button("Profile");
+    private static Button tab2 = new Button("Quiz");
+    private static Button tab3 = new Button("Global Leaderboard");
+
+    private static VBox profileBox = Profile.loadProfileTab(User.getCurrentUser());
+    private static VBox eventBox = EventPage.viewEventTab();
+    private static VBox leaderboardBox = GlobalLeaderboard.globalLeaderBoardTab();
+    private static VBox box4 = new VBox(10);
+    private static VBox box5 = new VBox(10);
 
     public static void showHomeScene(Stage stg){
         Lantern.Clear_History();
+
         root.setBackground(new Background(new BackgroundFill(Color.web(color.BACKGROUND.getCode()), new CornerRadii(0), Insets.EMPTY)));
         Image image = new Image("resources/assets/back_arrow.png");
         ImageView imageView = new ImageView(image);
@@ -113,34 +123,25 @@ public class Sidebar {
             updateAvailableWidth(isNowRetracted);
         });
         
-        Button tab1 = new Button("Profile");
-        Button tab2 = new Button("Quiz");
-        Button tab3 = new Button("Global Leaderboard");
-
-        VBox profileBox = Profile.loadProfileTab(User.getCurrentUser());
-        VBox quizBox = QuizPage.quizPageTab();
-        VBox leaderboardBox = GlobalLeaderboard.globalLeaderBoardTab();
-        VBox box4 = new VBox(10);
-        VBox box5 = new VBox(10);
-
+        
         StackPane stackPane = new StackPane();
         HBox.setHgrow(stackPane, Priority.ALWAYS);
         VBox.setVgrow(stackPane, Priority.ALWAYS);
         stackPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        stackPane.getChildren().addAll(profileBox, quizBox, leaderboardBox, box4, box5);
+        stackPane.getChildren().addAll(profileBox, eventBox, leaderboardBox, box4, box5);
 
         profileBox.prefWidthProperty().bind(stackPane.widthProperty());
-        quizBox.prefWidthProperty().bind(stackPane.widthProperty());
+        eventBox.prefWidthProperty().bind(stackPane.widthProperty());
         leaderboardBox.prefWidthProperty().bind(stackPane.widthProperty());
         box4.prefWidthProperty().bind(stackPane.widthProperty());
         box5.prefWidthProperty().bind(stackPane.widthProperty());
         VBox.setVgrow(profileBox, Priority.ALWAYS);
-        VBox.setVgrow(quizBox, Priority.ALWAYS);
+        VBox.setVgrow(eventBox, Priority.ALWAYS);
         VBox.setVgrow(leaderboardBox, Priority.ALWAYS);
         VBox.setVgrow(box4, Priority.ALWAYS);
         VBox.setVgrow(box5, Priority.ALWAYS);
         profileBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        quizBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        eventBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         leaderboardBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         box4.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         box5.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
@@ -160,13 +161,7 @@ public class Sidebar {
             push_SidebarHistory(3);
             setOneVisible(3);
         });
-
-        pages[1] = profileBox;
-        pages[2] = quizBox;
-        pages[3] = leaderboardBox;
-        pages[4] = box4;
-        pages[5] = box5;
-        setOneVisible(1);
+        
         layout1.getChildren().addAll(stackPane);
         tab1.setMaxWidth(Double.MAX_VALUE);
         tab2.setMaxWidth(Double.MAX_VALUE);
@@ -180,6 +175,16 @@ public class Sidebar {
             sidebar.getChildren().add(createSeparator());
             sidebar.getChildren().add(buttonSupplier.get());
         });
+        accessManager.getAccessibleSidebar1(accessManager.getUserRole(User.getCurrentUser())).forEach(
+                    sidebarSupplier -> box4.getChildren().add(sidebarSupplier.get()));
+        accessManager.getAccessibleSidebar2(accessManager.getUserRole(User.getCurrentUser())).forEach(
+                    sidebarSupplier -> box5.getChildren().add(sidebarSupplier.get()));
+        pages[1] = profileBox;
+        pages[2] = eventBox;
+        pages[3] = leaderboardBox;
+        pages[4] = box4;
+        pages[5] = box5;
+        setOneVisible(1);
         Platform.runLater(() -> {
             updateAvailableWidth(isSidebarRetracted.get());
             sidebarWidth = sidebar.getWidth();

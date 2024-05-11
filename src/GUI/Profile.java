@@ -1,10 +1,15 @@
 package GUI;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import Database.User;
+import Student.friend;
 import Database.Database;
+import Student.friend;
+
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -13,10 +18,16 @@ import javafx.scene.text.Text;
 
 public class Profile {
     private final static AccessManager accessManager = Sidebar.getAccessManager();
+    private final static Connection conn = Database.connectionDatabase();
+
     public static VBox loadProfileTab(User user){
         try {
             if(!Database.usernameExists(Database.connectionDatabase(), user.getUsername())){
-                user = User.getCurrentUser();
+                VBox errorBox = new VBox();
+                Text errorText = new Text("User does not exist");
+                errorText.getStyleClass().add("title");
+                errorBox.getChildren().add(errorText);
+                return errorBox;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -50,6 +61,14 @@ public class Profile {
 
         profileTab.getChildren().addAll(profileContents);
         profileTab.setAlignment(javafx.geometry.Pos.TOP_CENTER);
+
+        if(!user.getUsername().equals(User.getCurrentUser().getUsername())){
+            Button addFriendButton = new Button("Add Friend");
+            addFriendButton.getStyleClass().add("add_friend_button");
+            addFriendButton.setOnAction(e -> {
+                friend.friendRequest(conn, user.getUsername(), User.getCurrentUser().getUsername());
+            });
+        }
 
         return profileTab;
     }

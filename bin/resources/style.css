@@ -76,6 +76,9 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 10, 0, 0, 0);
     -fx-padding: 20 40 20 10;
 }
+.background_transparent {
+    -fx-background-color: transparent;
+}
 
 .back_button {
     -fx-background-color: radial-gradient(center 50% 50%, radius 100%, #8B0000, rgb(224, 48, 48));
@@ -94,6 +97,32 @@
     -fx-border-color: rgb(224, 48, 48);
     -fx-border-width: 1;
     -fx-border-radius: 0;
+}
+.login_button{
+    -fx-background-color: #FF8F00;
+    -fx-text-fill: white; 
+    -fx-font-family: 'Nunito Bold';
+    -fx-font-size: 22px;
+    -fx-border-color: black; 
+    -fx-border-width: 2px;
+    -fx-background-radius: 10px; 
+    -fx-border-radius: 10px;
+}
+.lantern_button{
+    -fx-background-color: transparent;
+    -fx-text-fill: transparent;
+    -fx-border-color: transparent;
+    -fx-background-image: url('./assets/lantern_icon.png');
+    -fx-padding: 50 50 50 50;
+}
+.lantern_button:hover {
+    -fx-effect: dropshadow(gaussian, rgba(255, 169, 89, 1), 30, 0, 0, 0);
+    -fx-background-image: url('./assets/lit_lantern.gif');
+}
+.register_text {
+    -fx-font-family: 'Nunito Regular';
+    -fx-font-size: 16;
+    -fx-text-fill: white;
 }
 
 .sidebar_button {
@@ -119,7 +148,18 @@
     -fx-font-size: 20;
     -fx-underline: true;
 }
-
+.add_friend_button{
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+}
+.add_friend_button:pressed{
+    -fx-background-color: #ffa44e;
+    -fx-text-fill: white;
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+}
 .separator {
     -fx-alignment: center;
     -fx-background-color: linear-gradient(to right, transparent, white, transparent);
@@ -160,7 +200,7 @@
 
 .text_field {
     -fx-background-color: #fff;
-    -fx-border-color: #ddd;
+    -fx-border-color: transparent;
     -fx-border-radius: 5px;
     -fx-padding: 10px;
     -fx-font-size: 16px;
@@ -169,8 +209,8 @@
     -fx-prompt-text-fill: #aaa;
 }
 .text_field_with_icon {
-    -fx-background-color: #fff;
-    -fx-border-color: #ddd;
+    -fx-background-color: white;
+    -fx-border-color: transparent;
     -fx-border-radius: 5px;
     -fx-padding: 10px;
     -fx-font-size: 16px;

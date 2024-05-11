@@ -45,7 +45,7 @@ public class friend {
         return check;
     }
 
-    public void friendRequest(Connection connection, String friendName, String username) {
+    public static void friendRequest(Connection connection, String friendName, String username) {
         Login_Register lg = new Login_Register();
         int id = lg.getID(username, connection);
         try {
