@@ -9,7 +9,10 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
@@ -75,12 +78,25 @@ public class EducatorCreateQuiz {
                 alert.showAndWait();
             }
         });
-        //Creating gridpane
         GridPane gridPane = new GridPane();
         gridPane.setMinSize(400,200);
         gridPane.setPadding(new Insets(10,10,10,10));
         gridPane.setVgap(6);
         gridPane.setHgap(6);
+
+        // Set ColumnConstraints
+        ColumnConstraints column1 = new ColumnConstraints();
+        column1.setPercentWidth(20);
+        ColumnConstraints column2 = new ColumnConstraints();
+        column2.setPercentWidth(80);
+        gridPane.getColumnConstraints().addAll(column1, column2);
+
+        // Set RowConstraints
+        for (int i = 0; i < 7; i++) {
+            RowConstraints row = new RowConstraints();
+            row.setVgrow(Priority.ALWAYS);
+            gridPane.getRowConstraints().add(row);
+        }
 
         gridPane.setAlignment(Pos.CENTER);
         gridPane.add(quizTitle,0,0);
@@ -97,11 +113,10 @@ public class EducatorCreateQuiz {
         gridPane.add(saveBtn,0,5);
         gridPane.add(cancelBtn, 0,6);
 
-
-        
         VBox mainvBox = new VBox();
         mainvBox.getChildren().addAll(title,gridPane);
         mainvBox.setStyle("-fx-background-color: #e1e8f0; -fx-font-weight: bold;");
+        VBox.setVgrow(mainvBox, Priority.ALWAYS);
         
 
         return mainvBox;

@@ -140,7 +140,7 @@ public class AccessManager {
         return vBox;
     }
     private VBox createEducatorSidebar2() {
-        VBox vBox = EducatorCreateEvent.tabCreateEvent();
+        VBox vBox = EducatorCreateQuiz.tabCreateQuiz();
         return vBox;
     }
     private VBox createStudentSidebar1() {
