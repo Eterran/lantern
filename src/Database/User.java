@@ -30,7 +30,6 @@ public class User {
         setCurrentUser(this);
     }
     
-    //End of tester code
     public void userData(int id) {
         String sql = "SELECT email,username ,password,role,coordinate,point FROM user WHERE id = ?";
         try {
