@@ -1,5 +1,6 @@
 package GUI;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import Database.Login_Register;
@@ -25,9 +26,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import Database.Database;
-
 public class LoginPage {
+    private static Connection conn = Lantern.getConn();
+    
     public static void showLoginScene(Stage stg) {
         Button registerButton = new Button();
         registerButton.setMinSize(274, 387);
@@ -66,7 +67,7 @@ public class LoginPage {
         loginButton.getStyleClass().add("login_button");
         loginButton.setOnAction(e -> {
             try {
-                if(Login_Register.login(usernameTF.getText(), passwordTF.getText(), Database.connectionDatabase())) {
+                if(Login_Register.login(usernameTF.getText(), passwordTF.getText(), conn)) {
                     showSuccessScene(stg);
                 } else {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -154,8 +155,12 @@ public class LoginPage {
 
     public static void showSuccessScene(Stage primaryStage) {
         VBox successLayout = new VBox(50);
+        successLayout.setBackground(new Background(new BackgroundFill(
+            Color.web(color.BACKGROUND.getCode()), new CornerRadii(6), Insets.EMPTY)));
         successLayout.setAlignment(Pos.CENTER);
-        successLayout.getChildren().addAll(new javafx.scene.control.Label("LOGIN SUCCESS") {
+        ImageView loading = new ImageView(new Image("resources/assets/lit_lantern.gif"));
+        
+        successLayout.getChildren().addAll(loading, new javafx.scene.control.Label("LOGIN SUCCESS") {
             {
                 setFont(Font.font(30));
             }
@@ -167,7 +172,7 @@ public class LoginPage {
         BorderPane successPane = new BorderPane();
         successPane.setCenter(successLayout);
         
-        Scene successScene = new Scene(successPane, 500, 450);
+        Scene successScene = new Scene(successPane, 700, 700);
         successScene.getStylesheets().add("resources/style.css");
         primaryStage.setScene(successScene);
         try {

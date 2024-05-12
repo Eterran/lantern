@@ -20,7 +20,7 @@ public class AccessManager {
     private final Map<UserRole, List<Supplier<VBox>>> vBoxAccessRules;
     private final Map<UserRole, List<Supplier<VBox>>> sidebarAccessRules1;
     private final Map<UserRole, List<Supplier<VBox>>> sidebarAccessRules2;
-    private Connection conn = Database.connectionDatabase();
+    private Connection conn = Lantern.getConn();
 
     public AccessManager() {
         buttonAccessRules = new EnumMap<>(UserRole.class);

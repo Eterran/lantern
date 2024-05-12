@@ -27,8 +27,9 @@ import Database.Database;
 import Database.Login_Register;
 
 public class RegistrationPage {
+    private static Connection conn = Lantern.getConn();
+
     public static void showRegistrationScene(Stage stg) {
-        Connection conn = Database.connectionDatabase();
         Lantern.Push_History(stg.getScene());
         Label label = new Label("Register");
         label.getStyleClass().add("title");

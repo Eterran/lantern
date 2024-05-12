@@ -12,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import Database.Database;
@@ -20,6 +21,7 @@ import Database.User;
 import Student.friend;
 
 public class FriendList {
+    private static Connection conn = Lantern.getConn();
     public static VBox loadFriendList() {
         Image addFriendImage = new Image("resources/assets/add_friends_icon.png");
         ImageView addFriendImageView = new ImageView(addFriendImage);
@@ -37,9 +39,9 @@ public class FriendList {
         addFriendButton.getStyleClass().add("add_friend_button");
         addFriendButton.setOnAction(e -> {
             String friendUsername = addFriendTF.getText();
-            if (Login_Register.getUser(friendUsername, Database.connectionDatabase()) != null) {
+            if (Login_Register.getUser(friendUsername, conn) != null) {
                 friendVBox.getChildren().clear();
-                friendVBox.getChildren().add(Profile.loadProfileTab(Login_Register.getUser(friendUsername, Database.connectionDatabase())));
+                friendVBox.getChildren().add(Profile.loadOthersProfileTab(Login_Register.getUser(friendUsername, conn)));
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
@@ -56,7 +58,7 @@ public class FriendList {
             Button profileButton = new Button(friend);
             profileButton.getStyleClass().add("profile_button");
             profileButton.setOnAction(e -> {
-                Profile.loadProfileTab(Login_Register.getUser(friend, Database.connectionDatabase()));
+                Profile.loadOthersProfileTab(Login_Register.getUser(friend, conn));
             });
             friendVBox.getChildren().add(profileButton);
         }

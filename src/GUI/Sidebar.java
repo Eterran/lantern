@@ -1,10 +1,12 @@
 package GUI;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.management.ValueExp;
-
+import Database.Database;
+import Database.Login_Register;
 import Database.User;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
@@ -14,9 +16,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -38,21 +42,28 @@ public class Sidebar {
     private static VBox[] pages = new VBox[10];
     private static Stack<Integer> sidebarHistory = new Stack<Integer>();
     private static int currentPage = 1;
-    public final static AccessManager accessManager = new AccessManager();
+
+    private final static AccessManager accessManager = new AccessManager();
+
+    private static Connection conn = Lantern.getConn();
+
     final static AtomicBoolean isSidebarRetracted = new AtomicBoolean(false);
     private static VBox sidebar = new VBox(0);
     private static BorderPane root = new BorderPane();
     private static DoubleProperty availableWidth = new SimpleDoubleProperty();
     private static double sidebarWidth = 200;
     private static Button tab1 = new Button("Profile");
-    private static Button tab2 = new Button("Quiz");
-    private static Button tab3 = new Button("Global Leaderboard");
+    private static Button tab2 = new Button("Events");
+    private static Button tab3 = new Button("Discussion");
+    private static Button tab4 = new Button("Global Leaderboard");
 
-    private static VBox profileBox = Profile.loadProfileTab(User.getCurrentUser());
+    private static VBox profileBox = Profile.loadProfileTab();
     private static VBox eventBox = EventPage.viewEventTab();
+    private static VBox discussionBox = Profile.loadOthersProfileTab(Login_Register.getUser("qwe", conn));
     private static VBox leaderboardBox = GlobalLeaderboard.globalLeaderBoardTab();
-    private static VBox box4 = new VBox(10);
     private static VBox box5 = new VBox(10);
+    private static VBox box6 = new VBox(10);
+    private static VBox box7 = new VBox(10);
 
     public static void showHomeScene(Stage stg){
         Lantern.Clear_History();
@@ -122,29 +133,36 @@ public class Sidebar {
             tt.playFromStart();
             updateAvailableWidth(isNowRetracted);
         });
-        
+
+        HBox searcHBox = createSearchBox();
         
         StackPane stackPane = new StackPane();
         HBox.setHgrow(stackPane, Priority.ALWAYS);
         VBox.setVgrow(stackPane, Priority.ALWAYS);
         stackPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        stackPane.getChildren().addAll(profileBox, eventBox, leaderboardBox, box4, box5);
+        stackPane.getChildren().addAll(profileBox, eventBox, discussionBox, leaderboardBox, box5, box6, box7);
 
         profileBox.prefWidthProperty().bind(stackPane.widthProperty());
         eventBox.prefWidthProperty().bind(stackPane.widthProperty());
+        discussionBox.prefWidthProperty().bind(stackPane.widthProperty());
         leaderboardBox.prefWidthProperty().bind(stackPane.widthProperty());
-        box4.prefWidthProperty().bind(stackPane.widthProperty());
         box5.prefWidthProperty().bind(stackPane.widthProperty());
+        box6.prefWidthProperty().bind(stackPane.widthProperty());
+        box7.prefWidthProperty().bind(stackPane.widthProperty());
         VBox.setVgrow(profileBox, Priority.ALWAYS);
         VBox.setVgrow(eventBox, Priority.ALWAYS);
+        VBox.setVgrow(discussionBox, Priority.ALWAYS);
         VBox.setVgrow(leaderboardBox, Priority.ALWAYS);
-        VBox.setVgrow(box4, Priority.ALWAYS);
         VBox.setVgrow(box5, Priority.ALWAYS);
+        VBox.setVgrow(box6, Priority.ALWAYS);
+        VBox.setVgrow(box7, Priority.ALWAYS);
         profileBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         eventBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        discussionBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         leaderboardBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        box4.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         box5.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        box6.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        box7.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
         backButton.setOnAction(e -> {
             goBackSidebar();
@@ -161,29 +179,36 @@ public class Sidebar {
             push_SidebarHistory(3);
             setOneVisible(3);
         });
+        tab4.setOnAction(e -> {
+            push_SidebarHistory(4);
+            setOneVisible(4);
+        });
         
         layout1.getChildren().addAll(stackPane);
         tab1.setMaxWidth(Double.MAX_VALUE);
         tab2.setMaxWidth(Double.MAX_VALUE);
         tab3.setMaxWidth(Double.MAX_VALUE);
+        tab4.setMaxWidth(Double.MAX_VALUE);
         
         backAndRetract.getChildren().addAll(backButton, retractButton);
         HBox.setHgrow(backButton, Priority.ALWAYS);
         backButton.setMaxWidth(Double.MAX_VALUE);
-        sidebar.getChildren().addAll(backAndRetract, tab1, createSeparator(), tab2, createSeparator(), tab3);
+        sidebar.getChildren().addAll(backAndRetract, searcHBox, tab1, createSeparator(), tab2, createSeparator(), tab3, createSeparator(), tab4);
         accessManager.getAccessibleButtons(accessManager.getUserRole(User.getCurrentUser())).forEach(buttonSupplier -> {
             sidebar.getChildren().add(createSeparator());
             sidebar.getChildren().add(buttonSupplier.get());
         });
         accessManager.getAccessibleSidebar1(accessManager.getUserRole(User.getCurrentUser())).forEach(
-                    sidebarSupplier -> box4.getChildren().add(sidebarSupplier.get()));
-        accessManager.getAccessibleSidebar2(accessManager.getUserRole(User.getCurrentUser())).forEach(
                     sidebarSupplier -> box5.getChildren().add(sidebarSupplier.get()));
+        accessManager.getAccessibleSidebar2(accessManager.getUserRole(User.getCurrentUser())).forEach(
+                    sidebarSupplier -> box6.getChildren().add(sidebarSupplier.get()));
         pages[1] = profileBox;
         pages[2] = eventBox;
-        pages[3] = leaderboardBox;
-        pages[4] = box4;
+        pages[3] = discussionBox;
+        pages[4] = leaderboardBox;
         pages[5] = box5;
+        pages[6] = box6;
+        pages[7] = box7;
         setOneVisible(1);
         Platform.runLater(() -> {
             updateAvailableWidth(isSidebarRetracted.get());
@@ -202,6 +227,7 @@ public class Sidebar {
         tab1.getStyleClass().add("sidebar_button");
         tab2.getStyleClass().add("sidebar_button");
         tab3.getStyleClass().add("sidebar_button");
+        tab4.getStyleClass().add("sidebar_button");
         scene1.getStylesheets().add("resources/style.css");
         stg.setScene(scene1);
     }
@@ -252,5 +278,40 @@ public class Sidebar {
         } else {
             availableWidth.set(root.getWidth() - sidebarWidth);
         }
+    }
+    private static HBox createSearchBox(){
+        HBox searchBox = new HBox();
+        TextField searchField = new TextField();
+        searchField.setPromptText("Search Users");
+        searchField.getStyleClass().add("search_field");
+        searchField.setMaxHeight(30);
+        HBox.setHgrow(searchField, Priority.ALWAYS);
+        Image searchImage = new Image("resources/assets/search_icon.png");
+        ImageView searchImageView = new ImageView(searchImage);
+        searchImageView.setFitHeight(30);
+        searchImageView.setFitWidth(30);
+        Button searchButton = new Button();
+        searchButton.setGraphic(searchImageView);
+        searchButton.getStyleClass().add("add_friend_button");
+        searchButton.setOnAction(e -> {
+            String search = searchField.getText();
+            if(search != null && !search.isEmpty()){
+                try {
+                    if(Database.usernameExists(conn, search)){
+                        box7 = Profile.loadOthersProfileTab(Login_Register.getUser(search, conn));
+                        setOneVisible(7);
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("User not found");
+                        alert.setContentText("The user you are trying to find does not exist.");
+                    }
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+        searchBox.getChildren().addAll(searchField, searchButton);
+        return searchBox;
     }
 }

@@ -13,14 +13,20 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
+
+import java.sql.Connection;
 import java.util.*;
+
+import Database.Database;
 
 public class Lantern extends Application {
     private static Deque<Scene> history = new ArrayDeque<Scene>();
     private static Deque<Tab> tabHistory = new ArrayDeque<Tab>();
-    
-    //TODO: Implement user class
-    //private User user;
+    private static Connection conn = Database.connectionDatabase();
+
+    public static Connection getConn() {
+        return conn;
+    }
 
     public static Scene Pop_History(){
         return history.pop();
