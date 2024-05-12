@@ -33,8 +33,6 @@ public class User {
         username = "dumStudent";
         password = "s";
         role = "student";
-       // x = 10.0;
-       // y = 10.0;
         coordinate = "10,10";
         points = 3.0;
         parents.add("dumParent");
@@ -44,8 +42,6 @@ public class User {
         username = "dumParent";
         password = "p";
         role = "parent";
-        //x = 11.0;
-        //y = 11.0;
         coordinate = "11,11";
         childrens.add("dumStudent");
     }
@@ -54,8 +50,6 @@ public class User {
         username = "dumEducator";
         password = "e";
         role = "educator";
-        //x = 12.0;
-        //y = 12.0;
         coordinate = "12,12";
     }
     //End of tester code
@@ -71,8 +65,7 @@ public class User {
                 username = resultSet.getString("username");
                 password = resultSet.getString("password");
                 role = resultSet.getString("role");
-                //x = resultSet.getDouble("x");
-                //y = resultSet.getDouble("y");
+                coordinate = resultSet.getString("coordinate");
                 points = resultSet.getDouble("point");
             }
             getParents(connection, id);
