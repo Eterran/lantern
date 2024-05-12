@@ -23,8 +23,7 @@ public class Login_Register {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         Database database = new Database();
         // Connection connection=database.connectionDatabase();
-//test
-System.out.println("Ilovu");
+
         double min = -500.0;
         double max = 500.0;
         Random random = new Random();
