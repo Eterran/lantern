@@ -13,7 +13,9 @@ import java.sql.*;
 
 public class User {
     private String email, username, password, role, coordinate;
+    private String[] temp;
     private double points;
+    private double X,Y;
     private ArrayList<String> parents = new ArrayList<>();
     private ArrayList<String> childrens = new ArrayList<>();
     private static User currentUser;
@@ -27,31 +29,7 @@ public class User {
     public User() {
         setCurrentUser(this);
     }
-    //Used for testing Only
-    public void dummyStudent() {
-        email = "dumStudentEmail@gmail.com";
-        username = "dumStudent";
-        password = "s";
-        role = "student";
-        coordinate = "10,10";
-        points = 3.0;
-        parents.add("dumParent");
-    }
-    public void dummyParent() {
-        email = "dumParentEmail@gmail.com";
-        username = "dumParent";
-        password = "p";
-        role = "parent";
-        coordinate = "11,11";
-        childrens.add("dumStudent");
-    }
-    public void dummyEducator() {
-        email = "";
-        username = "dumEducator";
-        password = "e";
-        role = "educator";
-        coordinate = "12,12";
-    }
+    
     //End of tester code
     public void userData(int id) {
         String sql = "SELECT email,username ,password,role,coordinate,point FROM user WHERE id = ?";
@@ -66,6 +44,9 @@ public class User {
                 password = resultSet.getString("password");
                 role = resultSet.getString("role");
                 coordinate = resultSet.getString("coordinate");
+                temp = coordinate.split(",");
+                X = Double.parseDouble(temp[0]);
+                Y = Double.parseDouble(temp[1]);
                 points = resultSet.getDouble("point");
             }
             getParents(connection, id);
@@ -124,6 +105,14 @@ public class User {
 
     public String getCoordinate() {
         return coordinate;
+    }
+    public Double getX() {
+        return X;
+
+    }
+
+    public Double getY() {
+        return Y;
     }
 
     public String getRole() {
