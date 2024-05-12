@@ -193,7 +193,7 @@ public class Sidebar {
         backAndRetract.getChildren().addAll(backButton, retractButton);
         HBox.setHgrow(backButton, Priority.ALWAYS);
         backButton.setMaxWidth(Double.MAX_VALUE);
-        sidebar.getChildren().addAll(backAndRetract, searcHBox, tab1, createSeparator(), tab2, createSeparator(), tab3, createSeparator(), tab4);
+        sidebar.getChildren().addAll(backAndRetract, searcHBox, createSeparator(), tab1, createSeparator(), tab2, createSeparator(), tab3, createSeparator(), tab4);
         accessManager.getAccessibleButtons(accessManager.getUserRole(User.getCurrentUser())).forEach(buttonSupplier -> {
             sidebar.getChildren().add(createSeparator());
             sidebar.getChildren().add(buttonSupplier.get());
@@ -281,15 +281,16 @@ public class Sidebar {
     }
     private static HBox createSearchBox(){
         HBox searchBox = new HBox();
+        searchBox.setPadding(new Insets(2, 0, 0, 0));
         TextField searchField = new TextField();
         searchField.setPromptText("Search Users");
         searchField.getStyleClass().add("search_field");
-        searchField.setMaxHeight(30);
+        searchField.setMaxSize(sidebarWidth, Double.MAX_VALUE);
         HBox.setHgrow(searchField, Priority.ALWAYS);
         Image searchImage = new Image("resources/assets/search_icon.png");
         ImageView searchImageView = new ImageView(searchImage);
-        searchImageView.setFitHeight(30);
-        searchImageView.setFitWidth(30);
+        searchImageView.setFitHeight(24);
+        searchImageView.setFitWidth(24);
         Button searchButton = new Button();
         searchButton.setGraphic(searchImageView);
         searchButton.getStyleClass().add("add_friend_button");
@@ -298,7 +299,9 @@ public class Sidebar {
             if(search != null && !search.isEmpty()){
                 try {
                     if(Database.usernameExists(conn, search)){
-                        box7 = Profile.loadOthersProfileTab(Login_Register.getUser(search, conn));
+                        box7.getChildren().clear();
+                        box7.getChildren().add(Profile.loadOthersProfileTab(Login_Register.getUser(search, conn)));
+                        pages[7] = box7;
                         setOneVisible(7);
                     } else {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
