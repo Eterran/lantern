@@ -12,7 +12,7 @@ import java.util.*;
 import java.sql.*;
 
 public class Quiz {
-    public void createQuiz(Connection connection,String title,String description,String theme,String content,String username){
+    public static boolean createQuiz(Connection connection,String title,String description,String theme,String content,String username){
     
         Login_Register lg=new Login_Register();
         int id =lg.getID(username, connection);
@@ -25,12 +25,22 @@ public class Quiz {
       preparedStatement.setString(4, theme);
       preparedStatement.setString(5, content);
       preparedStatement.executeUpdate();
+      int rowsInserted = preparedStatement.executeUpdate();
+        if (rowsInserted > 0) {
+            increaseQuizNumber(connection, getNumberOfQuiz(connection, username), username);
+            return true;
+        }
+      } catch(SQLException e){
+           e.printStackTrace();
+
       }
-      
-      catch(SQLException e){
-      e.printStackTrace();
-      }
-    increaseQuizNumber(connection,getNumberOfQuiz(connection,username),username);
+      return false;
+
+    //   catch(SQLException e){
+    //   e.printStackTrace();
+    //   }
+    // increaseQuizNumber(connection,getNumberOfQuiz(connection,username),username);
+
     }
     
     public static void increaseQuizNumber(Connection connection,int num,String username){

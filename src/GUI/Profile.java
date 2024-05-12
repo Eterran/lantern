@@ -48,7 +48,7 @@ public class Profile {
         VBox usernameBox = Lantern.createInfoVBox("USERNAME: ", user.getUsername(), padding);
         VBox roleBox = Lantern.createInfoVBox("ROLE: ", user.getRole(), padding);
         VBox emailBox = Lantern.createInfoVBox("EMAIL: ", user.getEmail(), padding);
-        VBox locationCoordinateBox = Lantern.createInfoVBox("LOCATION: ", "("+user.getXCoordinate()+", "+ user.getYCoordinate()+")", padding);
+        VBox locationCoordinateBox = Lantern.createInfoVBox("LOCATION: ", "("+"user.getXCoordinate()"+", "+ "user.getYCoordinate()"+")", padding);
 
         VBox profileContents = new VBox();
         profileContents.getChildren().addAll(usernameBox, roleBox, emailBox, locationCoordinateBox);

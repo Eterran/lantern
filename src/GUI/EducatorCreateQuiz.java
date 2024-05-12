@@ -1,8 +1,15 @@
 package GUI;
 
+import java.sql.Connection;
+
+import Database.Database;
+import Database.Event;
+import Database.EventData;
+import Database.User;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
@@ -16,6 +23,10 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
+import Database.Database;
+import Database.Quiz;
+import Database.QuizData;
+import Database.User;
 public class EducatorCreateQuiz {
 
     // public static void main(String[] args) {
@@ -66,6 +77,28 @@ public class EducatorCreateQuiz {
         saveBtn.setStyle("-fx-background-color: #9068be; -fx-text-fill: white");
         cancelBtn.setStyle("-fx-background-color:#9068be; -fx-text-fill: white");
 
+        StringBuilder selectedSubjects = new StringBuilder();
+        scCheckbox.setOnAction(e -> {
+             if (scCheckbox.isSelected()) {
+                 selectedSubjects.append("Science ");
+             }
+         });
+        techCheckbox.setOnAction(e -> {
+            if (techCheckbox.isSelected()) {
+                selectedSubjects.append("Technology ");
+            }
+        }); 
+        engCheckbox.setOnAction(e -> {
+            if (engCheckbox.isSelected()) {
+                selectedSubjects.append("Engineering ");
+            }
+        });
+        mathCheckbox.setOnAction(e -> {
+            if (mathCheckbox.isSelected()) {
+                selectedSubjects.append("Mathematics ");
+            }
+        });
+
         saveBtn.setOnAction(e -> {
             if (quizTitleTF.getText().isEmpty() || quizDescriptionTA.getText().isEmpty() ||
                     !(scCheckbox.isSelected() || techCheckbox.isSelected() || engCheckbox.isSelected() || mathCheckbox.isSelected()) ||
@@ -78,6 +111,30 @@ public class EducatorCreateQuiz {
                 alert.showAndWait();
             }
         });
+
+       User user = User.getCurrentUser();
+
+        saveBtn.setOnAction(e -> {
+            String QTitle = quizTitleTF.getText();
+            String Qdescription = quizDescriptionTA.getText();
+            String Qtheme = selectedSubjects.toString(); //solve chekbox
+            String Qcontent = quizContentTF.getText();
+    
+            boolean savedSuccessfully = Quiz.createQuiz(Database.connectionDatabase(), QTitle, Qdescription, Qtheme, Qcontent, user.getUsername());
+            if (savedSuccessfully) {
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Success");
+                alert.setContentText("Quiz saved successfully!");
+                alert.showAndWait();
+            } else {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText("Failed to save quiz.");
+                alert.showAndWait();
+            }
+        });
+
+
         GridPane gridPane = new GridPane();
         gridPane.setMinSize(400,200);
         gridPane.setPadding(new Insets(10,10,10,10));
