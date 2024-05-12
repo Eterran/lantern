@@ -2,6 +2,8 @@ package GUI;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
@@ -13,6 +15,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 
 import java.sql.Connection;
 import java.util.*;
@@ -104,7 +107,6 @@ public class Lantern extends Application {
             return false;
         }
     }
-
     public static boolean goBackTab(TabPane tabPane) {
         if (!tabHistory.isEmpty()) {
             tabPane.getSelectionModel().select(tabHistory.pop());
@@ -113,20 +115,27 @@ public class Lantern extends Application {
             return false;
         }
     }
-
-    public static boolean checkLoginCredentials(String username, String password) {
-        if (username.equals("a") && password.equals("a")) {
-            return true;
-        }
-        return false;
+    public static VBox createHorizontalSeparator(int spacing){
+        Separator separator = new Separator();
+        separator.setOrientation(Orientation.HORIZONTAL);
+        VBox sepBox = new VBox();
+        Insets padding = new Insets(0, spacing, 0, spacing);
+        sepBox.setPadding(padding);
+        sepBox.getChildren().add(separator);
+        sepBox.setAlignment(Pos.CENTER);
+        return sepBox;
+    }
+    public static VBox createVerticalSeparator(int spacing){
+        Separator separator = new Separator();
+        separator.setOrientation(Orientation.VERTICAL);
+        VBox sepBox = new VBox(spacing);
+        Insets padding = new Insets(spacing, 0, spacing, 0);
+        sepBox.setPadding(padding);
+        sepBox.getChildren().add(separator);
+        sepBox.setAlignment(Pos.CENTER);
+        return sepBox;
     }
 
-    public static boolean checkRegisterCredentials(String username, String password, String role) {
-        if (!(username.equals("a") && password.equals("a"))) {
-            return true;
-        }
-        return false;
-    }
     public static VBox createInfoBox(String labelText, String valueText, int spacing) {
         Text label = new Text(labelText);
         Text value = new Text(valueText);

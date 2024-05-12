@@ -111,6 +111,7 @@ public class Profile {
             addFriendButton.setOnAction(e -> {
                 friend.friendRequest(conn, user.getUsername(), User.getCurrentUser().getUsername());
             });
+            profileContents.getChildren().add(addFriendButton);
         }
 
         return profileTab;

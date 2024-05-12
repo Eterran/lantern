@@ -59,7 +59,7 @@ public class RegistrationPage {
 
         Button registerButton = new Button();
         registerButton.setText("Register");
-        registerButton.setPadding(new Insets(8, 100, 8, 100));
+        registerButton.setPadding(new Insets(8, 94, 8, 94));
         registerButton.setStyle("-fx-background-color: " + color.MAIN.getCode() +
                                 "; -fx-text-fill: white; -fx-font-size: 18px;" +
                                 "-fx-border-color: black; -fx-border-width: 2px;" +
@@ -105,7 +105,7 @@ public class RegistrationPage {
 
         Button backButton = new Button();
         backButton.setText("Back");
-        backButton.setPadding(new Insets(8, 100, 8, 100));
+        backButton.setPadding(new Insets(8, 106, 8, 106));
         backButton.setStyle("-fx-background-color: " + color.ACCENT.getCode() +
                             "; -fx-text-fill: white; -fx-font-size: 18px;" +
                             "-fx-border-color: black; -fx-border-width: 2px;" +

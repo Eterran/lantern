@@ -59,7 +59,7 @@ public class Sidebar {
 
     private static VBox profileBox = Profile.loadProfileTab();
     private static VBox eventBox = EventPage.viewEventTab();
-    private static VBox discussionBox = Profile.loadOthersProfileTab(Login_Register.getUser("qwe", conn));
+    private static VBox discussionBox = new VBox();
     private static VBox leaderboardBox = GlobalLeaderboard.globalLeaderBoardTab();
     private static VBox box5 = new VBox(10);
     private static VBox box6 = new VBox(10);
@@ -193,9 +193,9 @@ public class Sidebar {
         backAndRetract.getChildren().addAll(backButton, retractButton);
         HBox.setHgrow(backButton, Priority.ALWAYS);
         backButton.setMaxWidth(Double.MAX_VALUE);
-        sidebar.getChildren().addAll(backAndRetract, searcHBox, createSeparator(), tab1, createSeparator(), tab2, createSeparator(), tab3, createSeparator(), tab4);
+        sidebar.getChildren().addAll(backAndRetract, searcHBox, Lantern.createHorizontalSeparator(6), tab1, Lantern.createHorizontalSeparator(6), tab2, Lantern.createHorizontalSeparator(6), tab3, Lantern.createHorizontalSeparator(6), tab4);
         accessManager.getAccessibleButtons(accessManager.getUserRole(User.getCurrentUser())).forEach(buttonSupplier -> {
-            sidebar.getChildren().add(createSeparator());
+            sidebar.getChildren().add(Lantern.createHorizontalSeparator(6));
             sidebar.getChildren().add(buttonSupplier.get());
         });
         accessManager.getAccessibleSidebar1(accessManager.getUserRole(User.getCurrentUser())).forEach(
@@ -223,7 +223,7 @@ public class Sidebar {
         });
         root.setCenter(layout1);
         root.setLeft(sidebar);
-        Scene scene1 = new Scene(root, 1000, 650);
+        Scene scene1 = new Scene(root, 1200, 700);
         tab1.getStyleClass().add("sidebar_button");
         tab2.getStyleClass().add("sidebar_button");
         tab3.getStyleClass().add("sidebar_button");
@@ -263,14 +263,7 @@ public class Sidebar {
     public static AccessManager getAccessManager(){
         return accessManager;
     }
-    private static VBox createSeparator(){
-        Separator separator = new Separator();
-        separator.setOrientation(Orientation.HORIZONTAL);
-        VBox sepBox = new VBox(6);
-        sepBox.getChildren().add(separator);
-        sepBox.setAlignment(Pos.CENTER);
-        return sepBox;
-    }
+
     private static void updateAvailableWidth(boolean isRetracted) {
         double offsetWidth = 60;
         if(isRetracted) {
@@ -281,7 +274,7 @@ public class Sidebar {
     }
     private static HBox createSearchBox(){
         HBox searchBox = new HBox();
-        searchBox.setPadding(new Insets(2, 0, 0, 0));
+        searchBox.setPadding(new Insets(0, 0, 0, 0));
         TextField searchField = new TextField();
         searchField.setPromptText("Search Users");
         searchField.getStyleClass().add("search_field");
@@ -289,11 +282,11 @@ public class Sidebar {
         HBox.setHgrow(searchField, Priority.ALWAYS);
         Image searchImage = new Image("resources/assets/search_icon.png");
         ImageView searchImageView = new ImageView(searchImage);
-        searchImageView.setFitHeight(24);
-        searchImageView.setFitWidth(24);
+        searchImageView.setFitHeight(22);
+        searchImageView.setFitWidth(22);
         Button searchButton = new Button();
         searchButton.setGraphic(searchImageView);
-        searchButton.getStyleClass().add("add_friend_button");
+        searchButton.getStyleClass().add("search_button");
         searchButton.setOnAction(e -> {
             String search = searchField.getText();
             if(search != null && !search.isEmpty()){
@@ -314,7 +307,7 @@ public class Sidebar {
                 }
             }
         });
-        searchBox.getChildren().addAll(searchField, searchButton);
+        searchBox.getChildren().addAll(searchField, Lantern.createVerticalSeparator(2),  searchButton);
         return searchBox;
     }
 }

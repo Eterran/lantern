@@ -2,9 +2,6 @@ package GUI;
 
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.event.ActionEvent;
-import javafx.scene.chart.PieChart.Data;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,7 +12,6 @@ import javafx.scene.image.ImageView;
 import java.sql.Connection;
 import java.util.ArrayList;
 
-import Database.Database;
 import Database.Login_Register;
 import Database.User;
 import Student.friend;
@@ -46,7 +42,7 @@ public class FriendList {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText("User not found");
-                alert.setContentText("The user you are trying to add as a friend does not exist.");
+                alert.setContentText("The user you are trying to find does not exist.");
             }
         });
         HBox addFriendHBox = new HBox();

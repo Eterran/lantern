@@ -50,12 +50,8 @@ public class LoginPage {
         passwordTF.getStyleClass().add("text_field_with_icon");
         HBox username_hbox = new HBox();
         HBox password_hbox = new HBox();
-        Separator sep1 = new Separator();
-        Separator sep2 = new Separator();
-        sep1.getStyleClass().add("separator_vertical");
-        sep2.getStyleClass().add("separator_vertical");
-        username_hbox.getChildren().addAll(user_icon, sep1, usernameTF);
-        password_hbox.getChildren().addAll(pw_icon, sep2, passwordTF);
+        username_hbox.getChildren().addAll(user_icon, Lantern.createVerticalSeparator(4), usernameTF);
+        password_hbox.getChildren().addAll(pw_icon, Lantern.createVerticalSeparator(4), passwordTF);
         username_hbox.setAlignment(Pos.CENTER_LEFT);
         password_hbox.setAlignment(Pos.CENTER_LEFT);
         username_hbox.getStyleClass().add("background_transparent");
@@ -63,7 +59,7 @@ public class LoginPage {
 
         Button loginButton = new Button();
         loginButton.setText("Login");
-        loginButton.setPadding(new Insets(8, 150, 8, 150));
+        loginButton.setPadding(new Insets(8, 140, 8, 140));
         loginButton.getStyleClass().add("login_button");
         loginButton.setOnAction(e -> {
             try {
@@ -112,9 +108,13 @@ public class LoginPage {
         loginBox.setPrefSize(600, 500);
         loginBox.setMaxSize(600, 500);
         loginBox.setMinSize(600, 500);
-        // inputBox.prefWidthProperty().bind(loginBox.widthProperty());
-        // usernameTF.maxWidthProperty().bind(inputBox.widthProperty().multiply(1));
-        // passwordTF.maxWidthProperty().bind(inputBox.widthProperty().multiply(1));
+        inputBox.prefWidthProperty().bind(loginBox.widthProperty());
+        labelBox.prefWidthProperty().bind(loginBox.widthProperty());
+        buttonBox.prefWidthProperty().bind(loginBox.widthProperty());
+        username_hbox.prefWidthProperty().bind(inputBox.widthProperty());
+        password_hbox.prefWidthProperty().bind(inputBox.widthProperty());
+        usernameTF.prefWidthProperty().bind(username_hbox.widthProperty().multiply(0.65));
+        passwordTF.prefWidthProperty().bind(password_hbox.widthProperty().multiply(0.65));
         
         loginBox.setBackground(new Background(new BackgroundFill(
             Color.web(color.BACKGROUND.getCode()), new CornerRadii(6), Insets.EMPTY)));
@@ -172,7 +172,7 @@ public class LoginPage {
         BorderPane successPane = new BorderPane();
         successPane.setCenter(successLayout);
         
-        Scene successScene = new Scene(successPane, 700, 700);
+        Scene successScene = new Scene(successPane, 1200, 700);
         successScene.getStylesheets().add("resources/style.css");
         primaryStage.setScene(successScene);
         try {

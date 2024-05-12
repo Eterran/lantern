@@ -89,6 +89,15 @@
     -fx-border-width: 1;
     -fx-border-radius: 0;
 }
+.back_button:hover {
+    -fx-background-color: radial-gradient(center 50% 50%, radius 100%, #ad1f1f, rgb(224, 48, 48));
+    -fx-text-fill: white;
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+    -fx-border-color: rgb(224, 48, 48);
+    -fx-border-width: 1;
+    -fx-border-radius: 0;
+}
 .back_button:pressed {
     -fx-background-color: radial-gradient(center 50% 50%, radius 100%, #4e0000, rgb(224, 48, 48));
     -fx-text-fill: white;
@@ -100,6 +109,16 @@
 }
 .login_button{
     -fx-background-color: #FF8F00;
+    -fx-text-fill: white; 
+    -fx-font-family: 'Nunito Bold';
+    -fx-font-size: 22px;
+    -fx-border-color: black; 
+    -fx-border-width: 2px;
+    -fx-background-radius: 10px; 
+    -fx-border-radius: 10px;
+}
+.login_button:pressed{
+    -fx-background-color: #ffa44e;
     -fx-text-fill: white; 
     -fx-font-family: 'Nunito Bold';
     -fx-font-size: 22px;
@@ -131,6 +150,12 @@
     -fx-font-size: 20;
     -fx-font-weight: bold;
 }
+.sidebar_button:hover {
+    -fx-background-color: #8f1111;
+    -fx-text-fill: white;
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+}
 .sidebar_button:pressed {
     -fx-background-color: #4e0000;
     -fx-text-fill: white;
@@ -142,6 +167,15 @@
     -fx-background-color: white;
 }
 
+.search_button {
+    -fx-background-color: white;
+}
+.search_button:hover {
+    -fx-background-color: #ddd;
+}
+.search_button:pressed {
+    -fx-background-color: #ccc;
+}
 .profile_button {
     -fx-background-color: transparent;
     -fx-text-fill: blue;
@@ -149,9 +183,10 @@
     -fx-underline: true;
 }
 .add_friend_button{
-    -fx-background-color: transparent;
+    -fx-background-color: #FF8F00;
     -fx-text-fill: white;
     -fx-font-size: 20;
+    -fx-font-family: 'Nunito Bold';
     -fx-font-weight: bold;
 }
 .add_friend_button:pressed{
@@ -165,16 +200,16 @@
     -fx-background-color: linear-gradient(to right, transparent, white, transparent);
     -fx-border-width: 0;
     -fx-max-height: 1;
-    -fx-pref-width: 200;
     -fx-border-color: transparent;
 }
 .separator_vertical {
     -fx-alignment: center;
+    -fx-orientation: vertical;
     -fx-background-color: linear-gradient(to bottom, transparent, white, transparent);
     -fx-border-width: 0;
     -fx-max-height: 550;
     -fx-pref-width: 1;
-    -fx-padding: 4 1 4 1;
+    -fx-padding: 0 4 0 4;
     -fx-border-color: transparent;
 }
 
@@ -189,10 +224,9 @@
     -fx-text-fill: white;
 }
 .title {
-    -fx-font-family: 'Nunito Bold';
+    -fx-font-family: 'Nunito ExtraBold';
     -fx-font-size: 40;
 }
-
 .subtext {
     -fx-font-size: 16;
     -fx-text-fill: rgb(154, 154, 154);
