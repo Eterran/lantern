@@ -154,13 +154,18 @@
     -fx-background-color: #8f1111;
     -fx-text-fill: white;
     -fx-font-size: 20;
-    -fx-font-weight: bold;
 }
 .sidebar_button:pressed {
     -fx-background-color: #4e0000;
     -fx-text-fill: white;
     -fx-font-size: 20;
-    -fx-font-weight: bold;
+}
+.sidebar_button_selected {
+    -fx-background-color: rgb(255, 216, 75);
+    -fx-text-fill: rgb(0, 0, 0);
+    -fx-font-size: 20;
+    -fx-border-color: black;
+    -fx-border-width: 0 0 0 6;
 }
 .separator .line {
     -fx-border-width: 0;

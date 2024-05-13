@@ -71,6 +71,16 @@ public class Sidebar {
     private static ImageView destinationsIcon = new ImageView(new Image("resources/assets/destinations_icon.png"));
     private static ImageView bookingsIcon = new ImageView(new Image("resources/assets/bookings_icon.png"));
     private static ImageView friendlistIcon = new ImageView(new Image("resources/assets/friendlist_icon.png")); 
+    private static ImageView rprofileIcon = new ImageView(new Image("resources/assets/profile_icon.png"));
+    private static ImageView reventIcon = new ImageView(new Image("resources/assets/events_icon.png"));
+    private static ImageView rdiscussionIcon = new ImageView(new Image("resources/assets/discussion_icon.png"));
+    private static ImageView rleaderboardIcon = new ImageView(new Image("resources/assets/leaderboard_icon.png"));
+    private static ImageView rcreateEventIcon = new ImageView(new Image("resources/assets/create_event_icon.png"));
+    private static ImageView rquizzesIcon = new ImageView(new Image("resources/assets/quizzes_icon.png"));
+    private static ImageView rcreateQuizzesIcon = new ImageView(new Image("resources/assets/create_quizzes_icon.png"));
+    private static ImageView rdestinationsIcon = new ImageView(new Image("resources/assets/destinations_icon.png"));
+    private static ImageView rbookingsIcon = new ImageView(new Image("resources/assets/bookings_icon.png"));
+    private static ImageView rfriendlistIcon = new ImageView(new Image("resources/assets/friendlist_icon.png")); 
 
     private static StackPane stackPane = new StackPane();
     private static VBox profileBox = Profile.loadProfileTab();
@@ -273,6 +283,26 @@ public class Sidebar {
         bookingsIcon.setFitWidth(30);
         friendlistIcon.setFitHeight(30);
         friendlistIcon.setFitWidth(30);
+        rprofileIcon.setFitHeight(30);
+        rprofileIcon.setFitWidth(30);
+        reventIcon.setFitHeight(30);
+        reventIcon.setFitWidth(30);
+        rdiscussionIcon.setFitHeight(30);
+        rdiscussionIcon.setFitWidth(30);
+        rleaderboardIcon.setFitHeight(30);
+        rleaderboardIcon.setFitWidth(30);
+        rcreateEventIcon.setFitHeight(30);
+        rcreateEventIcon.setFitWidth(30);
+        rquizzesIcon.setFitHeight(30);
+        rquizzesIcon.setFitWidth(30);
+        rcreateQuizzesIcon.setFitHeight(30);
+        rcreateQuizzesIcon.setFitWidth(30);
+        rdestinationsIcon.setFitHeight(30);
+        rdestinationsIcon.setFitWidth(30);
+        rbookingsIcon.setFitHeight(30);
+        rbookingsIcon.setFitWidth(30);
+        rfriendlistIcon.setFitHeight(30);
+        rfriendlistIcon.setFitWidth(30);
         tab1 = new Button();
         tab2 = new Button();
         tab3 = new Button();
@@ -299,10 +329,10 @@ public class Sidebar {
         hbox.getChildren().addAll(leaderboardIcon, Lantern.createVerticalSeparator(8), leaderboardText);
         tab4.setGraphic(hbox);
 
-        rtab1.setGraphic(profileIcon);
-        rtab2.setGraphic(eventIcon);
-        rtab3.setGraphic(discussionIcon);
-        rtab4.setGraphic(leaderboardIcon);
+        rtab1.setGraphic(rprofileIcon);
+        rtab2.setGraphic(reventIcon);
+        rtab3.setGraphic(rdiscussionIcon);
+        rtab4.setGraphic(rleaderboardIcon);
 
         tab1.getStyleClass().add("sidebar_button");
         tab2.getStyleClass().add("sidebar_button");
