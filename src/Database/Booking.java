@@ -10,7 +10,8 @@ package Database;
  */
 import java.util.*;
 import java.sql.*;
-import java.time.*;
+
+
 public class Booking {
     
     public static void bookingTour(Connection connection,BookingData booking,String username){
@@ -68,7 +69,6 @@ public class Booking {
       catch(SQLException e){
       e.printStackTrace();
       }
-    
     boolean check=false;
     for(int i=0;i<datesList.size();i++){
     if((datesList.get(i).equalsIgnoreCase(booking.date))&&(destination.get(i).equalsIgnoreCase(booking.destination)))check=true;

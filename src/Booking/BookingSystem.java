@@ -4,9 +4,10 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import Database.BookingDate;
+import Database.Booking;
 import Database.User;
 import Database.Database;
+import Database.BookingData;
 
 import java.util.*;
 import java.sql.*;
@@ -79,7 +80,7 @@ public class BookingSystem {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         
         
-        ArrayList<Date> availableDates = getAvailableDates(user);
+        ArrayList<Date> availableDates = getAvailableDates(user, destinationId);
         if(availableDates.isEmpty()){
             return null;
         }
@@ -104,8 +105,22 @@ public class BookingSystem {
         return timeSlots;
     }
 
-    private ArrayList<Date> getAvailableDates(User user) {
+    public String destinationName(int destinationId){
+        String destinationName[] = {"Petrosaincs Science Discovery Centre", "Tech Dome Penang", "Agro Technology Park in MARDI", "National Science Centre","Marine Aquarium and Musuem", "Pusat Sains & Kreativiti Terengganu", "Biomedical Museum","Telegraph Museum", "Penang Science Cluster"};
+        String temp = "";
+        for (int i = 0; i < destinationName.length; i++) {
+            if (destinationId == i) {
+                temp = destinationName[i];
+                break;
+            }
+        }
+           return temp; 
+    }
+
+    private ArrayList<Date> getAvailableDates(User user, int destinationId) {
     ArrayList<Date> availableDates = new ArrayList<>();
+    String destinationName = destinationName(destinationId);
+
     try {
         if ("parent".equals(user.getRole())) {
             Connection connection = Database.connectionDatabase();
@@ -124,7 +139,7 @@ public class BookingSystem {
                 String dateString = sdf.format(date);
 
                 // Check if the date exists
-                if (!new BookingDate().checkExistingDate(connection, username, dateString)) {
+                if (!new Booking().checkExistingBooking(connection, username, new BookingData(destinationName, dateString))) {
                     availableDates.add(date);
                 }
             }
@@ -143,7 +158,7 @@ public class BookingSystem {
 
     private ArrayList<Date> getBookedDatesForDestination(int destinationId) {
         ArrayList<Date> bookedDates = new ArrayList<>();
-    try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/lantern", "username", "password")) {
+    try (Connection connection = Database.connectionDatabase()) {
         String query = "SELECT date FROM bookings WHERE destination_id = ?"; // Query to retrieve booked dates
         PreparedStatement statement = connection.prepareStatement(query);
         statement.setInt(1, destinationId);
