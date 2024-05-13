@@ -15,6 +15,7 @@ import Database.User;
 import Student.friend;
 import Database.Event;
 import Database.Quiz;
+import Database.Booking;
 
 public class AccessManager {
     private final Map<UserRole, List<Supplier<Button>>> buttonAccessRules;
@@ -144,8 +145,7 @@ public class AccessManager {
     }
     private VBox createParentProfileVBox() {
         VBox vBox = new VBox();
-        //TODO database get bookings made
-        HBox quizzes = Lantern.createInfoHBox("BOOKINGS MADE: ", "User.getCurrentUser().get", new Insets(8, 10, 8, 15));
+        HBox quizzes = Lantern.createInfoHBox("BOOKINGS MADE: ", Booking.viewBooking(conn, User.getCurrentUser().getUsername()).size(), new Insets(8, 10, 8, 15));
         vBox.getChildren().add(quizzes);
         return vBox;
     }
