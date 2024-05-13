@@ -48,6 +48,8 @@ public class Profile {
         VBox emailBox = Lantern.createInfoVBox("EMAIL: ", User.getCurrentUser().getEmail(), padding);
         VBox locationCoordinateBox = Lantern.createInfoVBox("LOCATION: ", "("+User.getCurrentUser().getX()+", "+ User.getCurrentUser().getY()+")", padding);
 
+        //TODO parent child
+
         VBox profileContents = new VBox();
         profileContents.getChildren().addAll(usernameBox, roleBox, emailBox, locationCoordinateBox);
         profileContents.getStyleClass().add("content_box_background");

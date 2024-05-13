@@ -53,6 +53,9 @@ public class Sidebar {
     private static Button tab3 = new Button("Discussion");
     private static Button tab4 = new Button("Global Leaderboard");
 
+    private static VBox retractedVBox = new VBox();
+    private static ImageView profileIcon = new ImageView(new Image("resources/assets/profile_icon.png"));
+
     private static VBox profileBox = Profile.loadProfileTab();
     private static VBox eventBox = EventPage.viewEventTab();
     private static VBox discussionBox = new VBox();
@@ -60,6 +63,8 @@ public class Sidebar {
     private static VBox box5 = new VBox(10);
     private static VBox box6 = new VBox(10);
     private static VBox box7 = new VBox(10);
+
+
 
     public static void showHomeScene(Stage stg){
         Lantern.Clear_History();
@@ -103,7 +108,7 @@ public class Sidebar {
         fakeRetractButton.getStyleClass().add("back_button");
         
         HBox backAndRetract = new HBox();
-        VBox retractedVBox = new VBox();
+        
         retractedVBox.setBackground(new Background(new BackgroundFill(Color.web(color.SIDEBAR.getCode()), new CornerRadii(0), Insets.EMPTY)));
         retractedVBox.setMaxWidth(60);
         retractedVBox.setMinWidth(60);
