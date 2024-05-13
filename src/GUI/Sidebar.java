@@ -54,7 +54,7 @@ public class Sidebar {
     private static Button tab4 = new Button("Global Leaderboard");
 
     private static VBox retractedVBox = new VBox();
-    private static ImageView profileIcon = new ImageView(new Image("resources/assets/profile_icon.png"));
+    //private static ImageView profileIcon = new ImageView(new Image("resources/assets/profile_icon.png"));
 
     private static VBox profileBox = Profile.loadProfileTab();
     private static VBox eventBox = EventPage.viewEventTab();

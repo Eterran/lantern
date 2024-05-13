@@ -24,10 +24,9 @@ import Database.Database;
 public class Lantern extends Application {
     private static Deque<Scene> history = new ArrayDeque<Scene>();
     private static Deque<Tab> tabHistory = new ArrayDeque<Tab>();
-    private static Connection conn = Database.connectionDatabase();
 
     public static Connection getConn() {
-        return conn;
+        return Database.connectionDatabase();
     }
 
     public static Scene Pop_History(){

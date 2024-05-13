@@ -120,7 +120,7 @@ public class EducatorCreateQuiz {
             String Qtheme = selectedSubjects.toString(); //solve chekbox
             String Qcontent = quizContentTF.getText();
     
-            boolean savedSuccessfully = Quiz.createQuiz(Database.connectionDatabase(), QTitle, Qdescription, Qtheme, Qcontent, user.getUsername());
+            boolean savedSuccessfully = Quiz.createQuiz(Lantern.getConn(), QTitle, Qdescription, Qtheme, Qcontent, user.getUsername());
             if (savedSuccessfully) {
                 Alert alert = new Alert(AlertType.INFORMATION);
                 alert.setTitle("Success");

@@ -108,7 +108,7 @@ public class EducatorCreateEvent  {
            // User user = User.getCurrentUser();
             EventData events = new EventData(ETitle, Edescription, Evenue, Edate, Etime);
         
-            boolean savedSuccessfully = Event.createEvent(Database.connectionDatabase(), events, user.getUsername());
+            boolean savedSuccessfully = Event.createEvent(Lantern.getConn(), events, user.getUsername());
             if (savedSuccessfully) {
                 Alert alert = new Alert(AlertType.INFORMATION);
                 alert.setTitle("Success");

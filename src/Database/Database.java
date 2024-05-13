@@ -11,6 +11,9 @@ package Database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+
+import GUI.Lantern;
+
 import java.sql.*;
 
 
@@ -56,21 +59,20 @@ while (resultSet.next()) {
     }
 }*/
 public class Database {
-  public static Connection connectionDatabase(){
-       String databasePath = "jdbc:sqlite:..\\database.db";
-        Connection connection=null;
-        try {
-           connection = DriverManager.getConnection(databasePath);
-           Statement stmt = connection.createStatement();
-           stmt.execute("PRAGMA foreign_keys = ON;");
-        }
-        catch (SQLException e) {
-            // Handle any SQL errors
-            e.printStackTrace();
-        }
-        
-        return connection;
-}
+    private static Connection conn = null;
+    public static Connection connectionDatabase(){
+        String databasePath = "jdbc:sqlite:..\\database.db";
+        if(conn == null)
+            try {
+                conn = DriverManager.getConnection(databasePath);
+                Statement stmt = conn.createStatement();
+                stmt.execute("PRAGMA foreign_keys = ON;");
+            }
+            catch (SQLException e) {
+                e.printStackTrace();
+            }
+        return conn;
+    }
   
     public void deleteUser(Connection conn, int id) throws SQLException {
         String SQL_DELETE = "DELETE FROM user WHERE username = ?";
