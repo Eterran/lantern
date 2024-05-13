@@ -8,9 +8,11 @@ import java.util.function.Supplier;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import Database.User;
+import Student.friend;
 import Database.Event;
 import Database.Quiz;
 
@@ -19,6 +21,7 @@ public class AccessManager {
     private final Map<UserRole, List<Supplier<VBox>>> vBoxAccessRules;
     private final Map<UserRole, List<Supplier<VBox>>> sidebarAccessRules1;
     private final Map<UserRole, List<Supplier<VBox>>> sidebarAccessRules2;
+    private final Map<UserRole, List<Supplier<VBox>>> retractedButtonAccessRules;
     private Connection conn = Lantern.getConn();
 
     public AccessManager() {
@@ -26,6 +29,7 @@ public class AccessManager {
         vBoxAccessRules = new EnumMap<>(UserRole.class);
         sidebarAccessRules1 = new EnumMap<>(UserRole.class);
         sidebarAccessRules2 = new EnumMap<>(UserRole.class);
+        retractedButtonAccessRules = new EnumMap<>(UserRole.class);
 
         buttonAccessRules.put(UserRole.EDUCATOR, List.of(
             createButton("Create Quizzes", () -> {
@@ -37,6 +41,7 @@ public class AccessManager {
                 Sidebar.setOneVisible(5);
             })
         ));
+        retractedButtonAccessRules.put(UserRole.EDUCATOR, List.of());
         vBoxAccessRules.put(UserRole.EDUCATOR, List.of(
             this::createEducatorProfileVBox
         ));
@@ -97,6 +102,16 @@ public class AccessManager {
     private Supplier<Button> createButton(String text, Runnable action) {
         return () -> {
             Button button = new Button(text);
+            button.setOnAction(e -> action.run());
+            button.getStyleClass().add("sidebar_button");
+            button.setMaxWidth(Double.MAX_VALUE);
+            return button;
+        };
+    }
+    private Supplier<Button> createdRetractedButton(ImageView img, Runnable action){
+        return () -> {
+            Button button = new Button();
+            button.setGraphic(img);
             button.setOnAction(e -> action.run());
             button.getStyleClass().add("sidebar_button");
             button.setMaxWidth(Double.MAX_VALUE);

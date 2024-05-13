@@ -17,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -31,6 +32,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -52,10 +54,25 @@ public class Sidebar {
     private static Button tab2 = new Button("Events");
     private static Button tab3 = new Button("Discussion");
     private static Button tab4 = new Button("Global Leaderboard");
+    private static Button rtab1 = new Button();
+    private static Button rtab2 = new Button();
+    private static Button rtab3 = new Button();
+    private static Button rtab4 = new Button();
 
+    private static TranslateTransition tt = new TranslateTransition(Duration.millis(1000), sidebar);
     private static VBox retractedVBox = new VBox();
-    //private static ImageView profileIcon = new ImageView(new Image("resources/assets/profile_icon.png"));
+    private static ImageView profileIcon = new ImageView(new Image("resources/assets/profile_icon.png"));
+    private static ImageView eventIcon = new ImageView(new Image("resources/assets/events_icon.png"));
+    private static ImageView discussionIcon = new ImageView(new Image("resources/assets/discussion_icon.png"));
+    private static ImageView leaderboardIcon = new ImageView(new Image("resources/assets/leaderboard_icon.png"));
+    private static ImageView createEventIcon = new ImageView(new Image("resources/assets/create_event_icon.png"));
+    private static ImageView quizzesIcon = new ImageView(new Image("resources/assets/quizzes_icon.png"));
+    private static ImageView createQuizzesIcon = new ImageView(new Image("resources/assets/create_quizzes_icon.png"));
+    private static ImageView destinationsIcon = new ImageView(new Image("resources/assets/destinations_icon.png"));
+    private static ImageView bookingsIcon = new ImageView(new Image("resources/assets/bookings_icon.png"));
+    private static ImageView friendlistIcon = new ImageView(new Image("resources/assets/friendlist_icon.png")); 
 
+    private static StackPane stackPane = new StackPane();
     private static VBox profileBox = Profile.loadProfileTab();
     private static VBox eventBox = EventPage.viewEventTab();
     private static VBox discussionBox = new VBox();
@@ -64,19 +81,14 @@ public class Sidebar {
     private static VBox box6 = new VBox(10);
     private static VBox box7 = new VBox(10);
 
-
-
     public static void showHomeScene(Stage stg){
         Lantern.Clear_History();
 
+        initialiseButtons();
+        initialseVBoxes();
+        Button backButton = createBackButton();
+        
         root.setBackground(new Background(new BackgroundFill(Color.web(color.BACKGROUND.getCode()), new CornerRadii(0), Insets.EMPTY)));
-        Image image = new Image("resources/assets/back_arrow.png");
-        ImageView imageView = new ImageView(image);
-        imageView.setFitHeight(30);
-        imageView.setFitWidth(30);
-        Button backButton = new Button();
-        backButton.setGraphic(imageView);
-        backButton.getStyleClass().add("back_button");
         HBox layout1 = new HBox(0);
         layout1.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         layout1.setBackground(new Background(new BackgroundFill(Color.web(color.BACKGROUND.getCode()), new CornerRadii(0), Insets.EMPTY)));
@@ -92,109 +104,41 @@ public class Sidebar {
         );
         sidebar.setBackground(new Background(new BackgroundFill(gradient, new CornerRadii(0), Insets.EMPTY)));
         sidebar.setMaxWidth(Double.MAX_VALUE);
-        Button retractButton = new Button();
-        Button fakeRetractButton = new Button();
-        Image sidebarImage = new Image("resources/assets/sidebar_icon.png");
-        ImageView sideBarImageView = new ImageView(sidebarImage);
-        sideBarImageView.setFitHeight(30);
-        sideBarImageView.setFitWidth(30);
-        retractButton.setGraphic(sideBarImageView);
-        retractButton.getStyleClass().add("back_button");
-        
-        ImageView fakeSideBarImageView = new ImageView(sidebarImage);
-        fakeSideBarImageView.setFitHeight(30);
-        fakeSideBarImageView.setFitWidth(30);
-        fakeRetractButton.setGraphic(fakeSideBarImageView);
-        fakeRetractButton.getStyleClass().add("back_button");
+        Button retractButton = createRetractButton();
+        Button retractedRetractButton = createRetractButton();
         
         HBox backAndRetract = new HBox();
         
         retractedVBox.setBackground(new Background(new BackgroundFill(Color.web(color.SIDEBAR.getCode()), new CornerRadii(0), Insets.EMPTY)));
         retractedVBox.setMaxWidth(60);
         retractedVBox.setMinWidth(60);
-        TranslateTransition tt = new TranslateTransition(Duration.millis(1000), sidebar);
+
         tt.setCycleCount(1);
         tt.setAutoReverse(false);
+        tt.setOnFinished(e -> {
+            layout1.setPrefWidth(availableWidth.get());
+            if (isSidebarRetracted.get()) {
+                root.setLeft(retractedVBox);
+            }
+        });
         root.widthProperty().addListener((obs, oldVal, newVal) -> {
             updateAvailableWidth(isSidebarRetracted.get());
         });
         
-        retractButton.setOnAction(e -> {
-            boolean isNowRetracted = !isSidebarRetracted.getAndSet(!isSidebarRetracted.get());
-            if (isNowRetracted) {
-                retractedVBox.getChildren().add(retractButton);
-                backAndRetract.getChildren().add(fakeRetractButton);
-                tt.setToX(-(sidebarWidth- 60));
-            } else {
-                backAndRetract.getChildren().remove(fakeRetractButton);
-                backAndRetract.getChildren().add(retractButton);
-                root.setLeft(sidebar);
-                tt.setToX(0);
-            }
-            tt.playFromStart();
-            updateAvailableWidth(isNowRetracted);
-        });
-
         HBox searcHBox = createSearchBox();
-        
-        StackPane stackPane = new StackPane();
+
         HBox.setHgrow(stackPane, Priority.ALWAYS);
         VBox.setVgrow(stackPane, Priority.ALWAYS);
         stackPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         stackPane.getChildren().addAll(profileBox, eventBox, discussionBox, leaderboardBox, box5, box6, box7);
 
-        profileBox.prefWidthProperty().bind(stackPane.widthProperty());
-        eventBox.prefWidthProperty().bind(stackPane.widthProperty());
-        discussionBox.prefWidthProperty().bind(stackPane.widthProperty());
-        leaderboardBox.prefWidthProperty().bind(stackPane.widthProperty());
-        box5.prefWidthProperty().bind(stackPane.widthProperty());
-        box6.prefWidthProperty().bind(stackPane.widthProperty());
-        box7.prefWidthProperty().bind(stackPane.widthProperty());
-        VBox.setVgrow(profileBox, Priority.ALWAYS);
-        VBox.setVgrow(eventBox, Priority.ALWAYS);
-        VBox.setVgrow(discussionBox, Priority.ALWAYS);
-        VBox.setVgrow(leaderboardBox, Priority.ALWAYS);
-        VBox.setVgrow(box5, Priority.ALWAYS);
-        VBox.setVgrow(box6, Priority.ALWAYS);
-        VBox.setVgrow(box7, Priority.ALWAYS);
-        profileBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        eventBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        discussionBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        leaderboardBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        box5.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        box6.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        box7.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-
-        backButton.setOnAction(e -> {
-            goBackSidebar();
-        });
-        tab1.setOnAction(e -> {
-            push_SidebarHistory(1);
-            setOneVisible(1);
-        });
-        tab2.setOnAction(e -> {
-            push_SidebarHistory(2);
-            setOneVisible(2);
-        });
-        tab3.setOnAction(e -> {
-            push_SidebarHistory(3);
-            setOneVisible(3);
-        });
-        tab4.setOnAction(e -> {
-            push_SidebarHistory(4);
-            setOneVisible(4);
-        });
-        
         layout1.getChildren().addAll(stackPane);
-        tab1.setMaxWidth(Double.MAX_VALUE);
-        tab2.setMaxWidth(Double.MAX_VALUE);
-        tab3.setMaxWidth(Double.MAX_VALUE);
-        tab4.setMaxWidth(Double.MAX_VALUE);
         
         backAndRetract.getChildren().addAll(backButton, retractButton);
         HBox.setHgrow(backButton, Priority.ALWAYS);
         backButton.setMaxWidth(Double.MAX_VALUE);
         sidebar.getChildren().addAll(backAndRetract, searcHBox, Lantern.createHorizontalSeparator(6), tab1, Lantern.createHorizontalSeparator(6), tab2, Lantern.createHorizontalSeparator(6), tab3, Lantern.createHorizontalSeparator(6), tab4);
+        retractedVBox.getChildren().addAll(retractedRetractButton, rtab1, Lantern.createHorizontalSeparator(6), rtab2, Lantern.createHorizontalSeparator(6), rtab3, Lantern.createHorizontalSeparator(6), rtab4);
         accessManager.getAccessibleButtons(accessManager.getUserRole(User.getCurrentUser())).forEach(buttonSupplier -> {
             sidebar.getChildren().add(Lantern.createHorizontalSeparator(6));
             sidebar.getChildren().add(buttonSupplier.get());
@@ -215,20 +159,11 @@ public class Sidebar {
             updateAvailableWidth(isSidebarRetracted.get());
             sidebarWidth = sidebar.getWidth();
         });
-        tt.setOnFinished(e -> {
-            layout1.setPrefWidth(availableWidth.get());
-            if (isSidebarRetracted.get()) {
-                backAndRetract.getChildren().remove(retractButton);
-                root.setLeft(retractedVBox);
-            }
-        });
+        
         root.setCenter(layout1);
         root.setLeft(sidebar);
         Scene scene1 = new Scene(root, 1200, 700);
-        tab1.getStyleClass().add("sidebar_button");
-        tab2.getStyleClass().add("sidebar_button");
-        tab3.getStyleClass().add("sidebar_button");
-        tab4.getStyleClass().add("sidebar_button");
+        
         scene1.getStylesheets().add("resources/style.css");
         stg.setScene(scene1);
     }
@@ -308,7 +243,197 @@ public class Sidebar {
                 }
             }
         });
-        searchBox.getChildren().addAll(searchField, Lantern.createVerticalSeparator(2),  searchButton);
+        searchBox.getChildren().addAll(searchField, Lantern.createVerticalSeparator(0),  searchButton);
         return searchBox;
+    }
+    private static void initialiseButtons(){
+        ColorAdjust colorAdjust = new ColorAdjust();
+        colorAdjust.setHue(0.5);
+        profileIcon.setEffect(colorAdjust);
+        eventIcon.setEffect(colorAdjust);
+        discussionIcon.setEffect(colorAdjust);
+        leaderboardIcon.setEffect(colorAdjust);
+        profileIcon.setFitHeight(30);
+        profileIcon.setFitWidth(30);
+        eventIcon.setFitHeight(30);
+        eventIcon.setFitWidth(30);
+        discussionIcon.setFitHeight(30);
+        discussionIcon.setFitWidth(30);
+        leaderboardIcon.setFitHeight(30);
+        leaderboardIcon.setFitWidth(30);
+        createEventIcon.setFitHeight(30);
+        createEventIcon.setFitWidth(30);
+        quizzesIcon.setFitHeight(30);
+        quizzesIcon.setFitWidth(30);
+        createQuizzesIcon.setFitHeight(30);
+        createQuizzesIcon.setFitWidth(30);
+        destinationsIcon.setFitHeight(30);
+        destinationsIcon.setFitWidth(30);
+        bookingsIcon.setFitHeight(30);
+        bookingsIcon.setFitWidth(30);
+        friendlistIcon.setFitHeight(30);
+        friendlistIcon.setFitWidth(30);
+        tab1 = new Button();
+        tab2 = new Button();
+        tab3 = new Button();
+        tab4 = new Button();
+
+        HBox hbox = new HBox();
+        Text profileText = new Text("Profile");
+        profileText.setFill(Color.WHITE);
+        hbox.getChildren().addAll(profileIcon, Lantern.createVerticalSeparator(8), profileText);
+        tab1.setGraphic(hbox);
+        hbox = new HBox();
+        Text eventsText = new Text("Events");
+        eventsText.setFill(Color.WHITE);
+        hbox.getChildren().addAll(eventIcon, Lantern.createVerticalSeparator(8), eventsText);
+        tab2.setGraphic(hbox);
+        hbox = new HBox();
+        Text discussionText = new Text("Discussion");
+        discussionText.setFill(Color.WHITE);
+        hbox.getChildren().addAll(discussionIcon, Lantern.createVerticalSeparator(8), discussionText);
+        tab3.setGraphic(hbox);
+        hbox = new HBox();
+        Text leaderboardText = new Text("Global Leaderboard");
+        leaderboardText.setFill(Color.WHITE);
+        hbox.getChildren().addAll(leaderboardIcon, Lantern.createVerticalSeparator(8), leaderboardText);
+        tab4.setGraphic(hbox);
+
+        rtab1.setGraphic(profileIcon);
+        rtab2.setGraphic(eventIcon);
+        rtab3.setGraphic(discussionIcon);
+        rtab4.setGraphic(leaderboardIcon);
+
+        tab1.getStyleClass().add("sidebar_button");
+        tab2.getStyleClass().add("sidebar_button");
+        tab3.getStyleClass().add("sidebar_button");
+        tab4.getStyleClass().add("sidebar_button");
+        rtab1.getStyleClass().add("sidebar_button");
+        rtab2.getStyleClass().add("sidebar_button");
+        rtab3.getStyleClass().add("sidebar_button");
+        rtab4.getStyleClass().add("sidebar_button");
+        tab1.setMaxWidth(Double.MAX_VALUE);
+        tab2.setMaxWidth(Double.MAX_VALUE);
+        tab3.setMaxWidth(Double.MAX_VALUE);
+        tab4.setMaxWidth(Double.MAX_VALUE);
+        tab1.setOnAction(e -> {
+            push_SidebarHistory(1);
+            setOneVisible(1);
+        });
+        tab2.setOnAction(e -> {
+            push_SidebarHistory(2);
+            setOneVisible(2);
+        });
+        tab3.setOnAction(e -> {
+            push_SidebarHistory(3);
+            setOneVisible(3);
+        });
+        tab4.setOnAction(e -> {
+            push_SidebarHistory(4);
+            setOneVisible(4);
+        });
+        rtab1.setOnAction(e -> {
+            push_SidebarHistory(1);
+            setOneVisible(1);
+        });
+        rtab2.setOnAction(e -> {
+            push_SidebarHistory(2);
+            setOneVisible(2);
+        });
+        rtab3.setOnAction(e -> {
+            push_SidebarHistory(3);
+            setOneVisible(3);
+        });
+        rtab4.setOnAction(e -> {
+            push_SidebarHistory(4);
+            setOneVisible(4);
+        });
+    }
+    private static Button createBackButton(){
+        ImageView imageView = new ImageView(new Image("resources/assets/back_arrow.png"));
+        imageView.setFitHeight(30);
+        imageView.setFitWidth(30);
+        Button backButton = new Button();
+        backButton.setGraphic(imageView);
+        backButton.getStyleClass().add("back_button");
+        backButton.setOnAction(e -> {
+            goBackSidebar();
+        });
+        return backButton;
+    }
+    private static void initialseVBoxes(){
+        profileBox.prefWidthProperty().bind(stackPane.widthProperty());
+        eventBox.prefWidthProperty().bind(stackPane.widthProperty());
+        discussionBox.prefWidthProperty().bind(stackPane.widthProperty());
+        leaderboardBox.prefWidthProperty().bind(stackPane.widthProperty());
+        box5.prefWidthProperty().bind(stackPane.widthProperty());
+        box6.prefWidthProperty().bind(stackPane.widthProperty());
+        box7.prefWidthProperty().bind(stackPane.widthProperty());
+        VBox.setVgrow(profileBox, Priority.ALWAYS);
+        VBox.setVgrow(eventBox, Priority.ALWAYS);
+        VBox.setVgrow(discussionBox, Priority.ALWAYS);
+        VBox.setVgrow(leaderboardBox, Priority.ALWAYS);
+        VBox.setVgrow(box5, Priority.ALWAYS);
+        VBox.setVgrow(box6, Priority.ALWAYS);
+        VBox.setVgrow(box7, Priority.ALWAYS);
+        profileBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        eventBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        discussionBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        leaderboardBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        box5.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        box6.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        box7.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+    }
+    private static Button createRetractButton(){
+        Button retractButton = new Button();
+        Image sidebarImage = new Image("resources/assets/sidebar_icon.png");
+        ImageView sideBarImageView = new ImageView(sidebarImage);
+        sideBarImageView.setFitHeight(30);
+        sideBarImageView.setFitWidth(30);
+        retractButton.setGraphic(sideBarImageView);
+        retractButton.getStyleClass().add("back_button");
+
+        retractButton.setOnAction(e -> {
+            boolean isNowRetracted = !isSidebarRetracted.getAndSet(!isSidebarRetracted.get());
+            if (isNowRetracted) {
+                tt.setToX(-(sidebarWidth- 60));
+            } else {
+                root.setLeft(sidebar);
+                tt.setToX(0);
+            }
+            tt.playFromStart();
+            updateAvailableWidth(isNowRetracted);
+        });
+        return retractButton;
+    }
+    public static ImageView getProfileIcon(){
+        return profileIcon;
+    }
+    public static ImageView getEventIcon(){
+        return eventIcon;
+    }
+    public static ImageView getDiscussionIcon(){
+        return discussionIcon;
+    }
+    public static ImageView getLeaderboardIcon(){
+        return leaderboardIcon;
+    }
+    public static ImageView getCreateEventIcon(){
+        return createEventIcon;
+    }
+    public static ImageView getQuizzesIcon(){
+        return quizzesIcon;
+    }
+    public static ImageView getCreateQuizzesIcon(){
+        return createQuizzesIcon;
+    }
+    public static ImageView getDestinationsIcon(){
+        return destinationsIcon;
+    }
+    public static ImageView getBookingsIcon(){
+        return bookingsIcon;
+    }
+    public static ImageView getFriendlistIcon(){
+        return friendlistIcon;
     }
 }
