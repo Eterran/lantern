@@ -11,30 +11,31 @@ package Database;
 import java.util.*;
 import java.sql.*;
 import java.time.*;
-public class BookingDate {
+public class Booking {
     
-    
-    
-    public void insertDate(Connection connection,String date,String username){
+    public static void bookingTour(Connection connection,BookingData booking,String username){
          Login_Register lg=new Login_Register();
         int id =lg.getID(username, connection);
-     String sql = "INSERT INTO BookingDate(main_id, bookingDate) VALUES (?, ?)";
+     String sql = "INSERT INTO BookingDate(main_id, bookingDate,destination) VALUES (?,?,?)";
       try{
       PreparedStatement preparedStatement = connection.prepareStatement(sql);
       preparedStatement.setInt(1, id);
-      preparedStatement.setString(2, date);
+      preparedStatement.setString(2, booking.date);
+      preparedStatement.setString(3, booking.destination);
       preparedStatement.executeUpdate();
       }
       
       catch(SQLException e){
       e.printStackTrace();
       }
+      
+      increaseCount(connection,getCount(connection,username),username);
     }
     
-    public void updateDate(Connection connection,String date,String username){
+   /* public void updateDate(Connection connection,String date,String username){
     Login_Register lg=new Login_Register();
         int id =lg.getID(username, connection);
-     String sql = "UPDATE BookingDate SET bookingDate=? WHERE main_id=?";
+     String sql = "UPDATE Booking SET bookingDate=? WHERE main_id=?";
       try{
       PreparedStatement preparedStatement = connection.prepareStatement(sql);
       preparedStatement.setString(1, date);
@@ -46,9 +47,40 @@ public class BookingDate {
       e.printStackTrace();
       }
     
+    }*/
+    //false mean booking is not made yet
+    public static boolean checkExistingBooking(Connection connection,String username,BookingData booking){
+        ArrayList<String>datesList=new ArrayList<>();
+        ArrayList<String>destination=new ArrayList<>();
+        Login_Register lg=new Login_Register();
+        int id =lg.getID(username, connection);
+    String query = "SELECT bookingDate,destination FROM BookingDate WHERE main_id=?";
+    try{
+      PreparedStatement preparedStatement = connection.prepareStatement(query);
+      preparedStatement.setInt(1, id);
+     ResultSet result= preparedStatement.executeQuery();
+     while(result.next()){
+     datesList.add(result.getString("bookingDate"));
+     destination.add(result.getString("destination"));
+     }
+      }
+      
+      catch(SQLException e){
+      e.printStackTrace();
+      }
+    
+    boolean check=false;
+    for(int i=0;i<datesList.size();i++){
+    if((datesList.get(i).equalsIgnoreCase(booking.date))&&(destination.get(i).equalsIgnoreCase(booking.destination)))check=true;
     }
-    //false mean no same date
-    public boolean checkExistingDate(Connection connection,String username,String Date){
+    
+    return check;
+    
+    
+    }
+    
+    //check the date is occupied by other event or not ,true mean occupied
+    public static boolean checkDate(Connection connection,String username,String date){
         ArrayList<String>datesList=new ArrayList<>();
         Login_Register lg=new Login_Register();
         int id =lg.getID(username, connection);
@@ -67,41 +99,39 @@ public class BookingDate {
       }
     
     boolean check=false;
-    for(String date: datesList)
-        if(date.equals(Date))
+    for(String hold: datesList)
+        if(date.equals(hold))
             check=true;
     
     return check;
-    
-    
     }
     
     //datesList contain all the bookingdate made by user
-    public ArrayList<String> viewDate(Connection connection,String username){
-     ArrayList<String>datesList=new ArrayList<>();
+    public static ArrayList<BookingData> viewBooking(Connection connection,String username){
+     ArrayList<BookingData>bookingList=new ArrayList<>();
         Login_Register lg=new Login_Register();
         int id =lg.getID(username, connection);
-    String query = "SELECT bookingDate FROM BookingDate WHERE main_id=?";
+    String query = "SELECT bookingDate,destination FROM BookingDate WHERE main_id=?";
     try{
       PreparedStatement preparedStatement = connection.prepareStatement(query);
       preparedStatement.setInt(1, id);
      ResultSet result= preparedStatement.executeQuery();
      while(result.next()){
-     datesList.add(result.getString("bookingDate"));
+     bookingList.add(new BookingData(result.getString("destination"),result.getString("bookingDate")));
      }
       }
       
       catch(SQLException e){
       e.printStackTrace();
       }
-    return datesList;
+    return bookingList;
     }
-
-    public ArrayList<String>allDateBooked(Connection connection){
+    
+    /*public ArrayList<String>allDateBooked(Connection connection){
     
      ArrayList<String>datesList=new ArrayList<>();
        
-    String query = "SELECT bookingDate FROM BookingDate ";
+    String query = "SELECT bookingDate FROM Booking ";
     try{
       Statement stm = connection.createStatement();
      ResultSet result= stm.executeQuery(query);
@@ -113,5 +143,45 @@ public class BookingDate {
       catch(SQLException e){
       e.printStackTrace();
       }
-    return datesList;}
+    return datesList;}*/
+    
+    public static void increaseCount(Connection connection,int num,String parentName){
+      int count =num+1;
+      Login_Register lg=new Login_Register();
+      int id =lg.getID(parentName, connection);
+      
+      String sql = "UPDATE BookingDate SET count = ? WHERE main_id= ?";
+      try{
+      PreparedStatement preparedStatement = connection.prepareStatement(sql);
+      preparedStatement.setInt(1,count );
+      preparedStatement.setInt(2,id);
+      preparedStatement.executeUpdate();
+      }
+      
+      catch(SQLException e){
+      e.printStackTrace();
+      }
+    }
+    
+    public static int getCount(Connection connection,String username){
+       int count =0;
+         Login_Register lg=new Login_Register();
+        int id =lg.getID(username, connection);
+    String query = "SELECT count FROM BookingDate WHERE main_id=?";
+    try{
+      PreparedStatement preparedStatement = connection.prepareStatement(query);
+      preparedStatement.setInt(1, id);
+     ResultSet result= preparedStatement.executeQuery();
+     if(result.next()){
+     count=result.getInt("count");
+     }
+      }
+      
+      catch(SQLException e){
+      e.printStackTrace();
+      }
+    return count;
+    }
+    
+    
 }
