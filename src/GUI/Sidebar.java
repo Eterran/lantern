@@ -84,7 +84,7 @@ public class Sidebar {
 
     private static StackPane stackPane = new StackPane();
     private static VBox profileBox = Profile.loadProfileTab();
-    private static VBox eventBox = EventPage.viewEventTab();
+    private static VBox eventBox = QuizPage.quizPageTab();
     private static VBox discussionBox = new VBox();
     private static VBox leaderboardBox = GlobalLeaderboard.globalLeaderBoardTab();
     private static VBox box5 = new VBox(10);
