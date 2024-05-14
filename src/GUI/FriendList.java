@@ -11,6 +11,8 @@ import javafx.scene.image.ImageView;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import Database.Login_Register;
 import Database.User;
@@ -61,5 +63,19 @@ public class FriendList {
 
         friendVBox.getChildren().add(addFriendHBox);
         return friendVBox;
+    }
+    public ArrayList<String> findCommonFriends(String username1, String username2){
+        friend friends1 = new friend(username1);
+        friend friends2 = new friend(username2);
+        
+        ArrayList<String> friendList1 = friends1.getFriendList();
+        ArrayList<String> friendList2 = friends2.getFriendList();
+        
+        Set<String> set1 = new HashSet<>(friendList1);
+        Set<String> set2 = new HashSet<>(friendList2);
+        
+        set1.retainAll(set2);
+        
+        return new ArrayList<>(set1);
     }
 }
