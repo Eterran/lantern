@@ -70,6 +70,7 @@ public class EducatorCreateQuiz {
 
                 boolean savedSuccessfully = Quiz.createQuiz(Lantern.getConn(), QTitle, Qdescription, Qtheme, Qcontent, user.getUsername());
                 if (savedSuccessfully) {
+                    //update columns in QuizAttempt 
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Success");
                     alert.setContentText("Quiz saved successfully!");
