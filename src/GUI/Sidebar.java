@@ -41,8 +41,6 @@ public class Sidebar {
     private static Stack<Integer> sidebarHistory = new Stack<Integer>();
     private static int currentPage = 1;
 
-    private final static AccessManager accessManager = new AccessManager();
-
     private static Connection conn = Lantern.getConn();
 
     final static AtomicBoolean isSidebarRetracted = new AtomicBoolean(false);
@@ -61,30 +59,12 @@ public class Sidebar {
 
     private static TranslateTransition tt = new TranslateTransition(Duration.millis(1000), sidebar);
     private static VBox retractedVBox = new VBox();
-    private static ImageView profileIcon = new ImageView(new Image("resources/assets/profile_icon.png"));
-    private static ImageView eventIcon = new ImageView(new Image("resources/assets/events_icon.png"));
-    private static ImageView discussionIcon = new ImageView(new Image("resources/assets/discussion_icon.png"));
-    private static ImageView leaderboardIcon = new ImageView(new Image("resources/assets/leaderboard_icon.png"));
-    private static ImageView createEventIcon = new ImageView(new Image("resources/assets/create_event_icon.png"));
-    private static ImageView quizzesIcon = new ImageView(new Image("resources/assets/quizzes_icon.png"));
-    private static ImageView createQuizzesIcon = new ImageView(new Image("resources/assets/create_quizzes_icon.png"));
-    private static ImageView destinationsIcon = new ImageView(new Image("resources/assets/destinations_icon.png"));
-    private static ImageView bookingsIcon = new ImageView(new Image("resources/assets/bookings_icon.png"));
-    private static ImageView friendlistIcon = new ImageView(new Image("resources/assets/friendlist_icon.png")); 
-    private static ImageView rprofileIcon = new ImageView(new Image("resources/assets/profile_icon.png"));
-    private static ImageView reventIcon = new ImageView(new Image("resources/assets/events_icon.png"));
-    private static ImageView rdiscussionIcon = new ImageView(new Image("resources/assets/discussion_icon.png"));
-    private static ImageView rleaderboardIcon = new ImageView(new Image("resources/assets/leaderboard_icon.png"));
-    private static ImageView rcreateEventIcon = new ImageView(new Image("resources/assets/create_event_icon.png"));
-    private static ImageView rquizzesIcon = new ImageView(new Image("resources/assets/quizzes_icon.png"));
-    private static ImageView rcreateQuizzesIcon = new ImageView(new Image("resources/assets/create_quizzes_icon.png"));
-    private static ImageView rdestinationsIcon = new ImageView(new Image("resources/assets/destinations_icon.png"));
-    private static ImageView rbookingsIcon = new ImageView(new Image("resources/assets/bookings_icon.png"));
-    private static ImageView rfriendlistIcon = new ImageView(new Image("resources/assets/friendlist_icon.png")); 
+
+    private final static AccessManager accessManager = new AccessManager();
 
     private static StackPane stackPane = new StackPane();
     private static VBox profileBox = Profile.loadProfileTab();
-    private static VBox eventBox = QuizPage.quizPageTab();
+    private static VBox eventBox = new VBox();
     private static VBox discussionBox = new VBox();
     private static VBox leaderboardBox = GlobalLeaderboard.globalLeaderBoardTab();
     private static VBox box5 = new VBox(10);
@@ -94,6 +74,7 @@ public class Sidebar {
     public static void showHomeScene(Stage stg){
         Lantern.Clear_History();
 
+        //initialiseImageViews();
         initialiseButtons();
         initialseVBoxes();
         Button backButton = createBackButton();
@@ -157,6 +138,11 @@ public class Sidebar {
                     sidebarSupplier -> box5.getChildren().add(sidebarSupplier.get()));
         accessManager.getAccessibleSidebar2(accessManager.getUserRole(User.getCurrentUser())).forEach(
                     sidebarSupplier -> box6.getChildren().add(sidebarSupplier.get()));
+        accessManager.getAccessibleRetractedButtons(accessManager.getUserRole(User.getCurrentUser())).forEach(
+                buttonSupplier -> {
+                    retractedVBox.getChildren().add(Lantern.createHorizontalSeparator(6));
+                    retractedVBox.getChildren().add(buttonSupplier.get());
+                });
         pages[1] = profileBox;
         pages[2] = eventBox;
         pages[3] = discussionBox;
@@ -257,52 +243,6 @@ public class Sidebar {
         return searchBox;
     }
     private static void initialiseButtons(){
-        ColorAdjust colorAdjust = new ColorAdjust();
-        colorAdjust.setHue(0.5);
-        profileIcon.setEffect(colorAdjust);
-        eventIcon.setEffect(colorAdjust);
-        discussionIcon.setEffect(colorAdjust);
-        leaderboardIcon.setEffect(colorAdjust);
-        profileIcon.setFitHeight(30);
-        profileIcon.setFitWidth(30);
-        eventIcon.setFitHeight(30);
-        eventIcon.setFitWidth(30);
-        discussionIcon.setFitHeight(30);
-        discussionIcon.setFitWidth(30);
-        leaderboardIcon.setFitHeight(30);
-        leaderboardIcon.setFitWidth(30);
-        createEventIcon.setFitHeight(30);
-        createEventIcon.setFitWidth(30);
-        quizzesIcon.setFitHeight(30);
-        quizzesIcon.setFitWidth(30);
-        createQuizzesIcon.setFitHeight(30);
-        createQuizzesIcon.setFitWidth(30);
-        destinationsIcon.setFitHeight(30);
-        destinationsIcon.setFitWidth(30);
-        bookingsIcon.setFitHeight(30);
-        bookingsIcon.setFitWidth(30);
-        friendlistIcon.setFitHeight(30);
-        friendlistIcon.setFitWidth(30);
-        rprofileIcon.setFitHeight(30);
-        rprofileIcon.setFitWidth(30);
-        reventIcon.setFitHeight(30);
-        reventIcon.setFitWidth(30);
-        rdiscussionIcon.setFitHeight(30);
-        rdiscussionIcon.setFitWidth(30);
-        rleaderboardIcon.setFitHeight(30);
-        rleaderboardIcon.setFitWidth(30);
-        rcreateEventIcon.setFitHeight(30);
-        rcreateEventIcon.setFitWidth(30);
-        rquizzesIcon.setFitHeight(30);
-        rquizzesIcon.setFitWidth(30);
-        rcreateQuizzesIcon.setFitHeight(30);
-        rcreateQuizzesIcon.setFitWidth(30);
-        rdestinationsIcon.setFitHeight(30);
-        rdestinationsIcon.setFitWidth(30);
-        rbookingsIcon.setFitHeight(30);
-        rbookingsIcon.setFitWidth(30);
-        rfriendlistIcon.setFitHeight(30);
-        rfriendlistIcon.setFitWidth(30);
         tab1 = new Button();
         tab2 = new Button();
         tab3 = new Button();
@@ -311,28 +251,28 @@ public class Sidebar {
         HBox hbox = new HBox();
         Text profileText = new Text("Profile");
         profileText.setFill(Color.WHITE);
-        hbox.getChildren().addAll(profileIcon, Lantern.createVerticalSeparator(8), profileText);
+        hbox.getChildren().addAll(getProfileIcon(), Lantern.createVerticalSeparator(8), profileText);
         tab1.setGraphic(hbox);
         hbox = new HBox();
         Text eventsText = new Text("Events");
         eventsText.setFill(Color.WHITE);
-        hbox.getChildren().addAll(eventIcon, Lantern.createVerticalSeparator(8), eventsText);
+        hbox.getChildren().addAll(getEventIcon(), Lantern.createVerticalSeparator(8), eventsText);
         tab2.setGraphic(hbox);
         hbox = new HBox();
         Text discussionText = new Text("Discussion");
         discussionText.setFill(Color.WHITE);
-        hbox.getChildren().addAll(discussionIcon, Lantern.createVerticalSeparator(8), discussionText);
+        hbox.getChildren().addAll(getDiscussionIcon(), Lantern.createVerticalSeparator(8), discussionText);
         tab3.setGraphic(hbox);
         hbox = new HBox();
         Text leaderboardText = new Text("Global Leaderboard");
         leaderboardText.setFill(Color.WHITE);
-        hbox.getChildren().addAll(leaderboardIcon, Lantern.createVerticalSeparator(8), leaderboardText);
+        hbox.getChildren().addAll(getLeaderboardIcon(), Lantern.createVerticalSeparator(8), leaderboardText);
         tab4.setGraphic(hbox);
 
-        rtab1.setGraphic(rprofileIcon);
-        rtab2.setGraphic(reventIcon);
-        rtab3.setGraphic(rdiscussionIcon);
-        rtab4.setGraphic(rleaderboardIcon);
+        rtab1.setGraphic(getRProfileIcon());
+        rtab2.setGraphic(getREventIcon());
+        rtab3.setGraphic(getRDiscussionIcon());
+        rtab4.setGraphic(getRLeaderboardIcon());
 
         tab1.getStyleClass().add("sidebar_button");
         tab2.getStyleClass().add("sidebar_button");
@@ -346,6 +286,11 @@ public class Sidebar {
         tab2.setMaxWidth(Double.MAX_VALUE);
         tab3.setMaxWidth(Double.MAX_VALUE);
         tab4.setMaxWidth(Double.MAX_VALUE);
+        rtab1.setMaxWidth(Double.MAX_VALUE);
+        rtab2.setMaxWidth(Double.MAX_VALUE);
+        rtab3.setMaxWidth(Double.MAX_VALUE);
+        rtab4.setMaxWidth(Double.MAX_VALUE);
+
         tab1.setOnAction(e -> {
             push_SidebarHistory(1);
             setOneVisible(1);
@@ -437,33 +382,123 @@ public class Sidebar {
         return retractButton;
     }
     public static ImageView getProfileIcon(){
+        ImageView profileIcon = new ImageView(new Image("resources/assets/profile_icon.png"));
+        profileIcon.setFitHeight(30);
+        profileIcon.setFitWidth(30);
         return profileIcon;
     }
     public static ImageView getEventIcon(){
+        ImageView eventIcon = new ImageView(new Image("resources/assets/events_icon.png"));
+        eventIcon.setFitHeight(30);
+        eventIcon.setFitWidth(30);
         return eventIcon;
     }
     public static ImageView getDiscussionIcon(){
+        ImageView discussionIcon = new ImageView(new Image("resources/assets/discussion_icon.png"));
+        discussionIcon.setFitHeight(30);
+        discussionIcon.setFitWidth(30);
         return discussionIcon;
     }
     public static ImageView getLeaderboardIcon(){
+        ImageView leaderboardIcon = new ImageView(new Image("resources/assets/leaderboard_icon.png"));
+        leaderboardIcon.setFitHeight(30);
+        leaderboardIcon.setFitWidth(30);
         return leaderboardIcon;
     }
     public static ImageView getCreateEventIcon(){
+        ImageView createEventIcon = new ImageView(new Image("resources/assets/create_event_icon.png"));
+        createEventIcon.setFitHeight(30);
+        createEventIcon.setFitWidth(30);
         return createEventIcon;
     }
     public static ImageView getQuizzesIcon(){
+        ImageView quizzesIcon = new ImageView(new Image("resources/assets/quizzes_icon.png"));
+        quizzesIcon.setFitHeight(30);
+        quizzesIcon.setFitWidth(30);
         return quizzesIcon;
     }
     public static ImageView getCreateQuizzesIcon(){
+        ImageView createQuizzesIcon = new ImageView(new Image("resources/assets/create_quizzes_icon.png"));
+        createQuizzesIcon.setFitHeight(30);
+        createQuizzesIcon.setFitWidth(30);
         return createQuizzesIcon;
     }
     public static ImageView getDestinationsIcon(){
+        ImageView destinationsIcon = new ImageView(new Image("resources/assets/destinations_icon.png"));
+        destinationsIcon.setFitHeight(30);
+        destinationsIcon.setFitWidth(30);
         return destinationsIcon;
     }
     public static ImageView getBookingsIcon(){
+        ImageView bookingsIcon = new ImageView(new Image("resources/assets/bookings_icon.png"));
+        bookingsIcon.setFitHeight(30);
+        bookingsIcon.setFitWidth(30);
         return bookingsIcon;
     }
     public static ImageView getFriendlistIcon(){
+        ImageView friendlistIcon = new ImageView(new Image("resources/assets/friendlist_icon.png"));
+        friendlistIcon.setFitHeight(30);
+        friendlistIcon.setFitWidth(30);
         return friendlistIcon;
+    }
+    public static ImageView getRProfileIcon(){
+        ImageView rprofileIcon = new ImageView(new Image("resources/assets/profile_icon.png"));
+        rprofileIcon.setFitHeight(30);
+        rprofileIcon.setFitWidth(30);
+        return rprofileIcon;
+    }
+    public static ImageView getREventIcon(){
+        ImageView reventIcon = new ImageView(new Image("resources/assets/events_icon.png"));
+        reventIcon.setFitHeight(30);
+        reventIcon.setFitWidth(30);
+        return reventIcon;
+    }
+    public static ImageView getRDiscussionIcon(){
+        ImageView rdiscussionIcon = new ImageView(new Image("resources/assets/discussion_icon.png"));
+        rdiscussionIcon.setFitHeight(30);
+        rdiscussionIcon.setFitWidth(30);
+        return rdiscussionIcon;
+    }
+    public static ImageView getRLeaderboardIcon(){
+        ImageView rleaderboardIcon = new ImageView(new Image("resources/assets/leaderboard_icon.png"));
+        rleaderboardIcon.setFitHeight(30);
+        rleaderboardIcon.setFitWidth(30);
+        return rleaderboardIcon;
+    }
+    public static ImageView getRCreateEventIcon(){
+        ImageView rcreateEventIcon = new ImageView(new Image("resources/assets/create_event_icon.png"));
+        rcreateEventIcon.setFitHeight(30);
+        rcreateEventIcon.setFitWidth(30);
+        return rcreateEventIcon;
+    }
+    public static ImageView getRQuizzesIcon(){
+        ImageView rquizzesIcon = new ImageView(new Image("resources/assets/quizzes_icon.png"));
+        rquizzesIcon.setFitHeight(30);
+        rquizzesIcon.setFitWidth(30);
+        return rquizzesIcon;
+    }
+    public static ImageView getRCreateQuizzesIcon(){
+        ImageView rcreateQuizzesIcon = new ImageView(new Image("resources/assets/create_quizzes_icon.png"));
+        rcreateQuizzesIcon.setFitHeight(30);
+        rcreateQuizzesIcon.setFitWidth(30);
+        return rcreateQuizzesIcon;
+    }
+    public static ImageView getRDestinationsIcon(){
+        ImageView rdestinationsIcon = new ImageView(new Image("resources/assets/destinations_icon.png"));
+        rdestinationsIcon.setFitHeight(30);
+        rdestinationsIcon.setFitWidth(30);
+        return rdestinationsIcon;
+    }
+    public static ImageView getRBookingsIcon(){
+        ImageView rbookingsIcon = new ImageView(new Image("resources/assets/bookings_icon.png"));
+        rbookingsIcon.setFitHeight(30);
+        rbookingsIcon.setFitWidth(30);
+        return rbookingsIcon;
+    }
+    public static ImageView getRFriendlistIcon(){
+        ImageView rfriendlistIcon = new ImageView(new Image("resources/assets/friendlist_icon.png"));
+        rfriendlistIcon.setFitHeight(30);
+        rfriendlistIcon.setFitWidth(30);
+        return rfriendlistIcon;
     }
 }

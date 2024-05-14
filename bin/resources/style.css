@@ -149,6 +149,7 @@
     -fx-text-fill: white;
     -fx-font-size: 20;
     -fx-font-family: 'Nunito Bold';
+    -fx-max-height: 30px;
 }
 .sidebar_button:hover {
     -fx-background-color: #8f1111;
