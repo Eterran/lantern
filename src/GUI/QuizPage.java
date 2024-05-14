@@ -101,12 +101,13 @@ public class QuizPage {
         button.setAlignment(Pos.BOTTOM_RIGHT);
        //// User user =  new User();
         String username = user.getUsername();
-        Quiz update = new Quiz();
+        // Quiz update = new Quiz();
 
         button.setOnAction(event->{
             //attempt the quiz
             //update.updateLatestQuizColumn(Lantern.getConn());
-            update.updateLatestQuizRow(Lantern.getConn());
+            // update.updateLatestQuizRow(Lantern.getConn());  
+            // Quiz.initializeRow(Lantern.getConn(), username);
             String quiz = "q"+ Quiz.getColumnNumber(Lantern.getConn())  ;
             Quiz.attempQuiz(Lantern.getConn(), quiz, username);
 

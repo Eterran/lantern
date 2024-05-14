@@ -10,6 +10,11 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+
+import java.io.IOException;
+import java.sql.SQLException;
+
+import Student.GlobalLeaderBoard;
 import javafx.geometry.Insets;
 
 public class GlobalLeaderboard {
@@ -70,24 +75,33 @@ public class GlobalLeaderboard {
 
         vBox.getChildren().add(headerBox);
 
-        int numberOfBoxes = 50;
-
-        // Loop to create the boxes
+        int numberOfBoxes = 4; //based on total number of students (totalrowsinquizAttempt)
+        GlobalLeaderBoard glb = new GlobalLeaderBoard();
+        String [] username = glb.getUsername();
+        double[] points = glb.getXp();
         for (int i = 0; i < numberOfBoxes; i++) {
             HBox dataBox = new HBox();
-            dataBox.setPadding(new Insets(5)); //padding for the databox
-           //f2ccff
+            dataBox.setPadding(new Insets(5)); 
             if (i % 2 == 0) {
                 dataBox.setStyle("-fx-background-color: #ADEFD1;");
             } else {
                 dataBox.setStyle("-fx-background-color: #ffffff;");
             }
-
+           
+            try {
+                glb.loadGlobal(Lantern.getConn());
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             Label rankData = new Label(String.valueOf(i + 1));  //fetch the value from the db
             rankData.setPadding(new Insets(5,10,5,5));
-            Label usernameData = new Label("Username " + (i + 1));
+            Label usernameData = new Label(username[i]);
             usernameData.setPadding(new Insets(5,10,5,5));
-            Label pointData = new Label(String.valueOf(90)); 
+            Label pointData = new Label(String.valueOf(points[i]));
             pointData.setPadding(new Insets(5,10,5,5));
             Region spacer3 = new Region();
             HBox.setHgrow(spacer3, javafx.scene.layout.Priority.ALWAYS);

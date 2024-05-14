@@ -67,10 +67,11 @@ public class EducatorCreateQuiz {
                 String Qdescription = quizDescriptionTA.getText();
                 String Qtheme = themeComboBox.getValue();
                 String Qcontent = quizContentTF.getText();
-
+                Quiz updatecol = new Quiz();
                 boolean savedSuccessfully = Quiz.createQuiz(Lantern.getConn(), QTitle, Qdescription, Qtheme, Qcontent, user.getUsername());
                 if (savedSuccessfully) {
                     //update columns in QuizAttempt 
+                    updatecol.updateLatestQuizColumn(Lantern.getConn());
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Success");
                     alert.setContentText("Quiz saved successfully!");
