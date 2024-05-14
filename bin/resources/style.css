@@ -168,6 +168,7 @@
     -fx-font-size: 20;
     -fx-font-family: 'Nunito Bold';
     -fx-max-height: 30px;
+    -fx-padding: 4 10 4 10;
 }
 .sidebar_button:hover {
     -fx-background-color: #8f1111;
@@ -185,6 +186,7 @@
     -fx-font-size: 20;
     -fx-border-color: black;
     -fx-border-width: 0 0 0 6;
+    -fx-padding: 4 10 4 10;
 }
 .separator .line {
     -fx-border-width: 0;

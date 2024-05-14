@@ -4,7 +4,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -17,14 +16,16 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.xml.transform.stax.StAXResult;
-
 import Database.Login_Register;
 import Database.User;
 import Student.friend;
 
 public class FriendList {
     private static Connection conn = Lantern.getConn();
+    private static User user = User.getCurrentUser();
+    private static friend friends = new friend(user.getUsername());
+    private static ArrayList<String> friendList = friends.getFriendList();
+
     public static VBox loadFriendList() {
         StackPane stackpane = new StackPane();
         ImageView searchFriendImageView = new ImageView(new Image("resources/assets/search_friends_icon.png"));
@@ -32,7 +33,7 @@ public class FriendList {
         searchFriendImageView.setFitHeight(40);
         VBox friendVBox = new VBox();
         friendVBox.getChildren().add(stackpane);
-        User user = User.getCurrentUser();
+        
         Label label = new Label("Friends");
         label.getStyleClass().add("title");
         label.setPadding(new Insets(12, 0, 12, 12));
@@ -45,7 +46,19 @@ public class FriendList {
         searchFriendButton.getStyleClass().add("add_friend_button");
         searchFriendButton.setOnAction(e -> {
             String friendUsername = searchFriendTF.getText();
-            
+            friendListBox.getChildren().clear();
+            friendListBox.getChildren().add(label);
+        
+            for (String friend : friendList) {
+                if (friend.toLowerCase().contains(friendUsername.toLowerCase())) { // Case insensitive search
+                    Button profileButton = new Button(friend);
+                    profileButton.getStyleClass().add("profile_button");
+                    profileButton.setOnAction(ev -> {
+                        Sidebar.setBox7(Profile.loadOthersProfileTab(Login_Register.getUser(friend, conn)));
+                    });
+                    friendListBox.getChildren().add(profileButton);
+                }
+            }
         });
         HBox searchFriendHBox = new HBox();
         Button showFriendRequestsButton = new Button();
@@ -84,8 +97,6 @@ public class FriendList {
         searchFriendHBox.getChildren().addAll(searchFriendTF, searchFriendButton, showFriendRequestsButton);
         friendListBox.getChildren().addAll(searchFriendHBox);
 
-        friend friends = new friend(user.getUsername());
-        ArrayList<String> friendList = friends.getFriendList();
         for (String friend : friendList) {
             Button profileButton = new Button(friend);
             profileButton.getStyleClass().add("profile_button");

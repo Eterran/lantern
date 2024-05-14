@@ -18,38 +18,43 @@ import Database.Quiz;
 import Database.Booking;
 
 public class AccessManager {
-    private final Map<UserRole, List<Supplier<Button>>> buttonAccessRules;
+    private final Map<UserRole, List<Supplier<Button>>> buttonAccessRules1;
+    private final Map<UserRole, List<Supplier<Button>>> buttonAccessRules2;
+    private final Map<UserRole, List<Supplier<Button>>> retractedButtonAccessRules1;
+    private final Map<UserRole, List<Supplier<Button>>> retractedButtonAccessRules2;
     private final Map<UserRole, List<Supplier<VBox>>> vBoxAccessRules;
     private final Map<UserRole, List<Supplier<VBox>>> sidebarAccessRules1;
     private final Map<UserRole, List<Supplier<VBox>>> sidebarAccessRules2;
-    private final Map<UserRole, List<Supplier<Button>>> retractedButtonAccessRules;
+    
     private Connection conn = Lantern.getConn();
 
     public AccessManager() {
-        buttonAccessRules = new EnumMap<>(UserRole.class);
+        buttonAccessRules1 = new EnumMap<>(UserRole.class);
+        buttonAccessRules2 = new EnumMap<>(UserRole.class);
+        retractedButtonAccessRules1 = new EnumMap<>(UserRole.class);
+        retractedButtonAccessRules2 = new EnumMap<>(UserRole.class);
         vBoxAccessRules = new EnumMap<>(UserRole.class);
         sidebarAccessRules1 = new EnumMap<>(UserRole.class);
         sidebarAccessRules2 = new EnumMap<>(UserRole.class);
-        retractedButtonAccessRules = new EnumMap<>(UserRole.class);
 
-        buttonAccessRules.put(UserRole.EDUCATOR, List.of(
+        buttonAccessRules1.put(UserRole.EDUCATOR, List.of(
             createButton("Create Quizzes", () -> {
-                Sidebar.push_SidebarHistory(5);
-                Sidebar.setOneVisible(5);
-            }, Sidebar.getCreateQuizzesIcon()),
+                Sidebar.selectTab(5);
+            }, Sidebar.getCreateQuizzesIcon())
+        ));
+        buttonAccessRules2.put(UserRole.EDUCATOR, List.of(
             createButton("Create Events", () -> {
-                Sidebar.push_SidebarHistory(6);
-                Sidebar.setOneVisible(6);
+                Sidebar.selectTab(6);
             }, Sidebar.getCreateEventIcon())
         ));
-        retractedButtonAccessRules.put(UserRole.EDUCATOR, List.of(
+        retractedButtonAccessRules1.put(UserRole.EDUCATOR, List.of(
             createdRetractedButton(Sidebar.getRCreateQuizzesIcon(), () -> {
-                Sidebar.push_SidebarHistory(5);
-                Sidebar.setOneVisible(5);
-            }),
+                Sidebar.selectTab(5);
+            })
+        ));
+        retractedButtonAccessRules2.put(UserRole.EDUCATOR, List.of(
             createdRetractedButton(Sidebar.getRCreateEventIcon(), () -> {
-                Sidebar.push_SidebarHistory(6);
-                Sidebar.setOneVisible(6);
+                Sidebar.selectTab(6);
             })
         ));
         vBoxAccessRules.put(UserRole.EDUCATOR, List.of(
@@ -61,24 +66,24 @@ public class AccessManager {
         sidebarAccessRules2.put(UserRole.EDUCATOR, List.of(
             this::createEducatorSidebar2
         ));
-        buttonAccessRules.put(UserRole.STUDENT, List.of(
+        buttonAccessRules1.put(UserRole.STUDENT, List.of(
             createButton("Quizzes", () -> {
-                Sidebar.push_SidebarHistory(5);
-                Sidebar.setOneVisible(5);
-            }, Sidebar.getQuizzesIcon()),
+                Sidebar.selectTab(5);
+            }, Sidebar.getQuizzesIcon())
+        ));
+        buttonAccessRules2.put(UserRole.STUDENT, List.of(
             createButton("Friends", () -> {
-                Sidebar.push_SidebarHistory(6);
-                Sidebar.setOneVisible(6);
+                Sidebar.selectTab(6);
             }, Sidebar.getFriendlistIcon())
         ));
-        retractedButtonAccessRules.put(UserRole.STUDENT, List.of(
+        retractedButtonAccessRules1.put(UserRole.STUDENT, List.of(
             createdRetractedButton(Sidebar.getRQuizzesIcon(), () -> {
-                Sidebar.push_SidebarHistory(5);
-                Sidebar.setOneVisible(5);
-            }),
+                Sidebar.selectTab(5);
+            })
+        ));
+        retractedButtonAccessRules2.put(UserRole.STUDENT, List.of(
             createdRetractedButton(Sidebar.getRFriendlistIcon(), () -> {
-                Sidebar.push_SidebarHistory(6);
-                Sidebar.setOneVisible(6);
+                Sidebar.selectTab(6);
             })
         ));
         vBoxAccessRules.put(UserRole.STUDENT, List.of(
@@ -90,16 +95,14 @@ public class AccessManager {
         sidebarAccessRules2.put(UserRole.STUDENT, List.of(
             this::createStudentSidebar2
         ));
-        buttonAccessRules.put(UserRole.PARENT, List.of(
+        buttonAccessRules1.put(UserRole.PARENT, List.of(
             createButton("Make Bookings", () -> {
-                Sidebar.push_SidebarHistory(5);
-                Sidebar.setOneVisible(5);
+                Sidebar.selectTab(5);
             }, Sidebar.getBookingsIcon())
         ));
-        retractedButtonAccessRules.put(UserRole.PARENT, List.of(
+        retractedButtonAccessRules1.put(UserRole.PARENT, List.of(
             createdRetractedButton(Sidebar.getRBookingsIcon(), () -> {
-                Sidebar.push_SidebarHistory(5);
-                Sidebar.setOneVisible(5);
+                Sidebar.selectTab(5);
             })
         ));
         vBoxAccessRules.put(UserRole.PARENT, List.of(
@@ -113,8 +116,11 @@ public class AccessManager {
         ));
     }
 
-    public List<Supplier<Button>> getAccessibleButtons(UserRole role) {
-        return buttonAccessRules.getOrDefault(role, List.of());
+    public List<Supplier<Button>> getAccessibleButtons1(UserRole role) {
+        return buttonAccessRules1.getOrDefault(role, List.of());
+    }
+    public List<Supplier<Button>> getAccessibleButtons2(UserRole role) {
+        return buttonAccessRules2.getOrDefault(role, List.of());
     }
     public List<Supplier<VBox>> getAccessibleVBoxes(UserRole role) {
         return vBoxAccessRules.getOrDefault(role, List.of());
@@ -125,8 +131,11 @@ public class AccessManager {
     public List<Supplier<VBox>> getAccessibleSidebar2(UserRole role) {
         return sidebarAccessRules2.getOrDefault(role, List.of());
     }
-    public List<Supplier<Button>> getAccessibleRetractedButtons(UserRole role) {
-        return retractedButtonAccessRules.getOrDefault(role, List.of());
+    public List<Supplier<Button>> getAccessibleRetractedButtons1(UserRole role) {
+        return retractedButtonAccessRules1.getOrDefault(role, List.of());
+    }
+    public List<Supplier<Button>> getAccessibleRetractedButtons2(UserRole role) {
+        return retractedButtonAccessRules2.getOrDefault(role, List.of());
     }
     // private Supplier<Button> createButton(String text, Runnable action) {
     //     return () -> {

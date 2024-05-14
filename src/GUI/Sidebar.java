@@ -38,6 +38,8 @@ import javafx.util.Duration;
 
 public class Sidebar {
     private static VBox[] pages = new VBox[10];
+    private static Button[] tabs = new Button[10];
+    private static Button[] rtabs = new Button[10];
     private static Stack<Integer> sidebarHistory = new Stack<Integer>();
     private static int currentPage = 1;
 
@@ -52,10 +54,14 @@ public class Sidebar {
     private static Button tab2 = new Button("Events");
     private static Button tab3 = new Button("Discussion");
     private static Button tab4 = new Button("Global Leaderboard");
+    private static Button tab5 = new Button();
+    private static Button tab6 = new Button();
     private static Button rtab1 = new Button();
     private static Button rtab2 = new Button();
     private static Button rtab3 = new Button();
     private static Button rtab4 = new Button();
+    private static Button rtab5 = new Button();
+    private static Button rtab6 = new Button();
 
     private static TranslateTransition tt = new TranslateTransition(Duration.millis(1000), sidebar);
     private static VBox retractedVBox = new VBox();
@@ -76,10 +82,10 @@ public class Sidebar {
 
         initialiseButtons();
         initialseVBoxes();
-        Button backButton = createBackButton();
         
         root.setBackground(new Background(new BackgroundFill(Color.web(color.BACKGROUND.getCode()), new CornerRadii(0), Insets.EMPTY)));
         HBox layout1 = new HBox(0);
+        layout1.getChildren().addAll(stackPane);
         layout1.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         layout1.setBackground(new Background(new BackgroundFill(Color.web(color.BACKGROUND.getCode()), new CornerRadii(0), Insets.EMPTY)));
         LinearGradient gradient = new LinearGradient(
@@ -121,35 +127,46 @@ public class Sidebar {
         VBox.setVgrow(stackPane, Priority.ALWAYS);
         stackPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         stackPane.getChildren().addAll(profileBox, eventBox, discussionBox, leaderboardBox, box5, box6, box7);
-
-        layout1.getChildren().addAll(stackPane);
         
+        Button backButton = createBackButton();
         backAndRetract.getChildren().addAll(backButton, retractButton);
         HBox.setHgrow(backButton, Priority.ALWAYS);
         backButton.setMaxWidth(Double.MAX_VALUE);
+
         sidebar.getChildren().addAll(backAndRetract, Lantern.createHorizontalSeparator(8), searcHBox, Lantern.createHorizontalSeparator(6), tab1, Lantern.createHorizontalSeparator(6), tab2, Lantern.createHorizontalSeparator(6), tab3, Lantern.createHorizontalSeparator(6), tab4);
         retractedVBox.getChildren().addAll(retractedRetractButton, rtab1, Lantern.createHorizontalSeparator(6), rtab2, Lantern.createHorizontalSeparator(6), rtab3, Lantern.createHorizontalSeparator(6), rtab4);
-        accessManager.getAccessibleButtons(accessManager.getUserRole(User.getCurrentUser())).forEach(buttonSupplier -> {
+        
+        accessManager.getAccessibleButtons1(accessManager.getUserRole(User.getCurrentUser())).forEach(buttonSupplier -> {
             sidebar.getChildren().add(Lantern.createHorizontalSeparator(6));
-            sidebar.getChildren().add(buttonSupplier.get());
+            tab5 = buttonSupplier.get();
+            sidebar.getChildren().add(tab5);
+        });
+        accessManager.getAccessibleButtons2(accessManager.getUserRole(User.getCurrentUser())).forEach(buttonSupplier -> {
+            sidebar.getChildren().add(Lantern.createHorizontalSeparator(6));
+            tab6 = buttonSupplier.get();
+            sidebar.getChildren().add(tab6);
         });
         accessManager.getAccessibleSidebar1(accessManager.getUserRole(User.getCurrentUser())).forEach(
-                    sidebarSupplier -> box5.getChildren().add(sidebarSupplier.get()));
+                sidebarSupplier -> 
+                    box5.getChildren().add(sidebarSupplier.get()));
         accessManager.getAccessibleSidebar2(accessManager.getUserRole(User.getCurrentUser())).forEach(
-                    sidebarSupplier -> box6.getChildren().add(sidebarSupplier.get()));
-        accessManager.getAccessibleRetractedButtons(accessManager.getUserRole(User.getCurrentUser())).forEach(
+                sidebarSupplier -> 
+                    box6.getChildren().add(sidebarSupplier.get()));
+        accessManager.getAccessibleRetractedButtons1(accessManager.getUserRole(User.getCurrentUser())).forEach(
                 buttonSupplier -> {
                     retractedVBox.getChildren().add(Lantern.createHorizontalSeparator(6));
-                    retractedVBox.getChildren().add(buttonSupplier.get());
+                    rtab5 = buttonSupplier.get();
+                    retractedVBox.getChildren().add(rtab5);
                 });
-        pages[1] = profileBox;
-        pages[2] = eventBox;
-        pages[3] = discussionBox;
-        pages[4] = leaderboardBox;
-        pages[5] = box5;
-        pages[6] = box6;
-        pages[7] = box7;
-        setOneVisible(1);
+        accessManager.getAccessibleRetractedButtons2(accessManager.getUserRole(User.getCurrentUser())).forEach(
+                buttonSupplier -> {
+                    retractedVBox.getChildren().add(Lantern.createHorizontalSeparator(6));
+                    rtab6 = buttonSupplier.get();
+                    retractedVBox.getChildren().add(rtab6);
+                });
+        
+        initialiseArrays();
+
         Platform.runLater(() -> {
             updateAvailableWidth(isSidebarRetracted.get());
             sidebarWidth = sidebar.getWidth();
@@ -162,7 +179,10 @@ public class Sidebar {
         scene1.getStylesheets().add("resources/style.css");
         stg.setScene(scene1);
     }
-    public static void setOneVisible(int index){
+
+
+
+    private static void setOneVisible(int index){
         for(int i = 1; i <= pages.length; i++){
             if(pages[i] == null)
                 break;
@@ -187,14 +207,32 @@ public class Sidebar {
         }
         return false;
     }
-    public static void push_SidebarHistory(int index){
+    private static void push_SidebarHistory(int index){
         if(sidebarHistory.isEmpty() || sidebarHistory.peek() != index)
             sidebarHistory.push(index);
     }
-    public static AccessManager getAccessManager(){
-        return accessManager;
+    private static void setSelectedButton(int index){
+        for(int i = 1; i <= tabs.length; i++){
+            if(tabs[i] == null)
+                break;
+            if(i == index){
+                tabs[i].getStyleClass().add("sidebar_button_selected");
+                tabs[i].getStyleClass().remove("sidebar_button");
+                rtabs[i].getStyleClass().add("sidebar_button_selected");
+                rtabs[i].getStyleClass().remove("sidebar_button");
+            } else {
+                tabs[i].getStyleClass().remove("sidebar_button_selected");
+                tabs[i].getStyleClass().add("sidebar_button");
+                rtabs[i].getStyleClass().remove("sidebar_button_selected");
+                rtabs[i].getStyleClass().add("sidebar_button");
+            }
+        }
     }
-
+    public static void selectTab(int ind){
+        push_SidebarHistory(ind);
+        setOneVisible(ind);
+        setSelectedButton(ind);
+    }
     private static void updateAvailableWidth(boolean isRetracted) {
         double offsetWidth = 60;
         if(isRetracted) {
@@ -202,6 +240,31 @@ public class Sidebar {
         } else {
             availableWidth.set(root.getWidth() - sidebarWidth);
         }
+    }
+
+
+    //create sidebar components
+    private static Button createRetractButton(){
+        Button retractButton = new Button();
+        Image sidebarImage = new Image("resources/assets/sidebar_icon.png");
+        ImageView sideBarImageView = new ImageView(sidebarImage);
+        sideBarImageView.setFitHeight(30);
+        sideBarImageView.setFitWidth(30);
+        retractButton.setGraphic(sideBarImageView);
+        retractButton.getStyleClass().add("back_button");
+
+        retractButton.setOnAction(e -> {
+            boolean isNowRetracted = !isSidebarRetracted.getAndSet(!isSidebarRetracted.get());
+            if (isNowRetracted) {
+                tt.setToX(-(sidebarWidth- 60));
+            } else {
+                root.setLeft(sidebar);
+                tt.setToX(0);
+            }
+            tt.playFromStart();
+            updateAvailableWidth(isNowRetracted);
+        });
+        return retractButton;
     }
     private static HBox createSearchBox(){
         HBox searchBox = new HBox();
@@ -241,6 +304,50 @@ public class Sidebar {
         searchBox.getChildren().addAll(searchField, Lantern.createVerticalSeparator(0),  searchButton);
         searchBox.setAlignment(Pos.CENTER);
         return searchBox;
+    }
+    private static Button createBackButton(){
+        ImageView imageView = new ImageView(new Image("resources/assets/back_arrow.png"));
+        imageView.setFitHeight(30);
+        imageView.setFitWidth(30);
+        Button backButton = new Button();
+        backButton.setGraphic(imageView);
+        backButton.getStyleClass().add("back_button");
+        backButton.setOnAction(e -> {
+            goBackSidebar();
+        });
+        return backButton;
+    }
+
+    // Initialisation
+    private static void initialseVBoxes(){
+        profileBox.prefWidthProperty().bind(stackPane.widthProperty());
+        eventBox.prefWidthProperty().bind(stackPane.widthProperty());
+        discussionBox.prefWidthProperty().bind(stackPane.widthProperty());
+        leaderboardBox.prefWidthProperty().bind(stackPane.widthProperty());
+        box5.prefWidthProperty().bind(stackPane.widthProperty());
+        box6.prefWidthProperty().bind(stackPane.widthProperty());
+        box7.prefWidthProperty().bind(stackPane.widthProperty());
+        profileBox.prefHeightProperty().bind(stackPane.heightProperty());
+        eventBox.prefHeightProperty().bind(stackPane.heightProperty());
+        discussionBox.prefHeightProperty().bind(stackPane.heightProperty());
+        leaderboardBox.prefHeightProperty().bind(stackPane.heightProperty());
+        box5.prefHeightProperty().bind(stackPane.heightProperty());
+        box6.prefHeightProperty().bind(stackPane.heightProperty());
+        box7.prefHeightProperty().bind(stackPane.heightProperty());
+        VBox.setVgrow(profileBox, Priority.ALWAYS);
+        VBox.setVgrow(eventBox, Priority.ALWAYS);
+        VBox.setVgrow(discussionBox, Priority.ALWAYS);
+        VBox.setVgrow(leaderboardBox, Priority.ALWAYS);
+        VBox.setVgrow(box5, Priority.ALWAYS);
+        VBox.setVgrow(box6, Priority.ALWAYS);
+        VBox.setVgrow(box7, Priority.ALWAYS);
+        profileBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        eventBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        discussionBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        leaderboardBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        box5.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        box6.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        box7.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
     }
     private static void initialiseButtons(){
         tab1 = new Button();
@@ -292,101 +399,60 @@ public class Sidebar {
         rtab4.setMaxWidth(Double.MAX_VALUE);
 
         tab1.setOnAction(e -> {
-            push_SidebarHistory(1);
-            setOneVisible(1);
+            selectTab(1);
         });
         tab2.setOnAction(e -> {
-            push_SidebarHistory(2);
-            setOneVisible(2);
+            selectTab(2);
         });
         tab3.setOnAction(e -> {
-            push_SidebarHistory(3);
-            setOneVisible(3);
+            selectTab(3);
         });
         tab4.setOnAction(e -> {
-            push_SidebarHistory(4);
-            setOneVisible(4);
+            selectTab(4);
         });
         rtab1.setOnAction(e -> {
-            push_SidebarHistory(1);
-            setOneVisible(1);
+            selectTab(1);
         });
         rtab2.setOnAction(e -> {
-            push_SidebarHistory(2);
-            setOneVisible(2);
+            selectTab(2);
         });
         rtab3.setOnAction(e -> {
-            push_SidebarHistory(3);
-            setOneVisible(3);
+            selectTab(3);
         });
         rtab4.setOnAction(e -> {
-            push_SidebarHistory(4);
-            setOneVisible(4);
+            selectTab(4);
         });
     }
-    private static Button createBackButton(){
-        ImageView imageView = new ImageView(new Image("resources/assets/back_arrow.png"));
-        imageView.setFitHeight(30);
-        imageView.setFitWidth(30);
-        Button backButton = new Button();
-        backButton.setGraphic(imageView);
-        backButton.getStyleClass().add("back_button");
-        backButton.setOnAction(e -> {
-            goBackSidebar();
-        });
-        return backButton;
-    }
-    private static void initialseVBoxes(){
-        profileBox.prefWidthProperty().bind(stackPane.widthProperty());
-        eventBox.prefWidthProperty().bind(stackPane.widthProperty());
-        discussionBox.prefWidthProperty().bind(stackPane.widthProperty());
-        leaderboardBox.prefWidthProperty().bind(stackPane.widthProperty());
-        box5.prefWidthProperty().bind(stackPane.widthProperty());
-        box6.prefWidthProperty().bind(stackPane.widthProperty());
-        box7.prefWidthProperty().bind(stackPane.widthProperty());
-        profileBox.prefHeightProperty().bind(stackPane.heightProperty());
-        eventBox.prefHeightProperty().bind(stackPane.heightProperty());
-        discussionBox.prefHeightProperty().bind(stackPane.heightProperty());
-        leaderboardBox.prefHeightProperty().bind(stackPane.heightProperty());
-        box5.prefHeightProperty().bind(stackPane.heightProperty());
-        box6.prefHeightProperty().bind(stackPane.heightProperty());
-        box7.prefHeightProperty().bind(stackPane.heightProperty());
-        VBox.setVgrow(profileBox, Priority.ALWAYS);
-        VBox.setVgrow(eventBox, Priority.ALWAYS);
-        VBox.setVgrow(discussionBox, Priority.ALWAYS);
-        VBox.setVgrow(leaderboardBox, Priority.ALWAYS);
-        VBox.setVgrow(box5, Priority.ALWAYS);
-        VBox.setVgrow(box6, Priority.ALWAYS);
-        VBox.setVgrow(box7, Priority.ALWAYS);
-        profileBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        eventBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        discussionBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        leaderboardBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        box5.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        box6.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        box7.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-    }
-    private static Button createRetractButton(){
-        Button retractButton = new Button();
-        Image sidebarImage = new Image("resources/assets/sidebar_icon.png");
-        ImageView sideBarImageView = new ImageView(sidebarImage);
-        sideBarImageView.setFitHeight(30);
-        sideBarImageView.setFitWidth(30);
-        retractButton.setGraphic(sideBarImageView);
-        retractButton.getStyleClass().add("back_button");
+    private static void initialiseArrays(){
+        pages[1] = profileBox;
+        pages[2] = eventBox;
+        pages[3] = discussionBox;
+        pages[4] = leaderboardBox;
+        pages[5] = box5;
+        pages[6] = box6;
+        pages[7] = box7;
+        
+        tabs[1] = tab1;
+        tabs[2] = tab2;
+        tabs[3] = tab3;
+        tabs[4] = tab4;
+        tabs[5] = tab5;
+        tabs[6] = tab6;
 
-        retractButton.setOnAction(e -> {
-            boolean isNowRetracted = !isSidebarRetracted.getAndSet(!isSidebarRetracted.get());
-            if (isNowRetracted) {
-                tt.setToX(-(sidebarWidth- 60));
-            } else {
-                root.setLeft(sidebar);
-                tt.setToX(0);
-            }
-            tt.playFromStart();
-            updateAvailableWidth(isNowRetracted);
-        });
-        return retractButton;
+        rtabs[1] = rtab1;
+        rtabs[2] = rtab2;
+        rtabs[3] = rtab3;
+        rtabs[4] = rtab4;
+        rtabs[5] = rtab5;
+        rtabs[6] = rtab6;
+
+        setOneVisible(1);
+        setSelectedButton(1);
+    }
+
+    // Getters
+    public static AccessManager getAccessManager(){
+        return accessManager;
     }
     public static ImageView getProfileIcon(){
         ImageView profileIcon = new ImageView(new Image("resources/assets/profile_icon.png"));
