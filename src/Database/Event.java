@@ -33,7 +33,6 @@ public class Event {
       preparedStatement.setString(4, event.venue);
       preparedStatement.setString(5, event.date);
       preparedStatement.setString(6, event.time);
-      preparedStatement.executeUpdate();
       //trying to check for the saving updates
       int rowsInserted = preparedStatement.executeUpdate();
         if (rowsInserted > 0) {
@@ -45,7 +44,7 @@ public class Event {
       catch(SQLException e){
         e.printStackTrace();
       }
-     // increaseEventNumber(connection,getNumberOfEvent(connection,username),username);
+      //increaseEventNumber(connection,getNumberOfEvent(connection,username),username);
       return false;
     }
 
