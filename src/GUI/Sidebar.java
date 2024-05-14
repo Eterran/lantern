@@ -13,11 +13,11 @@ import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -74,7 +74,6 @@ public class Sidebar {
     public static void showHomeScene(Stage stg){
         Lantern.Clear_History();
 
-        //initialiseImageViews();
         initialiseButtons();
         initialseVBoxes();
         Button backButton = createBackButton();
@@ -128,7 +127,7 @@ public class Sidebar {
         backAndRetract.getChildren().addAll(backButton, retractButton);
         HBox.setHgrow(backButton, Priority.ALWAYS);
         backButton.setMaxWidth(Double.MAX_VALUE);
-        sidebar.getChildren().addAll(backAndRetract, searcHBox, Lantern.createHorizontalSeparator(6), tab1, Lantern.createHorizontalSeparator(6), tab2, Lantern.createHorizontalSeparator(6), tab3, Lantern.createHorizontalSeparator(6), tab4);
+        sidebar.getChildren().addAll(backAndRetract, Lantern.createHorizontalSeparator(8), searcHBox, Lantern.createHorizontalSeparator(6), tab1, Lantern.createHorizontalSeparator(6), tab2, Lantern.createHorizontalSeparator(6), tab3, Lantern.createHorizontalSeparator(6), tab4);
         retractedVBox.getChildren().addAll(retractedRetractButton, rtab1, Lantern.createHorizontalSeparator(6), rtab2, Lantern.createHorizontalSeparator(6), rtab3, Lantern.createHorizontalSeparator(6), rtab4);
         accessManager.getAccessibleButtons(accessManager.getUserRole(User.getCurrentUser())).forEach(buttonSupplier -> {
             sidebar.getChildren().add(Lantern.createHorizontalSeparator(6));
@@ -206,11 +205,11 @@ public class Sidebar {
     }
     private static HBox createSearchBox(){
         HBox searchBox = new HBox();
-        searchBox.setPadding(new Insets(0, 0, 0, 0));
+        searchBox.setPadding(new Insets(0, 0, 2, 0));
         TextField searchField = new TextField();
         searchField.setPromptText("Search Users");
         searchField.getStyleClass().add("search_field");
-        searchField.setMaxSize(sidebarWidth, Double.MAX_VALUE);
+        searchField.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         HBox.setHgrow(searchField, Priority.ALWAYS);
         Image searchImage = new Image("resources/assets/search_icon.png");
         ImageView searchImageView = new ImageView(searchImage);
@@ -240,6 +239,7 @@ public class Sidebar {
             }
         });
         searchBox.getChildren().addAll(searchField, Lantern.createVerticalSeparator(0),  searchButton);
+        searchBox.setAlignment(Pos.CENTER);
         return searchBox;
     }
     private static void initialiseButtons(){
@@ -344,6 +344,13 @@ public class Sidebar {
         box5.prefWidthProperty().bind(stackPane.widthProperty());
         box6.prefWidthProperty().bind(stackPane.widthProperty());
         box7.prefWidthProperty().bind(stackPane.widthProperty());
+        profileBox.prefHeightProperty().bind(stackPane.heightProperty());
+        eventBox.prefHeightProperty().bind(stackPane.heightProperty());
+        discussionBox.prefHeightProperty().bind(stackPane.heightProperty());
+        leaderboardBox.prefHeightProperty().bind(stackPane.heightProperty());
+        box5.prefHeightProperty().bind(stackPane.heightProperty());
+        box6.prefHeightProperty().bind(stackPane.heightProperty());
+        box7.prefHeightProperty().bind(stackPane.heightProperty());
         VBox.setVgrow(profileBox, Priority.ALWAYS);
         VBox.setVgrow(eventBox, Priority.ALWAYS);
         VBox.setVgrow(discussionBox, Priority.ALWAYS);
@@ -500,5 +507,9 @@ public class Sidebar {
         rfriendlistIcon.setFitHeight(30);
         rfriendlistIcon.setFitWidth(30);
         return rfriendlistIcon;
+    }
+    public static void setBox7(VBox box){
+        box7 = box;
+        setOneVisible(7);
     }
 }

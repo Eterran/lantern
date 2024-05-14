@@ -7,14 +7,12 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import javafx.geometry.Insets;
-import javafx.geometry.Side;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import Database.User;
-import Student.friend;
 import Database.Event;
 import Database.Quiz;
 import Database.Booking;
@@ -130,15 +128,15 @@ public class AccessManager {
     public List<Supplier<Button>> getAccessibleRetractedButtons(UserRole role) {
         return retractedButtonAccessRules.getOrDefault(role, List.of());
     }
-    private Supplier<Button> createButton(String text, Runnable action) {
-        return () -> {
-            Button button = new Button(text);
-            button.setOnAction(e -> action.run());
-            button.getStyleClass().add("sidebar_button");
-            button.setMaxWidth(Double.MAX_VALUE);
-            return button;
-        };
-    }
+    // private Supplier<Button> createButton(String text, Runnable action) {
+    //     return () -> {
+    //         Button button = new Button(text);
+    //         button.setOnAction(e -> action.run());
+    //         button.getStyleClass().add("sidebar_button");
+    //         button.setMaxWidth(Double.MAX_VALUE);
+    //         return button;
+    //     };
+    // }
     private Supplier<Button> createButton(String text, Runnable action, ImageView img) {
         return () -> {
             Button button = new Button();
