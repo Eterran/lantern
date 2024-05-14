@@ -1,6 +1,8 @@
 package GUI;
 
 import java.sql.Connection;
+import java.util.LinkedList;
+import java.util.List;
 
 import Database.Database;
 import Database.Event;
@@ -43,7 +45,7 @@ public class EducatorCreateQuiz {
     //     primaryStage.show();
     
     // }
-    
+    private static List<String> QthemeList = new LinkedList<>();
     public static VBox tabCreateQuiz(){
         Label title = new Label("Create Quiz") ;
         title.setPadding(new Insets(10, 0, 0, 10));
@@ -77,27 +79,62 @@ public class EducatorCreateQuiz {
         saveBtn.setStyle("-fx-background-color: #9068be; -fx-text-fill: white");
         cancelBtn.setStyle("-fx-background-color:#9068be; -fx-text-fill: white");
 
-        StringBuilder selectedSubjects = new StringBuilder();
+        // StringBuilder selectedSubjects = new StringBuilder();
+        // scCheckbox.setOnAction(e -> {
+        //      if (scCheckbox.isSelected()) {
+        //          selectedSubjects.append("Science ");
+        //      }
+        //  });
+        // techCheckbox.setOnAction(e -> {
+        //     if (techCheckbox.isSelected()) {
+        //         selectedSubjects.append("Technology ");
+        //     }
+        // }); 
+        // engCheckbox.setOnAction(e -> {
+        //     if (engCheckbox.isSelected()) {
+        //         selectedSubjects.append("Engineering ");
+        //     }
+        // });
+        // mathCheckbox.setOnAction(e -> {
+        //     if (mathCheckbox.isSelected()) {
+        //         selectedSubjects.append("Mathematics ");
+        //     }
+        // });
+
+        
         scCheckbox.setOnAction(e -> {
-             if (scCheckbox.isSelected()) {
-                 selectedSubjects.append("Science ");
-             }
-         });
+            if (scCheckbox.isSelected()) {
+                QthemeList.add("Science");
+            } else {
+                QthemeList.remove("Science");
+            }
+        });
+
         techCheckbox.setOnAction(e -> {
             if (techCheckbox.isSelected()) {
-                selectedSubjects.append("Technology ");
+                QthemeList.add("Technology");
+            } else {
+                QthemeList.remove("Technology");
             }
-        }); 
+        });
+
         engCheckbox.setOnAction(e -> {
             if (engCheckbox.isSelected()) {
-                selectedSubjects.append("Engineering ");
+                QthemeList.add("Engineering");
+            } else {
+                QthemeList.remove("Engineering");
             }
         });
+
         mathCheckbox.setOnAction(e -> {
             if (mathCheckbox.isSelected()) {
-                selectedSubjects.append("Mathematics ");
+                QthemeList.add("Mathematics");
+            } else {
+                QthemeList.remove("Mathematics");
             }
         });
+
+       User user = User.getCurrentUser();
 
         saveBtn.setOnAction(e -> {
             if (quizTitleTF.getText().isEmpty() || quizDescriptionTA.getText().isEmpty() ||
@@ -106,32 +143,24 @@ public class EducatorCreateQuiz {
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Please fill in all fields before saving.", ButtonType.OK);
                 alert.showAndWait();
             } else {
-                // here to save the quiz
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Quiz saved successfully.", ButtonType.OK);
-                alert.showAndWait();
-            }
-        });
-
-       User user = User.getCurrentUser();
-
-        saveBtn.setOnAction(e -> {
-            String QTitle = quizTitleTF.getText();
-            String Qdescription = quizDescriptionTA.getText();
-            String Qtheme = selectedSubjects.toString(); //solve chekbox
-            String Qcontent = quizContentTF.getText();
-    
-            boolean savedSuccessfully = Quiz.createQuiz(Lantern.getConn(), QTitle, Qdescription, Qtheme, Qcontent, user.getUsername());
-            if (savedSuccessfully) {
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Success");
-                alert.setContentText("Quiz saved successfully!");
-                alert.showAndWait();
-            } else {
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setContentText("Failed to save quiz.");
-                alert.showAndWait();
-            }
+                String QTitle = quizTitleTF.getText();
+                String Qdescription = quizDescriptionTA.getText();
+                String Qtheme = String.join(", ", QthemeList); //solve chekbox
+                String Qcontent = quizContentTF.getText();
+        
+                boolean savedSuccessfully = Quiz.createQuiz(Lantern.getConn(), QTitle, Qdescription, Qtheme, Qcontent, user.getUsername());
+                if (savedSuccessfully) {
+                    Alert alert = new Alert(AlertType.INFORMATION);
+                    alert.setTitle("Success");
+                    alert.setContentText("Quiz saved successfully!");
+                    alert.showAndWait();
+                } else {
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setContentText("Failed to save quiz.");
+                    alert.showAndWait();
+                }
+            }  
         });
 
 

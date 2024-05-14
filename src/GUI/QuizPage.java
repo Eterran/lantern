@@ -14,6 +14,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import Database.User;
+
+import java.util.ArrayList;
+
+import Database.Quiz;
+import Database.QuizData;
 public class QuizPage {
 
  
@@ -24,7 +30,9 @@ public class QuizPage {
         
         Label titleLabel = new Label("Quiz"); //if not at the center, then just adjust this bah
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 25));
-        String label = "120"; //fetch from the db 
+
+        User user = User.getCurrentUser(); 
+        Double label = user.getPoints();; //fetch from the user db
         Label pointsLabel = new Label("Points:"+ label);
         pointsLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 
@@ -54,12 +62,17 @@ public class QuizPage {
         gridPane.setHgap(10);
         gridPane.setVgap(10);
 
-        for (int i = 0; i < 5; i++) {
-            //String labelText = (calling method to fetch the question theme from db);  fetchingmethod(int index)
-            //String labelText2 = (calling method to fetch the theme description from db);  fetchingmethod(int index)
-            String labelText1 = "Quiz Title";
-            String labelText2 = "Quiz theme";
-            BorderPane borderPane = BPForEveryQuiz(labelText1, labelText2, "Start Attempt","#226c94");
+        ArrayList<QuizData> quizDataList = Quiz.getAllQuiz(Lantern.getConn());
+        
+        int totalNumOfQuiz = Quiz.getTotalNumberOfQuizzes(Lantern.getConn());
+        for (int i = 0; i < totalNumOfQuiz; i++) { 
+            QuizData qd = quizDataList.get(i);
+            String quizTitle= qd.getQuizTitle();
+            String quizDescription= qd.getDescription();
+            String quizContent = qd.getContent();
+            String quiztheme = qd.getTheme();
+
+            BorderPane borderPane = BPForEveryQuiz(quizTitle, quiztheme, quizDescription, quizContent, "Start Attempt");
             gridPane.add(borderPane, i % 4, i / 4);
         }
 
@@ -71,53 +84,58 @@ public class QuizPage {
     }
 
 
-    public static BorderPane BPForEveryQuiz(String labelText1, String labelText2, String buttonText, String backgroundColor) {
+    public static BorderPane BPForEveryQuiz(String qtitle, String qtheme, String qdescrip, String qContent, String buttonText) {
         BorderPane borderPane = new BorderPane();
         borderPane.setPrefWidth(180);
-        borderPane.setPrefHeight(100);
-        borderPane.setStyle("-fx-background-color: " + backgroundColor + ";");
+        borderPane.setPrefHeight(120);
+        borderPane.setStyle("-fx-background-color: #226c94;");
         borderPane.setPadding(new Insets(10));
 
-        Label label1 = new Label(labelText1);
+        Label label1 = new Label(qtitle);
         label1.setTextFill(Color.WHITE); 
-        label1.setFont(Font.font("Arial", FontWeight.BOLD, 25));
-        Label label2 = new Label(labelText2);
+        label1.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        Label label2 = new Label(qtheme);
         label2.setTextFill(Color.WHITE); 
-        label1.setFont(Font.font("Arial", FontWeight.BOLD, 15));
+        label2.setFont(Font.font("Arial", 10));
+        Label label3 = new Label(qdescrip);
+        label3.setTextFill(Color.WHITE); 
+        label3.setFont(Font.font("Arial", 10));
         Button button = new Button(buttonText);
         button.setAlignment(Pos.BOTTOM_RIGHT);
 
         button.setOnAction(event->{
             Stage stage = new Stage();
-            stage.setScene(new Scene(showQuiz(), 400, 200));
+            stage.setScene(new Scene(showQuiz(qContent), 400, 200));
             stage.setTitle("Quiz Description");
             stage.show();
         });
         
 
         BorderPane.setAlignment(label1, Pos.TOP_LEFT);
-        BorderPane.setAlignment(label2, Pos.CENTER);
+        VBox storelabel23 = new VBox();
+        storelabel23.getChildren().addAll(label2, label3);
+        BorderPane.setAlignment(storelabel23, Pos.CENTER);
         BorderPane.setAlignment(button, Pos.BOTTOM_RIGHT);
 
         borderPane.setTop(label1);
-        borderPane.setLeft(label2);
+        borderPane.setLeft(storelabel23);
         borderPane.setBottom(button);
 
         return borderPane;
     }
 
     //show quiz description and finish attempt button
-    public static BorderPane showQuiz(){
+    public static BorderPane showQuiz(String quizContent){
         BorderPane borderPane= new BorderPane();
         
-        Label quizDescription = new Label("Fetch the description from db");
+        Label quizC = new Label (quizContent);
         Button finishAttemptBtn = new Button("Finish Attempt");
        
-        borderPane.setTop(quizDescription);
+        borderPane.setTop(quizC);
         borderPane.setBottom(finishAttemptBtn);
         BorderPane.setAlignment(finishAttemptBtn,Pos.BOTTOM_RIGHT);
 
-       BorderPane.setMargin(quizDescription, new Insets(10)); 
+       BorderPane.setMargin(quizC, new Insets(10)); 
        BorderPane.setMargin(finishAttemptBtn, new Insets(0, 10, 10, 0)); 
 
 

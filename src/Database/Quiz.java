@@ -24,7 +24,6 @@ public class Quiz {
       preparedStatement.setString(3, description);
       preparedStatement.setString(4, theme);
       preparedStatement.setString(5, content);
-      preparedStatement.executeUpdate();
       int rowsInserted = preparedStatement.executeUpdate();
         if (rowsInserted > 0) {
             increaseQuizNumber(connection, getNumberOfQuiz(connection, username), username);
@@ -60,7 +59,7 @@ public class Quiz {
       }
     }
     
-    public static int getNumberOfQuiz(Connection connection,String username){
+    public static int getNumberOfQuiz(Connection connection,String username){ 
     Login_Register lg=new Login_Register();
       int id =lg.getID(username, connection);
       int count=-1;
@@ -262,6 +261,22 @@ public class Quiz {
       e.printStackTrace();
       }
  }
-    
+    public static int getTotalNumberOfQuizzes(Connection connection) {
+      int totalQuizzes = 0;
+      int maxId = 0;
+      String query = "SELECT MAX(id) AS id FROM Quiz";
+      try {
+          Statement statement = connection.createStatement();
+          ResultSet resultSet = statement.executeQuery(query);
+          if (resultSet.next()) {
+              maxId = resultSet.getInt("id");
+          }
+      } catch (SQLException e) {
+          e.printStackTrace();
+      }  
+      totalQuizzes = maxId;
+      return totalQuizzes;
+    }
+        
     
 }

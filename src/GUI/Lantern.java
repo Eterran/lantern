@@ -117,7 +117,7 @@ public class Lantern extends Application {
         Separator separator = new Separator();
         separator.setOrientation(Orientation.HORIZONTAL);
         VBox sepBox = new VBox();
-        Insets padding = new Insets(0, spacing, 0, spacing);
+        Insets padding = new Insets(spacing, 0, spacing, 0);
         sepBox.setPadding(padding);
         sepBox.getChildren().add(separator);
         sepBox.setAlignment(Pos.CENTER);
@@ -127,7 +127,7 @@ public class Lantern extends Application {
         Separator separator = new Separator();
         separator.setOrientation(Orientation.VERTICAL);
         VBox sepBox = new VBox(spacing);
-        Insets padding = new Insets(spacing, 0, spacing, 0);
+        Insets padding = new Insets(0, spacing, 0, spacing);
         sepBox.setPadding(padding);
         sepBox.getChildren().add(separator);
         sepBox.setAlignment(Pos.CENTER);

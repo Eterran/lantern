@@ -8,17 +8,21 @@ import java.util.function.Supplier;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import Database.User;
+import Student.friend;
 import Database.Event;
 import Database.Quiz;
+import Database.Booking;
 
 public class AccessManager {
     private final Map<UserRole, List<Supplier<Button>>> buttonAccessRules;
     private final Map<UserRole, List<Supplier<VBox>>> vBoxAccessRules;
     private final Map<UserRole, List<Supplier<VBox>>> sidebarAccessRules1;
     private final Map<UserRole, List<Supplier<VBox>>> sidebarAccessRules2;
+    private final Map<UserRole, List<Supplier<VBox>>> retractedButtonAccessRules;
     private Connection conn = Lantern.getConn();
 
     public AccessManager() {
@@ -26,6 +30,7 @@ public class AccessManager {
         vBoxAccessRules = new EnumMap<>(UserRole.class);
         sidebarAccessRules1 = new EnumMap<>(UserRole.class);
         sidebarAccessRules2 = new EnumMap<>(UserRole.class);
+        retractedButtonAccessRules = new EnumMap<>(UserRole.class);
 
         buttonAccessRules.put(UserRole.EDUCATOR, List.of(
             createButton("Create Quizzes", () -> {
@@ -37,6 +42,7 @@ public class AccessManager {
                 Sidebar.setOneVisible(5);
             })
         ));
+        retractedButtonAccessRules.put(UserRole.EDUCATOR, List.of());
         vBoxAccessRules.put(UserRole.EDUCATOR, List.of(
             this::createEducatorProfileVBox
         ));
@@ -103,6 +109,16 @@ public class AccessManager {
             return button;
         };
     }
+    private Supplier<Button> createdRetractedButton(ImageView img, Runnable action){
+        return () -> {
+            Button button = new Button();
+            button.setGraphic(img);
+            button.setOnAction(e -> action.run());
+            button.getStyleClass().add("sidebar_button");
+            button.setMaxWidth(Double.MAX_VALUE);
+            return button;
+        };
+    }
     public UserRole getUserRole(User user) {
         if(user.getRole().toLowerCase().equals("educator")) {
             return UserRole.EDUCATOR;
@@ -129,8 +145,7 @@ public class AccessManager {
     }
     private VBox createParentProfileVBox() {
         VBox vBox = new VBox();
-        //TODO database get bookings made
-        HBox quizzes = Lantern.createInfoHBox("BOOKINGS MADE: ", "User.getCurrentUser().get", new Insets(8, 10, 8, 15));
+        HBox quizzes = Lantern.createInfoHBox("BOOKINGS MADE: ", Booking.viewBooking(conn, User.getCurrentUser().getUsername()).size(), new Insets(8, 10, 8, 15));
         vBox.getChildren().add(quizzes);
         return vBox;
     }

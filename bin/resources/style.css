@@ -148,19 +148,24 @@
     -fx-background-color: transparent;
     -fx-text-fill: white;
     -fx-font-size: 20;
-    -fx-font-weight: bold;
+    -fx-font-family: 'Nunito Bold';
 }
 .sidebar_button:hover {
     -fx-background-color: #8f1111;
     -fx-text-fill: white;
     -fx-font-size: 20;
-    -fx-font-weight: bold;
 }
 .sidebar_button:pressed {
     -fx-background-color: #4e0000;
     -fx-text-fill: white;
     -fx-font-size: 20;
-    -fx-font-weight: bold;
+}
+.sidebar_button_selected {
+    -fx-background-color: rgb(255, 216, 75);
+    -fx-text-fill: rgb(0, 0, 0);
+    -fx-font-size: 20;
+    -fx-border-color: black;
+    -fx-border-width: 0 0 0 6;
 }
 .separator .line {
     -fx-border-width: 0;
@@ -213,6 +218,15 @@
     -fx-border-color: transparent;
 }
 
+.title {
+    -fx-font-family: 'Nunito ExtraBold';
+    -fx-font-size: 40;
+}
+.text_bold {
+    -fx-font-family: 'Nunito Bold';
+    -fx-font-size: 20;
+    -fx-text-fill: white;
+}
 .text_label {
     -fx-font-family: 'Nunito SemiBold';
     -fx-font-size: 18;
@@ -223,10 +237,7 @@
     -fx-font-size: 18;
     -fx-text-fill: white;
 }
-.title {
-    -fx-font-family: 'Nunito ExtraBold';
-    -fx-font-size: 40;
-}
+
 .subtext {
     -fx-font-size: 16;
     -fx-text-fill: rgb(154, 154, 154);
