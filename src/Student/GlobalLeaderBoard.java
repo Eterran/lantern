@@ -213,7 +213,7 @@ import java.time.format.DateTimeFormatter;
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
       String time=LocalTime.now().format(formatter);
       String dat=date.toString();
-      String sql = "UPDATE XpLastUpdated ,Time SET xpLastUpdated = ? ,Time=? WHERE main_id= ?";
+      String sql = "UPDATE XpLastUpdated SET xpLastUpdated = ? ,Time=? WHERE main_id= ?";
       try{
       PreparedStatement preparedStatement = connection.prepareStatement(sql);
       preparedStatement.setString(1, dat);
