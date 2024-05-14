@@ -11,8 +11,8 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import Database.User;
-import Student.friend;
 import Database.Event;
 import Database.Quiz;
 import Database.Booking;
@@ -22,7 +22,7 @@ public class AccessManager {
     private final Map<UserRole, List<Supplier<VBox>>> vBoxAccessRules;
     private final Map<UserRole, List<Supplier<VBox>>> sidebarAccessRules1;
     private final Map<UserRole, List<Supplier<VBox>>> sidebarAccessRules2;
-    private final Map<UserRole, List<Supplier<VBox>>> retractedButtonAccessRules;
+    private final Map<UserRole, List<Supplier<Button>>> retractedButtonAccessRules;
     private Connection conn = Lantern.getConn();
 
     public AccessManager() {
@@ -34,15 +34,24 @@ public class AccessManager {
 
         buttonAccessRules.put(UserRole.EDUCATOR, List.of(
             createButton("Create Quizzes", () -> {
-                Sidebar.push_SidebarHistory(4);
-                Sidebar.setOneVisible(4);
-            }),
-            createButton("Create Events", () -> {
                 Sidebar.push_SidebarHistory(5);
                 Sidebar.setOneVisible(5);
+            }, Sidebar.getCreateQuizzesIcon()),
+            createButton("Create Events", () -> {
+                Sidebar.push_SidebarHistory(6);
+                Sidebar.setOneVisible(6);
+            }, Sidebar.getCreateEventIcon())
+        ));
+        retractedButtonAccessRules.put(UserRole.EDUCATOR, List.of(
+            createdRetractedButton(Sidebar.getRCreateQuizzesIcon(), () -> {
+                Sidebar.push_SidebarHistory(5);
+                Sidebar.setOneVisible(5);
+            }),
+            createdRetractedButton(Sidebar.getRCreateEventIcon(), () -> {
+                Sidebar.push_SidebarHistory(6);
+                Sidebar.setOneVisible(6);
             })
         ));
-        retractedButtonAccessRules.put(UserRole.EDUCATOR, List.of());
         vBoxAccessRules.put(UserRole.EDUCATOR, List.of(
             this::createEducatorProfileVBox
         ));
@@ -54,12 +63,22 @@ public class AccessManager {
         ));
         buttonAccessRules.put(UserRole.STUDENT, List.of(
             createButton("Quizzes", () -> {
-                Sidebar.push_SidebarHistory(4);
-                Sidebar.setOneVisible(4);
-            }),
-            createButton("Friends", () -> {
                 Sidebar.push_SidebarHistory(5);
                 Sidebar.setOneVisible(5);
+            }, Sidebar.getQuizzesIcon()),
+            createButton("Friends", () -> {
+                Sidebar.push_SidebarHistory(6);
+                Sidebar.setOneVisible(6);
+            }, Sidebar.getFriendlistIcon())
+        ));
+        retractedButtonAccessRules.put(UserRole.STUDENT, List.of(
+            createdRetractedButton(Sidebar.getRQuizzesIcon(), () -> {
+                Sidebar.push_SidebarHistory(5);
+                Sidebar.setOneVisible(5);
+            }),
+            createdRetractedButton(Sidebar.getRFriendlistIcon(), () -> {
+                Sidebar.push_SidebarHistory(6);
+                Sidebar.setOneVisible(6);
             })
         ));
         vBoxAccessRules.put(UserRole.STUDENT, List.of(
@@ -73,8 +92,14 @@ public class AccessManager {
         ));
         buttonAccessRules.put(UserRole.PARENT, List.of(
             createButton("Make Bookings", () -> {
-                Sidebar.push_SidebarHistory(4);
-                Sidebar.setOneVisible(4);
+                Sidebar.push_SidebarHistory(5);
+                Sidebar.setOneVisible(5);
+            }, Sidebar.getBookingsIcon())
+        ));
+        retractedButtonAccessRules.put(UserRole.PARENT, List.of(
+            createdRetractedButton(Sidebar.getRBookingsIcon(), () -> {
+                Sidebar.push_SidebarHistory(5);
+                Sidebar.setOneVisible(5);
             })
         ));
         vBoxAccessRules.put(UserRole.PARENT, List.of(
@@ -100,9 +125,26 @@ public class AccessManager {
     public List<Supplier<VBox>> getAccessibleSidebar2(UserRole role) {
         return sidebarAccessRules2.getOrDefault(role, List.of());
     }
-    private Supplier<Button> createButton(String text, Runnable action) {
+    public List<Supplier<Button>> getAccessibleRetractedButtons(UserRole role) {
+        return retractedButtonAccessRules.getOrDefault(role, List.of());
+    }
+    // private Supplier<Button> createButton(String text, Runnable action) {
+    //     return () -> {
+    //         Button button = new Button(text);
+    //         button.setOnAction(e -> action.run());
+    //         button.getStyleClass().add("sidebar_button");
+    //         button.setMaxWidth(Double.MAX_VALUE);
+    //         return button;
+    //     };
+    // }
+    private Supplier<Button> createButton(String text, Runnable action, ImageView img) {
         return () -> {
-            Button button = new Button(text);
+            Button button = new Button();
+            HBox hbox = new HBox();
+            Text tex = new Text(text);
+            tex.setFill(javafx.scene.paint.Color.WHITE);
+            hbox.getChildren().addAll(img, Lantern.createVerticalSeparator(8), tex);
+            button.setGraphic(hbox);
             button.setOnAction(e -> action.run());
             button.getStyleClass().add("sidebar_button");
             button.setMaxWidth(Double.MAX_VALUE);
@@ -112,7 +154,9 @@ public class AccessManager {
     private Supplier<Button> createdRetractedButton(ImageView img, Runnable action){
         return () -> {
             Button button = new Button();
-            button.setGraphic(img);
+            HBox hbox = new HBox();
+            hbox.getChildren().add(img);
+            button.setGraphic(hbox);
             button.setOnAction(e -> action.run());
             button.getStyleClass().add("sidebar_button");
             button.setMaxWidth(Double.MAX_VALUE);

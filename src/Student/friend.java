@@ -23,7 +23,7 @@ public class friend {
     public ArrayList<String> getFriendList(){
         return this.Friend_List;
     }
-    public boolean checkExistingFriend(Connection connection, String Friendname, String username) {
+    public static boolean checkExistingFriend(Connection connection, String Friendname, String username) {
         Login_Register lg = new Login_Register();
         boolean check = false;
         int id = lg.getID(username, connection);

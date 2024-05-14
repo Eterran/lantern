@@ -31,7 +31,7 @@ public class Parent_Child_Relationship {
         }
     }
 
-    public void createRelationship(Connection connection, String childName, String parentName) {
+    public void requestRelationship(Connection connection, String childName, String parentName) {
         try {
             parentChildren.request(connection, childName, parentName);
         } catch (Exception e) {

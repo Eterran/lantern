@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import Database.Login_Register;
+import javafx.animation.PauseTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -25,6 +26,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class LoginPage {
     private static Connection conn = Lantern.getConn();
@@ -175,11 +177,9 @@ public class LoginPage {
         Scene successScene = new Scene(successPane, 1200, 700);
         successScene.getStylesheets().add("resources/style.css");
         primaryStage.setScene(successScene);
-        try {
-            Thread.sleep(1000);
-            Sidebar.showHomeScene(primaryStage);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        PauseTransition pause = new PauseTransition(Duration.seconds(1));
+        pause.setOnFinished(event -> Sidebar.showHomeScene(primaryStage));
+        pause.play();
     }
 }

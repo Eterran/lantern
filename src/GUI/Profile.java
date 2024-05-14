@@ -94,18 +94,17 @@ public class Profile {
         VBox roleBox = Lantern.createInfoVBox("ROLE: ", user.getRole(), padding);
 
         VBox profileContents = new VBox();
-        profileContents.getChildren().addAll(usernameBox, roleBox);
+        
         profileContents.getStyleClass().add("content_box_background");
         profileContents.maxWidthProperty().bind(profileTab.widthProperty().multiply(0.9));
         profileContents.setPadding(new Insets(30, 10, 30, 10));
 
-        accessManager.getAccessibleVBoxes(accessManager.getUserRole(User.getCurrentUser())).forEach(
+        accessManager.getAccessibleVBoxes(accessManager.getUserRole(user)).forEach(
                     vBoxSupplier -> profileContents.getChildren().add(vBoxSupplier.get()));
-
-        profileTab.getChildren().addAll(profileContents);
+        
         profileTab.setAlignment(javafx.geometry.Pos.TOP_CENTER);
 
-        if(User.getCurrentUser().getRole().equals("student") && user.getRole().equals("student")){
+        if(User.getCurrentUser().getRole().equals("student") && user.getRole().equals("student") && friend.checkExistingFriend(conn, user.getUsername(), User.getCurrentUser().getUsername())){
             Button addFriendButton = new Button("Send Friend Request");
             addFriendButton.getStyleClass().add("add_friend_button");
             addFriendButton.setOnAction(e -> {
@@ -114,6 +113,8 @@ public class Profile {
             profileContents.getChildren().add(addFriendButton);
         }
 
+        profileContents.getChildren().addAll(usernameBox, roleBox);
+        profileTab.getChildren().addAll(profileContents);
         return profileTab;
     }
 }
