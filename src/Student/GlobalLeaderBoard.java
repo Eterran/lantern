@@ -11,13 +11,15 @@ package Student;
 import java.util.*;
 import java.io.*;
 import java.sql.*;
-import java.time.LocalDate;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 
     
     public class GlobalLeaderBoard {
         String[]username2 ;
         LocalDate[]xpLastUpdated2;
         double[]XP2;
+        LocalTime[]time2;
         ArrayList<Integer>idStudent=new ArrayList<>();
     
     public void loadGlobal(Connection connection)throws IOException,SQLException{
@@ -26,6 +28,7 @@ import java.time.LocalDate;
         LocalDate xpLastUpdated=null;
         double XP=0;
         int count=0;
+        LocalTime time=null;
              
         
             try{
@@ -48,11 +51,11 @@ import java.time.LocalDate;
         username2 = new String[count];
         xpLastUpdated2 = new LocalDate[count];
         XP2=new double[count];
-        
+        time2=new LocalTime[count];
         for(int i=0;i<idStudent.size();i++){
             try{
             String sql = "SELECT username,point FROM user WHERE id = ? ";
-            String sql2 = "SELECT xpLastUpdated FROM XpLastUpdated WHERE main_id = ? ";
+            String sql2 = "SELECT xpLastUpdated,Time FROM XpLastUpdated WHERE main_id = ? ";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             PreparedStatement preparedStatement2 = connection.prepareStatement(sql2);
             preparedStatement.setInt(1, idStudent.get(i));
@@ -67,9 +70,12 @@ import java.time.LocalDate;
             if (resultSet2.next()) {
             String temp=resultSet2.getString("xpLastUpdated");
             xpLastUpdated=LocalDate.parse(temp);
+            String temp2=resultSet2.getString("Time");
+            time=LocalTime.parse(temp2);
              }
             else{
              xpLastUpdated=null;
+             time=null;
             }
             
             
@@ -81,6 +87,7 @@ import java.time.LocalDate;
             username2[i]=username;
             xpLastUpdated2[i]=xpLastUpdated;
             XP2[i]=XP;
+            time2[i]=time;
         }
         
         for(int i=0;i<count;i++){
@@ -119,13 +126,45 @@ import java.time.LocalDate;
                         LocalDate hold3 = xpLastUpdated2[j+1];
                         xpLastUpdated2[j+1] = xpLastUpdated2[j];
                         xpLastUpdated2[j]=hold3;
+                        LocalTime hold4 = time2[j+1];
+                        time2[j+1] = time2[j];
+                        time2[j]=hold4;
+                    }
+                    
+                    
+                    
+                    }
+            }
+            
+        }
+        
+        for(int i=1;i<count;i++){
+            for(int j=0;j<count-1;j++){
+                if(xpLastUpdated2[j].compareTo(xpLastUpdated2[j+1])==0){
+                    if(time2[j].isAfter(time2[j+1])){
+                        double hold = XP2[j+1];
+                        XP2[j+1] = XP2[j];
+                        XP2[j]=hold;
+                        String hold2 = username2[j+1];
+                        username2[j+1] = username2[j];
+                        username2[j]=hold2;
+                        LocalDate hold3 = xpLastUpdated2[j+1];
+                        xpLastUpdated2[j+1] = xpLastUpdated2[j];
+                        xpLastUpdated2[j]=hold3;
+                        LocalTime hold4 = time2[j+1];
+                        time2[j+1] = time2[j];
+                        time2[j]=hold4;
+                    }
+                    
+                    
+                    
                     }
             }
             
         }
         
     
-    }
+    
         System.out.println("This is the global leader part");
         for(int i=0;i<count;i++){
             System.out.println(username2[i]);
@@ -147,14 +186,18 @@ import java.time.LocalDate;
         return XP2;
     }
     
+    
     public void insertXpState(Connection connection,int id ){
       LocalDate date =LocalDate.now();
       String dat=date.toString();
-      String sql = "INSERT INTO XpLastUpdated(main_id, xpLastUpdated) VALUES (?, ?)";
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+      String time=LocalTime.now().format(formatter);
+      String sql = "INSERT INTO XpLastUpdated(main_id, xpLastUpdated,Time) VALUES (?, ?,?)";
       try{
       PreparedStatement preparedStatement = connection.prepareStatement(sql);
       preparedStatement.setInt(1, id);
       preparedStatement.setString(2, dat);
+      preparedStatement.setString(3,time);
       preparedStatement.executeUpdate();
       }
       
@@ -166,12 +209,16 @@ import java.time.LocalDate;
     
     public void updateXpState(Connection connection,int id ){
       LocalDate date =LocalDate.now();
+      
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+      String time=LocalTime.now().format(formatter);
       String dat=date.toString();
-      String sql = "UPDATE XpLastUpdated SET xpLastUpdated = ? WHERE main_id= ?";
+      String sql = "UPDATE XpLastUpdated ,Time SET xpLastUpdated = ? ,Time=? WHERE main_id= ?";
       try{
       PreparedStatement preparedStatement = connection.prepareStatement(sql);
       preparedStatement.setString(1, dat);
-      preparedStatement.setInt(2, id);
+      preparedStatement.setString(2,time );
+      preparedStatement.setInt(3, id);
       preparedStatement.executeUpdate();
       }
       
