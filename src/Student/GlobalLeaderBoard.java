@@ -32,7 +32,8 @@ import java.time.format.DateTimeFormatter;
              
         
             try{
-            String sql = "SELECT id FROM user WHERE role = ? ";
+            String sql = "SELECT id FROM user WHERE LOWER(role) = LOWER(?) ";
+         //String sql = "SELECT id FROM user WHERE role= ? ";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1,"Student");
             ResultSet result= preparedStatement.executeQuery();

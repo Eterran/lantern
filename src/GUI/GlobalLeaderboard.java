@@ -14,6 +14,7 @@ import javafx.scene.text.Font;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import Database.Login_Register;
 import Student.GlobalLeaderBoard;
 import javafx.geometry.Insets;
 
@@ -75,11 +76,24 @@ public class GlobalLeaderboard {
 
         vBox.getChildren().add(headerBox);
 
-        int numberOfBoxes = 4; //based on total number of students (totalrowsinquizAttempt)
-        // GlobalLeaderBoard glb = new GlobalLeaderBoard();
-        // String [] username = glb.getUsername();
-        // double[] points = glb.getXp();
-        for (int i = 0; i < numberOfBoxes; i++) {
+        // int numberOfBoxes = 4; //based on total number of students (totalrowsinquizAttempt)
+        GlobalLeaderBoard glb = new GlobalLeaderBoard();
+        Login_Register user = new Login_Register();
+        glb.insertXpState(Lantern.getConn(), user.getId());
+        glb.updateXpState(Lantern.getConn(), user.getId());
+        try {
+                glb.loadGlobal(Lantern.getConn());
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        String [] username = glb.getUsername();
+        System.out.println(username.length);
+        double[] points = glb.getXp();
+        for (int i = 0; i < username.length; i++) {
             HBox dataBox = new HBox();
             dataBox.setPadding(new Insets(5)); 
             if (i % 2 == 0) {
@@ -88,20 +102,12 @@ public class GlobalLeaderboard {
                 dataBox.setStyle("-fx-background-color: #ffffff;");
             }
            
-            // try {
-            //     glb.loadGlobal(Lantern.getConn());
-            // } catch (IOException e) {
-            //     // TODO Auto-generated catch block
-            //     e.printStackTrace();
-            // } catch (SQLException e) {
-            //     // TODO Auto-generated catch block
-            //     e.printStackTrace();
-            // }
+            
             Label rankData = new Label(String.valueOf(i + 1));  //fetch the value from the db
             rankData.setPadding(new Insets(5,10,5,5));
-            Label usernameData = new Label("Label");
+            Label usernameData = new Label(username[i]);
             usernameData.setPadding(new Insets(5,10,5,5));
-            Label pointData = new Label(String.valueOf("points[i]"));
+            Label pointData = new Label(String.valueOf(points[i]));
             pointData.setPadding(new Insets(5,10,5,5));
             Region spacer3 = new Region();
             HBox.setHgrow(spacer3, javafx.scene.layout.Priority.ALWAYS);
