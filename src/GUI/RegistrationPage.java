@@ -95,7 +95,7 @@ public class RegistrationPage {
                 e1.printStackTrace();
             }
             if(passwordMatch && !usernameExists)
-                if (Login_Register.register(new ArrayList<String>(), new ArrayList<String>(), usernameTF.getText(), emailTF.getText(), password, comboBox.getValue().toLowerCase())) {
+                if (Login_Register.register(new ArrayList<String>(), new ArrayList<String>(), usernameTF.getText(), emailTF.getText(), password, comboBox.getValue())) {
                     LoginPage.showSuccessScene(stg);
                 }
             }
