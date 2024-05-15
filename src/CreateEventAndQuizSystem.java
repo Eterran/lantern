@@ -25,20 +25,20 @@ public class CreateEventAndQuizSystem {
 
         return events;
     }
-    public List<Event> displayLatestEvents(){
+    public List<EventData> displayLatestEvents(){
         Database database = new Database();
         Connection connection = database.connectionDatabase();
 
         //Display live event and closest 3 upcoming events
         List<EventData> eventDataList = Event.getLatestEvent(connection);
-        List<Event> latestEvents = convertToEventObjects(eventDataList);
+        List<EventData> latestEvents = convertToEventObjects(eventDataList);
 
         return latestEvents;
     }
-    private List<Event> convertToEventObjects(List<EventData> eventDataList){
-        List<Event> events = new ArrayList<>();
+    private List<EventData> convertToEventObjects(List<EventData> eventDataList){
+        List<EventData> events = new ArrayList<>();
         for(EventData eventData : eventDataList){
-            Event event = new Event(eventData.getEventTitle(), eventData.getDescription(), eventData.getVenue(), eventData.getDate(), eventData.getTime(),);
+            EventData event = new EventData(eventData.getEventTitle(), eventData.getDescription(), eventData.getVenue(), eventData.getDate(), eventData.getTime());
             events.add(event);
         }
         return events;
