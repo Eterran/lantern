@@ -22,7 +22,8 @@ public class AccessManager {
     private final Map<UserRole, List<Supplier<Button>>> buttonAccessRules2;
     private final Map<UserRole, List<Supplier<Button>>> retractedButtonAccessRules1;
     private final Map<UserRole, List<Supplier<Button>>> retractedButtonAccessRules2;
-    private final Map<UserRole, List<Supplier<VBox>>> vBoxAccessRules;
+    private final Map<UserRole, List<Supplier<VBox>>> publicProfileAccessRules;
+    private final Map<UserRole, List<Supplier<VBox>>> privateProfileAccessRules;
     private final Map<UserRole, List<Supplier<VBox>>> sidebarAccessRules1;
     private final Map<UserRole, List<Supplier<VBox>>> sidebarAccessRules2;
     
@@ -33,7 +34,8 @@ public class AccessManager {
         buttonAccessRules2 = new EnumMap<>(UserRole.class);
         retractedButtonAccessRules1 = new EnumMap<>(UserRole.class);
         retractedButtonAccessRules2 = new EnumMap<>(UserRole.class);
-        vBoxAccessRules = new EnumMap<>(UserRole.class);
+        publicProfileAccessRules = new EnumMap<>(UserRole.class);
+        privateProfileAccessRules = new EnumMap<>(UserRole.class);
         sidebarAccessRules1 = new EnumMap<>(UserRole.class);
         sidebarAccessRules2 = new EnumMap<>(UserRole.class);
 
@@ -57,8 +59,11 @@ public class AccessManager {
                 Sidebar.selectTab(6);
             })
         ));
-        vBoxAccessRules.put(UserRole.EDUCATOR, List.of(
-            this::createEducatorProfileVBox
+        publicProfileAccessRules.put(UserRole.EDUCATOR, List.of(
+            this::createEducatorPublicProfileVBox
+        ));
+        privateProfileAccessRules.put(UserRole.EDUCATOR, List.of(
+            this::createEducatorPrivateProfileVBox
         ));
         sidebarAccessRules1.put(UserRole.EDUCATOR, List.of(
             this::createEducatorSidebar1
@@ -86,8 +91,11 @@ public class AccessManager {
                 Sidebar.selectTab(6);
             })
         ));
-        vBoxAccessRules.put(UserRole.STUDENT, List.of(
-            this::createStudentProfileVBox
+        publicProfileAccessRules.put(UserRole.STUDENT, List.of(
+            this::createStudentPublicProfileVBox
+        ));
+        privateProfileAccessRules.put(UserRole.STUDENT, List.of(
+            this::createStudentPrivateProfileVBox
         ));
         sidebarAccessRules1.put(UserRole.STUDENT, List.of(
             this::createStudentSidebar1
@@ -105,8 +113,11 @@ public class AccessManager {
                 Sidebar.selectTab(5);
             })
         ));
-        vBoxAccessRules.put(UserRole.PARENT, List.of(
-            this::createParentProfileVBox
+        publicProfileAccessRules.put(UserRole.PARENT, List.of(
+            this::createParentPublicProfileVBox
+        ));
+        privateProfileAccessRules.put(UserRole.PARENT, List.of(
+            this::createParentPrivateProfileVBox
         ));
         sidebarAccessRules1.put(UserRole.PARENT, List.of(
             this::createParentSidebar1
@@ -122,8 +133,11 @@ public class AccessManager {
     public List<Supplier<Button>> getAccessibleButtons2(UserRole role) {
         return buttonAccessRules2.getOrDefault(role, List.of());
     }
-    public List<Supplier<VBox>> getAccessibleVBoxes(UserRole role) {
-        return vBoxAccessRules.getOrDefault(role, List.of());
+    public List<Supplier<VBox>> getAccessiblePublicProfile(UserRole role) {
+        return publicProfileAccessRules.getOrDefault(role, List.of());
+    }
+    public List<Supplier<VBox>> getAccessiblePrivateProfile(UserRole role) {
+        return privateProfileAccessRules.getOrDefault(role, List.of());
     }
     public List<Supplier<VBox>> getAccessibleSidebar1(UserRole role) {
         return sidebarAccessRules1.getOrDefault(role, List.of());
@@ -183,23 +197,39 @@ public class AccessManager {
             throw new IllegalArgumentException("Invalid user role: " + user.getRole());
         }
     }
-    private VBox createEducatorProfileVBox() {
+    private VBox createEducatorPublicProfileVBox() {
         VBox vBox = new VBox();
         HBox quizzes = Lantern.createInfoHBox("QUIZZES CREATED: ", Quiz.getNumberOfQuiz(conn, User.getCurrentUser().getUsername()), new Insets(8, 10, 8, 15));
         HBox events = Lantern.createInfoHBox("EVENTS CREATED: ", Event.getNumberOfEvent(conn, User.getCurrentUser().getUsername()), new Insets(8, 10, 8, 15));
         vBox.getChildren().addAll(quizzes, events);
         return vBox;
     }
-    private VBox createStudentProfileVBox() {
+    private VBox createEducatorPrivateProfileVBox() {
         VBox vBox = new VBox();
-        HBox quizzes = Lantern.createInfoHBox("POINTS: ", User.getCurrentUser().getPoints(), new Insets(8, 10, 8, 15));
-        vBox.getChildren().add(quizzes);
         return vBox;
     }
-    private VBox createParentProfileVBox() {
+    private VBox createStudentPublicProfileVBox() {
         VBox vBox = new VBox();
-        HBox quizzes = Lantern.createInfoHBox("BOOKINGS MADE: ", Booking.viewBooking(conn, User.getCurrentUser().getUsername()).size(), new Insets(8, 10, 8, 15));
-        vBox.getChildren().add(quizzes);
+        HBox points = Lantern.createInfoHBox("POINTS: ", User.getCurrentUser().getPoints(), new Insets(8, 10, 8, 15));
+        vBox.getChildren().addAll(points);
+        return vBox;
+    }
+    private VBox createStudentPrivateProfileVBox() {
+        VBox vBox = new VBox();
+        HBox parents = Lantern.createInfoHBox("PARENTS: ", User.getCurrentUser().getParents(), new Insets(8, 10, 8, 15));
+        vBox.getChildren().addAll(parents);
+        return vBox;
+    }
+    private VBox createParentPublicProfileVBox() {
+        VBox vBox = new VBox();
+        HBox bookings = Lantern.createInfoHBox("BOOKINGS MADE: ", Booking.viewBooking(conn, User.getCurrentUser().getUsername()).size(), new Insets(8, 10, 8, 15));
+        vBox.getChildren().add(bookings);
+        return vBox;
+    }
+    private VBox createParentPrivateProfileVBox() {
+        VBox vBox = new VBox();
+        HBox children = Lantern.createInfoHBox("CHILDREN: ", User.getCurrentUser().getChildren(), new Insets(8, 10, 8, 15));
+        vBox.getChildren().add(children);
         return vBox;
     }
     private VBox createEducatorSidebar1() {

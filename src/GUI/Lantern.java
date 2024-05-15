@@ -246,4 +246,32 @@ public class Lantern extends Application {
         infoBox.getStylesheets().add("resources/style.css");
         return infoBox;
     }
+    public static HBox createInfoHBox(String labelText, ArrayList<String> relationships, Insets spacing) {
+        Text label = new Text(labelText);
+        StringBuilder valueText = new StringBuilder();
+        if (relationships != null) {
+            for (String relation : relationships) {
+                if (relation != null) {
+                    valueText.append(relation).append(", ");
+                }
+            }
+        }
+        if (valueText.length() > 0) {
+            valueText.delete(valueText.length() - 2, valueText.length());
+        }
+        Text value = new Text("None");
+        if(valueText.length() > 0){
+            value = new Text(valueText.toString());
+            value.getStyleClass().add("text_content");
+        } else {
+            value.getStyleClass().add("text_greyed_out");
+        }
+        label.getStyleClass().add("text_label");
+        
+        HBox infoBox = new HBox(0);
+        infoBox.setPadding(spacing);
+        infoBox.getStylesheets().add("resources/style.css");
+        infoBox.getChildren().addAll(label, value);
+        return infoBox;
+    }
 }

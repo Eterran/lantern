@@ -70,7 +70,7 @@ public class Sidebar {
 
     private static StackPane stackPane = new StackPane();
     private static VBox profileBox = Profile.loadProfileTab();
-    private static VBox eventBox = new VBox();
+    private static VBox eventBox = EventPage.viewEventTab();
     private static VBox discussionBox = new VBox();
     private static VBox leaderboardBox = GlobalLeaderboard.globalLeaderBoardTab();
     private static VBox box5 = new VBox(10);
@@ -577,5 +577,8 @@ public class Sidebar {
     public static void setBox7(VBox box){
         box7 = box;
         setOneVisible(7);
+    }
+    public static void refreshProfile(){
+        profileBox = Profile.loadProfileTab();
     }
 }

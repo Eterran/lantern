@@ -25,7 +25,7 @@ public class User {
     }
     public static void setCurrentUser(User user) {
         currentUser = user;
-        System.out.println("Current user: " + user.getUsername());
+        //System.out.println("Current user: " + user.getUsername());
     }
     
     public void userData(int id) {
@@ -47,7 +47,7 @@ public class User {
                 points = resultSet.getDouble("point");
             }
             getParents(connection, id);
-            getChildrens(connection, id);
+            getChildren(connection, id);
 
         }
 
@@ -71,7 +71,7 @@ public class User {
         }
     }
 
-    public void getChildrens(Connection connection, int id) {
+    public void getChildren(Connection connection, int id) {
         String sql = "SELECT children FROM parent WHERE main_id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -124,7 +124,7 @@ public class User {
         return parents;
     }
 
-    public ArrayList<String> getChildrens() {
+    public ArrayList<String> getChildren() {
         return childrens;
     }
 

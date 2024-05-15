@@ -1,8 +1,6 @@
 package GUI;
 
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -170,14 +168,16 @@ public class FriendList {
         for (String friendRequest : friendRequests) {
             HBox friendRequestHBox = new HBox();
             Label friendRequestLabel = new Label(friendRequest);
-            friendRequestLabel.getStyleClass().add("friend_request_label");
+            friendRequestLabel.getStyleClass().add("text_content_black");
             Button acceptButton = new Button();
+            acceptButton.setPrefSize(30, 30);
             acceptButton.getStyleClass().add("accept_button");
             acceptButton.setOnAction(e -> {
                 fren.acceptFriend(conn, friendRequest, User.getCurrentUser().getUsername());
                 friendRequestsVBox.getChildren().remove(friendRequestHBox);
             });
             Button declineButton = new Button();
+            declineButton.setPrefSize(30, 30);
             declineButton.getStyleClass().add("decline_button");
             declineButton.setOnAction(e -> {
                 fren.declineFriend(conn, friendRequest, User.getCurrentUser().getUsername());

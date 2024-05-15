@@ -227,18 +227,20 @@
     -fx-text-fill: transparent;
     -fx-border-color: transparent;
     -fx-background-image: url('./assets/accept_icon.png');
+    -fx-background-size: 100%;
 }
 .accept_button:hover {
-    -fx-effect: dropshadow(gaussian, rgb(40, 255, 3), 10, 0, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgb(40, 255, 3), 3, 0, 0, 0);
 }
 .decline_button{
     -fx-background-color: transparent;
     -fx-text-fill: transparent;
     -fx-border-color: transparent;
     -fx-background-image: url('./assets/decline_icon.png');
+    -fx-background-size: 100%;
 }
-.accept_button:hover {
-    -fx-effect: dropshadow(gaussian, rgb(255, 25, 25), 10, 0, 0, 0);
+.decline_button:hover {
+    -fx-effect: dropshadow(gaussian, rgb(255, 25, 25), 3, 0, 0, 0);
 }
 
 .separator {
@@ -278,9 +280,15 @@
     -fx-font-size: 18;
     -fx-text-fill: white;
 }
+.text_content_black {
+    -fx-font-family: 'Nunito Regular';
+    -fx-font-size: 18;
+    -fx-text-fill: rgb(0, 0, 0);
+    -fx-padding: 0 0 0 10;
+}
 .text_greyed_out{
     -fx-font-family: 'Nunito Medium';
-    -fx-font-size: 16;
+    -fx-font-size: 18;
     -fx-text-fill: rgb(154, 154, 154);
     -fx-font-style: italic;
 }
