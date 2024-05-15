@@ -233,11 +233,12 @@ public class AccessManager {
         return vBox;
     }
     private VBox createEducatorSidebar1() {
-        VBox vBox = EducatorCreateEvent.tabCreateEvent();
+        VBox vBox = MainEducatorCreateQuiz.QuizButton();
         return vBox;
     }
     private VBox createEducatorSidebar2() {
-        VBox vBox = EducatorCreateQuiz.tabCreateQuiz();
+       // VBox vBox = EducatorCreateQuiz.tabCreateQuiz();  
+       VBox vBox = EducatorCreateEvent.tabCreateEvent();
         return vBox;
     }
     private VBox createStudentSidebar1() {

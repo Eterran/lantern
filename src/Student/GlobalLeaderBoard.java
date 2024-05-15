@@ -166,11 +166,11 @@ import java.time.format.DateTimeFormatter;
         
     
     
-        System.out.println("This is the global leader part");
-        for(int i=0;i<count;i++){
-            System.out.println(username2[i]);
-            System.out.println(XP2[i]);
-            System.out.println();}
+        // System.out.println("This is the global leader part");
+        // for(int i=0;i<count;i++){
+        //     System.out.println(username2[i]);
+        //     System.out.println(XP2[i]);
+        //     System.out.println();}
     }
     
 
