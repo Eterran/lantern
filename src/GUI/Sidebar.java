@@ -216,14 +216,14 @@ public class Sidebar {
             if(tabs[i] == null)
                 break;
             if(i == index){
+                tabs[i].getStyleClass().clear();
                 tabs[i].getStyleClass().add("sidebar_button_selected");
-                tabs[i].getStyleClass().remove("sidebar_button");
+                rtabs[i].getStyleClass().clear();;
                 rtabs[i].getStyleClass().add("sidebar_button_selected");
-                rtabs[i].getStyleClass().remove("sidebar_button");
             } else {
-                tabs[i].getStyleClass().remove("sidebar_button_selected");
+                tabs[i].getStyleClass().clear();
                 tabs[i].getStyleClass().add("sidebar_button");
-                rtabs[i].getStyleClass().remove("sidebar_button_selected");
+                rtabs[i].getStyleClass().clear();
                 rtabs[i].getStyleClass().add("sidebar_button");
             }
         }

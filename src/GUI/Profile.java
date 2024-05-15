@@ -104,7 +104,13 @@ public class Profile {
         
         profileTab.setAlignment(javafx.geometry.Pos.TOP_CENTER);
 
-        if(User.getCurrentUser().getRole().equals("student") && user.getRole().equals("student") && friend.checkExistingFriend(conn, user.getUsername(), User.getCurrentUser().getUsername())){
+        boolean isBothStudents = User.getCurrentUser().getRole().equals("student") && user.getRole().equals("student");
+        
+        if(isBothStudents){
+            VBox commonFriendsBox = Lantern.createInfoVBox("NUMBER OF FRIENDS IN COMMON: ", FriendList.findCommonFriends(User.getCurrentUser().getUsername(), user.getUsername()).size(), padding);
+            profileContents.getChildren().add(commonFriendsBox);
+        }
+        if(isBothStudents && !friend.checkExistingFriend(conn, user.getUsername(), User.getCurrentUser().getUsername())){
             Button addFriendButton = new Button("Send Friend Request");
             addFriendButton.getStyleClass().add("add_friend_button");
             addFriendButton.setOnAction(e -> {
