@@ -48,9 +48,9 @@ public class Profile {
         HBox.setHgrow(spacer, Priority.ALWAYS);
         profileLabelBox.getChildren().addAll(profileLabel, spacer);
 
-        if(User.getCurrentUser().getRole().equals("student")){
+        if(User.getCurrentUser().getRole().toLowerCase().equals("student")){
             Button pendingRequestsButton = new Button();
-            pendingRequestsButton.getStyleClass().add("friend_request_button");
+            pendingRequestsButton.getStyleClass().add("add_friend_button");
             ImageView pendingRequestsImageView = new ImageView(new Image("resources/assets/three_dots_icon.png"));
             pendingRequestsImageView.setFitWidth(40);
             pendingRequestsImageView.setFitHeight(40);
@@ -58,6 +58,7 @@ public class Profile {
             pendingRequestsButton.setOnAction(e -> {
                 VBox friendRequestsVBox = createPendingRequestsVBox();
                 VBox overlay = new VBox();
+                VBox backgroundBlocker = new VBox();
                 Button closeButton = new Button();
                 ImageView closeImageView = new ImageView(new Image("resources/assets/close_icon.png"));
                 closeImageView.setFitWidth(40);
@@ -77,7 +78,18 @@ public class Profile {
                 overlay.minWidthProperty().bind(stackpane.widthProperty().multiply(0.75));
                 overlay.maxHeightProperty().bind(stackpane.heightProperty().multiply(0.85));
                 overlay.maxWidthProperty().bind(stackpane.widthProperty().multiply(0.75));
+                
+                backgroundBlocker.getStyleClass().add("background_transparent");
+                backgroundBlocker.minHeightProperty().bind(stackpane.heightProperty());
+                backgroundBlocker.minWidthProperty().bind(stackpane.widthProperty());
+                backgroundBlocker.maxHeightProperty().bind(stackpane.heightProperty());
+                backgroundBlocker.maxWidthProperty().bind(stackpane.widthProperty());
+                backgroundBlocker.setOnMouseClicked(event -> {
+                    stackpane.getChildren().remove(overlay);
+                    stackpane.getChildren().remove(backgroundBlocker);
+                });
 
+                stackpane.getChildren().add(backgroundBlocker);
                 stackpane.getChildren().add(overlay);
             });
             profileLabelBox.getChildren().add(pendingRequestsButton);
@@ -147,18 +159,19 @@ public class Profile {
         profileContents.maxWidthProperty().bind(profileTab.widthProperty().multiply(0.9));
         profileContents.setPadding(new Insets(30, 10, 30, 10));
 
-        accessManager.getAccessibleVBoxes(accessManager.getUserRole(user)).forEach(
-                    vBoxSupplier -> profileContents.getChildren().add(vBoxSupplier.get()));
-        
         profileTab.setAlignment(javafx.geometry.Pos.TOP_CENTER);
-
-        boolean isBothStudents = User.getCurrentUser().getRole().equals("student") && user.getRole().equals("student");
-        boolean isParentStudent = User.getCurrentUser().getRole().equals("parent") && user.getRole().equals("student") ;
+        profileContents.getChildren().addAll(usernameBox, roleBox);
+        accessManager.getAccessibleVBoxes(accessManager.getUserRole(user)).forEach(
+                            vBoxSupplier -> profileContents.getChildren().add(vBoxSupplier.get()));
+                            
+        boolean isBothStudents = User.getCurrentUser().getRole().toLowerCase().equals("student") && user.getRole().toLowerCase().equals("student");
+        boolean isParentStudent = User.getCurrentUser().getRole().toLowerCase().equals("parent") && user.getRole().toLowerCase().equals("student") ;
 
         if(isBothStudents){
             VBox commonFriendsBox = Lantern.createInfoVBox("NUMBER OF FRIENDS IN COMMON: ", FriendList.findCommonFriends(User.getCurrentUser().getUsername(), user.getUsername()).size(), padding);
             profileContents.getChildren().add(commonFriendsBox);
         }
+        System.out.println("Friend request sent from: " + User.getCurrentUser().getUsername() + " to: " + user.getUsername());
         if(isBothStudents && !friend.checkExistingFriend(conn, user.getUsername(), User.getCurrentUser().getUsername())){
             Button addFriendButton = new Button("Send Friend Request");
             addFriendButton.getStyleClass().add("add_friend_button");
@@ -175,8 +188,7 @@ public class Profile {
             });
             profileContents.getChildren().add(parentButton);
         }
-
-        profileContents.getChildren().addAll(usernameBox, roleBox);
+        
         profileTab.getChildren().addAll(profileContents);
         return profileTab;
     }

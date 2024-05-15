@@ -11,6 +11,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -112,6 +113,11 @@ public class Lantern extends Application {
         } else {
             return false;
         }
+    }
+    public static Region createSpacer(){
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+        return spacer;
     }
     public static VBox createHorizontalSeparator(int spacing){
         Separator separator = new Separator();

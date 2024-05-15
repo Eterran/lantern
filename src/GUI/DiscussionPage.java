@@ -7,7 +7,7 @@ import javafx.scene.layout.VBox;
 public class DiscussionPage {
     public static VBox loadDiscussionPage(){
         VBox discussionVBox = new VBox();
-        discussionVBox.getStyleClass().add("discussion_vbox");
+        //discussionVBox.getStyleClass().add("discussion_vbox");
         discussionVBox.setPadding(new Insets(0, 0, 0, 0));
         discussionVBox.setSpacing(0);
         

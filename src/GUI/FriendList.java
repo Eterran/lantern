@@ -1,6 +1,8 @@
 package GUI;
 
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -41,13 +43,14 @@ public class FriendList {
         
         TextField searchFriendTF = new TextField();
         searchFriendTF.getStyleClass().add("text_field");
+        searchFriendTF.setPromptText("Search friend");
         Button searchFriendButton = new Button();
         searchFriendButton.setGraphic(searchFriendImageView);
         searchFriendButton.getStyleClass().add("add_friend_button");
         searchFriendButton.setOnAction(e -> {
-            String friendUsername = searchFriendTF.getText();
-            friendListBox.getChildren().clear();
-            friendListBox.getChildren().add(label);
+        String friendUsername = searchFriendTF.getText();
+        friendListBox.getChildren().clear();
+        friendListBox.getChildren().add(label);
         
             for (String friend : friendList) {
                 if (friend.toLowerCase().contains(friendUsername.toLowerCase())) {
@@ -71,6 +74,7 @@ public class FriendList {
         showFriendRequestsButton.setOnAction(e -> {
             VBox friendRequestsVBox = createFriendRequestsVBox();
             VBox overlay = new VBox();
+            VBox backgroundBlocker = new VBox();
             Button closeButton = new Button();
             ImageView closeImageView = new ImageView(new Image("resources/assets/close_icon.png"));
             closeImageView.setFitWidth(40);
@@ -91,10 +95,22 @@ public class FriendList {
             overlay.maxHeightProperty().bind(stackpane.heightProperty().multiply(0.85));
             overlay.maxWidthProperty().bind(stackpane.widthProperty().multiply(0.75));
 
+            backgroundBlocker.getStyleClass().add("background_transparent");
+            backgroundBlocker.minHeightProperty().bind(stackpane.heightProperty());
+            backgroundBlocker.minWidthProperty().bind(stackpane.widthProperty());
+            backgroundBlocker.maxHeightProperty().bind(stackpane.heightProperty());
+            backgroundBlocker.maxWidthProperty().bind(stackpane.widthProperty());
+            backgroundBlocker.setOnMouseClicked(event -> {
+                stackpane.getChildren().remove(overlay);
+                stackpane.getChildren().remove(backgroundBlocker);
+            });
+
+            stackpane.getChildren().add(backgroundBlocker);
             stackpane.getChildren().add(overlay);
         });
 
-        searchFriendHBox.getChildren().addAll(searchFriendTF, searchFriendButton, showFriendRequestsButton);
+        searchFriendHBox.getChildren().addAll(searchFriendTF, searchFriendButton, Lantern.createSpacer(), showFriendRequestsButton);
+        searchFriendHBox.setPadding(new Insets(0, 12, 12, 10));
         VBox baseVBox = new VBox();
         baseVBox.getChildren().addAll(label, searchFriendHBox);
 
@@ -150,6 +166,7 @@ public class FriendList {
         friendRequestsLabel.getStyleClass().add("title");
         friendRequestsLabel.setPadding(new Insets(12, 0, 12, 12));
         friendRequestsVBox.getChildren().add(friendRequestsLabel);
+        
         for (String friendRequest : friendRequests) {
             HBox friendRequestHBox = new HBox();
             Label friendRequestLabel = new Label(friendRequest);
@@ -166,7 +183,7 @@ public class FriendList {
                 fren.declineFriend(conn, friendRequest, User.getCurrentUser().getUsername());
                 friendRequestsVBox.getChildren().remove(friendRequestHBox);
             });
-            friendRequestHBox.getChildren().addAll(friendRequestLabel, acceptButton, declineButton);
+            friendRequestHBox.getChildren().addAll(friendRequestLabel, Lantern.createSpacer(), acceptButton, declineButton);
             friendRequestsVBox.getChildren().add(friendRequestHBox);
         }
         if(friendRequests.isEmpty()){

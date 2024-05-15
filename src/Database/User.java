@@ -25,9 +25,7 @@ public class User {
     }
     public static void setCurrentUser(User user) {
         currentUser = user;
-    }
-    public User() {
-        setCurrentUser(this);
+        System.out.println("Current user: " + user.getUsername());
     }
     
     public void userData(int id) {

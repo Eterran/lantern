@@ -23,8 +23,11 @@ import Database.Database;
 import Database.Quiz;
 import Database.QuizData;
 public class QuizPage {
+    private static Double label = User.getCurrentUser().getPoints();//fetch from the user db
 
- 
+    public static void updatePoints(){
+        label = User.getCurrentUser().getPoints();
+    }
     public static VBox quizPageTab(){
 
         BorderPane root = new BorderPane();
@@ -34,7 +37,6 @@ public class QuizPage {
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 25));
 
         User user = User.getCurrentUser(); 
-        Double label = user.getPoints(); //fetch from the user db
         Label pointsLabel = new Label("Points:"+ label);
         pointsLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 
