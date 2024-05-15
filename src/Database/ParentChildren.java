@@ -14,7 +14,7 @@ public class ParentChildren {
     //This is used for parent to add children
     
     
-    public boolean checkExistingChildren(Connection connection ,String childrenName,String parentName ){
+    public static boolean checkExistingChildren(Connection connection ,String childrenName,String parentName ){
         Login_Register lg=new Login_Register();
         boolean check=false;
         int id =lg.getID(parentName, connection);
@@ -61,7 +61,7 @@ public class ParentChildren {
      }
     
     //make a request
-    public void request(Connection connection,String childrenName,String parentName){
+    public static void request(Connection connection,String childrenName,String parentName){
         Login_Register lg=new Login_Register();
         int childrenId =lg.getID(childrenName, connection);
         int parentId=lg.getID(parentName, connection);
@@ -90,7 +90,7 @@ public class ParentChildren {
     
      
     //Accept request
-    public void acceptRequest(Connection connection,String childrenName,String parentName){
+    public static void acceptRequest(Connection connection,String childrenName,String parentName){
        Login_Register lg=new Login_Register();
         int childrenId =lg.getID(childrenName, connection);
         int parentId=lg.getID(parentName, connection);
@@ -117,7 +117,7 @@ public class ParentChildren {
     
     }
     
-     public void declineRequest(Connection connection,String childrenName,String parentName){
+     public static void declineRequest(Connection connection,String childrenName,String parentName){
          Login_Register lg=new Login_Register();
         int childrenId =lg.getID(childrenName, connection);
         int parentId=lg.getID(parentName, connection);
@@ -141,7 +141,7 @@ public class ParentChildren {
     }
     
      //show who had make request to become a certain child's parent
-    public ArrayList<String> showReuqestParent(Connection connection,String childrenName){
+    public static ArrayList<String> showRequestParent(Connection connection,String childrenName){
         Login_Register lr=new Login_Register();
         int main_id=lr.getID(childrenName, connection);
         ArrayList <String>list=new ArrayList<>();

@@ -154,13 +154,13 @@ public class FriendList {
             HBox friendRequestHBox = new HBox();
             Label friendRequestLabel = new Label(friendRequest);
             friendRequestLabel.getStyleClass().add("friend_request_label");
-            Button acceptButton = new Button("Accept");
+            Button acceptButton = new Button();
             acceptButton.getStyleClass().add("accept_button");
             acceptButton.setOnAction(e -> {
                 fren.acceptFriend(conn, friendRequest, User.getCurrentUser().getUsername());
                 friendRequestsVBox.getChildren().remove(friendRequestHBox);
             });
-            Button declineButton = new Button("Decline");
+            Button declineButton = new Button();
             declineButton.getStyleClass().add("decline_button");
             declineButton.setOnAction(e -> {
                 fren.declineFriend(conn, friendRequest, User.getCurrentUser().getUsername());
