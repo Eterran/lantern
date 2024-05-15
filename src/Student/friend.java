@@ -15,14 +15,6 @@ import Database.Database;
 import Database.Login_Register;
 
 public class friend {
-    ArrayList<String> Friend_List = new ArrayList<String>();
-    public friend(String username){
-        Connection connection = Database.connectionDatabase();
-        this.Friend_List = showFriend(connection, username);
-    }
-    public ArrayList<String> getFriendList(){
-        return this.Friend_List;
-    }
     public static boolean checkExistingFriend(Connection connection, String Friendname, String username) {
         Login_Register lg = new Login_Register();
         boolean check = false;
@@ -37,8 +29,7 @@ public class friend {
             ResultSet result = preparedStatement.executeQuery();
             if (result.next())
                 check = true;
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -60,7 +51,7 @@ public class friend {
         }
     }
 
-    public int getFriendId(Connection connection, String friendName, String username) {
+    public static int getFriendId(Connection connection, String friendName, String username) {
 
         Login_Register lg = new Login_Register();
         int id = lg.getID(username, connection);
@@ -83,7 +74,7 @@ public class friend {
         return userId;
     }
 
-    public void acceptFriend(Connection connection, String friendName, String username) {
+    public static void acceptFriend(Connection connection, String friendName, String username) {
         int id = getFriendId(connection, friendName, username);
         Login_Register lr = new Login_Register();
         int main_id = lr.getID(username, connection);
@@ -101,28 +92,26 @@ public class friend {
              * preparedStatement2.setInt(2,id);
              * preparedStatement2.executeUpdate();
              */
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
     }
 
-     public void declineFriend(Connection connection,String friendName,String username){
-        int id=getFriendId(connection,friendName,username);
-    try{
-       String query = "DELETE FROM friends WHERE id = ?";
+    public static void declineFriend(Connection connection, String friendName, String username) {
+        int id = getFriendId(connection, friendName, username);
+        try {
+            String query = "DELETE FROM friends WHERE id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1,id);
+            preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-        }
-         catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-    
+
     }
 
-    public ArrayList<String> showPending(Connection connection, String username) {
+    public static ArrayList<String> showPending(Connection connection, String username) {
         Login_Register lr = new Login_Register();
         int main_id = lr.getID(username, connection);
         ArrayList<String> list = new ArrayList<>();
@@ -147,7 +136,7 @@ public class friend {
 
     }
 
-    public ArrayList<String> showFriend(Connection connection, String username) {
+    public static ArrayList<String> showFriend(Connection connection, String username) {
         Login_Register lr = new Login_Register();
         int main_id = lr.getID(username, connection);
         ArrayList<String> list = new ArrayList<>();

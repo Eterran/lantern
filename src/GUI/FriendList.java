@@ -23,9 +23,36 @@ import Student.friend;
 public class FriendList {
     private static Connection conn = Lantern.getConn();
     private static User user = User.getCurrentUser();
-    private static friend friends = new friend(user.getUsername());
-    private static ArrayList<String> friendList = friends.getFriendList();
-
+    private static ArrayList<String> friendList = friend.showFriend(conn, user.getUsername());
+    private static VBox friendListBox = new VBox();
+    public static void refreshFriendList(){
+        friendList = friend.showFriend(conn, user.getUsername());
+        friendListBox.getChildren().clear();
+        VBox temp = new VBox();
+        for (String friend : friendList) {
+            Button profileButton = new Button(friend);
+            profileButton.getStyleClass().add("profile_button");
+            profileButton.setOnAction(e -> {
+                Sidebar.setBox7(Profile.loadOthersProfileTab(Login_Register.getUser(friend, conn)));
+            });
+            temp.getChildren().add(profileButton);
+        }
+        if(friendList.isEmpty()){
+            VBox noFriendsVBox = new VBox();
+            noFriendsVBox.setPadding(new Insets(30, 0, 30, 0));
+            noFriendsVBox.setAlignment(Pos.CENTER);
+            Label noFriendsLabel = new Label("It's quite lonely here...");
+            noFriendsLabel.getStyleClass().add("text_greyed_out");
+            ImageView img = new ImageView(new Image("resources/assets/black_lantern.png"));
+            img.setFitHeight(180);
+            img.setFitWidth(180);
+            img.setOpacity(0.5);
+            noFriendsVBox.getChildren().addAll(noFriendsLabel, img);
+            temp.getChildren().add(noFriendsVBox);
+        }
+        friendListBox.getChildren().add(temp);
+        Sidebar.selectTab(6);
+    }
     public static VBox loadFriendList() {
         StackPane stackpane = new StackPane();
         ImageView searchFriendImageView = new ImageView(new Image("resources/assets/search_friends_icon.png"));
@@ -37,19 +64,19 @@ public class FriendList {
         Label label = new Label("Friends");
         label.getStyleClass().add("title");
         label.setPadding(new Insets(12, 0, 12, 12));
-        VBox friendListBox = new VBox();
         
         TextField searchFriendTF = new TextField();
         searchFriendTF.getStyleClass().add("text_field");
         searchFriendTF.setPromptText("Search friend");
+        searchFriendTF.setPrefHeight(40);
         Button searchFriendButton = new Button();
         searchFriendButton.setGraphic(searchFriendImageView);
         searchFriendButton.getStyleClass().add("add_friend_button");
+
         searchFriendButton.setOnAction(e -> {
-        String friendUsername = searchFriendTF.getText();
-        friendListBox.getChildren().clear();
-        friendListBox.getChildren().add(label);
-        
+            String friendUsername = searchFriendTF.getText();
+            friendListBox.getChildren().add(label);
+            
             for (String friend : friendList) {
                 if (friend.toLowerCase().contains(friendUsername.toLowerCase())) {
                     Button profileButton = new Button(friend);
@@ -112,27 +139,7 @@ public class FriendList {
         VBox baseVBox = new VBox();
         baseVBox.getChildren().addAll(label, searchFriendHBox);
 
-        for (String friend : friendList) {
-            Button profileButton = new Button(friend);
-            profileButton.getStyleClass().add("profile_button");
-            profileButton.setOnAction(e -> {
-                Sidebar.setBox7(Profile.loadOthersProfileTab(Login_Register.getUser(friend, conn)));
-            });
-            friendListBox.getChildren().add(profileButton);
-        }
-        if(friendList.isEmpty()){
-            VBox noFriendsVBox = new VBox();
-            noFriendsVBox.setPadding(new Insets(30, 0, 30, 0));
-            noFriendsVBox.setAlignment(Pos.CENTER);
-            Label noFriendsLabel = new Label("It's quite lonely here...");
-            noFriendsLabel.getStyleClass().add("text_greyed_out");
-            ImageView img = new ImageView(new Image("resources/assets/black_lantern.png"));
-            img.setFitHeight(180);
-            img.setFitWidth(180);
-            img.setOpacity(0.5);
-            noFriendsVBox.getChildren().addAll(noFriendsLabel, img);
-            friendListBox.getChildren().add(noFriendsVBox);
-        }
+        refreshFriendList();
         
         baseVBox.getChildren().add(friendListBox);
         stackpane.getChildren().add(baseVBox);
@@ -143,11 +150,8 @@ public class FriendList {
         return friendVBox;
     }
     public static ArrayList<String> findCommonFriends(String username1, String username2){
-        friend friends1 = new friend(username1);
-        friend friends2 = new friend(username2);
-        
-        ArrayList<String> friendList1 = friends1.getFriendList();
-        ArrayList<String> friendList2 = friends2.getFriendList();
+        ArrayList<String> friendList1 = friend.showFriend(conn, username1);
+        ArrayList<String> friendList2 = friend.showFriend(conn, username2);
         
         Set<String> set1 = new HashSet<>(friendList1);
         Set<String> set2 = new HashSet<>(friendList2);
@@ -157,8 +161,7 @@ public class FriendList {
         return new ArrayList<>(set1);
     }
     private static VBox createFriendRequestsVBox(){
-        friend fren = new friend(User.getCurrentUser().getUsername());
-        ArrayList<String> friendRequests = fren.showPending(conn, User.getCurrentUser().getUsername());
+        ArrayList<String> friendRequests = friend.showPending(conn, User.getCurrentUser().getUsername());
         VBox friendRequestsVBox = new VBox();
         Label friendRequestsLabel = new Label("Friend Requests");
         friendRequestsLabel.getStyleClass().add("title");
@@ -173,14 +176,15 @@ public class FriendList {
             acceptButton.setPrefSize(30, 30);
             acceptButton.getStyleClass().add("accept_button");
             acceptButton.setOnAction(e -> {
-                fren.acceptFriend(conn, friendRequest, User.getCurrentUser().getUsername());
+                friend.acceptFriend(conn, friendRequest, User.getCurrentUser().getUsername());
                 friendRequestsVBox.getChildren().remove(friendRequestHBox);
+                refreshFriendList();
             });
             Button declineButton = new Button();
             declineButton.setPrefSize(30, 30);
             declineButton.getStyleClass().add("decline_button");
             declineButton.setOnAction(e -> {
-                fren.declineFriend(conn, friendRequest, User.getCurrentUser().getUsername());
+                friend.declineFriend(conn, friendRequest, User.getCurrentUser().getUsername());
                 friendRequestsVBox.getChildren().remove(friendRequestHBox);
             });
             friendRequestHBox.getChildren().addAll(friendRequestLabel, Lantern.createSpacer(), acceptButton, declineButton);

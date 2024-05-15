@@ -575,10 +575,8 @@ public class Sidebar {
         return rfriendlistIcon;
     }
     public static void setBox7(VBox box){
-        box7 = box;
+        box7.getChildren().clear();
+        box7.getChildren().add(box);
         setOneVisible(7);
-    }
-    public static void refreshProfile(){
-        profileBox = Profile.loadProfileTab();
     }
 }
