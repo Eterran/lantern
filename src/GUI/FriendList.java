@@ -38,7 +38,7 @@ public class FriendList {
         label.getStyleClass().add("title");
         label.setPadding(new Insets(12, 0, 12, 12));
         VBox friendListBox = new VBox();
-        friendListBox.getChildren().add(label);
+        
         TextField searchFriendTF = new TextField();
         searchFriendTF.getStyleClass().add("text_field");
         Button searchFriendButton = new Button();
@@ -50,7 +50,7 @@ public class FriendList {
             friendListBox.getChildren().add(label);
         
             for (String friend : friendList) {
-                if (friend.toLowerCase().contains(friendUsername.toLowerCase())) { // Case insensitive search
+                if (friend.toLowerCase().contains(friendUsername.toLowerCase())) {
                     Button profileButton = new Button(friend);
                     profileButton.getStyleClass().add("profile_button");
                     profileButton.setOnAction(ev -> {
@@ -95,7 +95,8 @@ public class FriendList {
         });
 
         searchFriendHBox.getChildren().addAll(searchFriendTF, searchFriendButton, showFriendRequestsButton);
-        friendListBox.getChildren().addAll(searchFriendHBox);
+        VBox baseVBox = new VBox();
+        baseVBox.getChildren().addAll(label, searchFriendHBox);
 
         for (String friend : friendList) {
             Button profileButton = new Button(friend);
@@ -119,7 +120,8 @@ public class FriendList {
             friendListBox.getChildren().add(noFriendsVBox);
         }
         
-        stackpane.getChildren().add(friendListBox);
+        baseVBox.getChildren().add(friendListBox);
+        stackpane.getChildren().add(baseVBox);
         stackpane.prefHeightProperty().bind(friendVBox.heightProperty().multiply(1));
         stackpane.prefWidthProperty().bind(friendVBox.widthProperty().multiply(1));
         friendVBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
