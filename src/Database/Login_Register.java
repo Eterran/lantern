@@ -99,6 +99,8 @@ public class Login_Register {
         // glb.insertXpState(connection, id);
         insertParent(connection, id, parent);
         insertChildren(connection, id, children);
+        Quiz.updateLatestQuizRow(connection);
+        Quiz.initializeRow(connection, username);
         User.setCurrentUser(getUser(username, connection));
         return true;
     }
