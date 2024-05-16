@@ -1,6 +1,7 @@
 package GUI;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -14,8 +15,12 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 
+import java.sql.Connection;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
+import java.util.Date;
+import Database.Booking;
+import Database.BookingData;
 import Booking.BookingSystem;
 import Booking.Destination;
 import Database.User;
@@ -56,7 +61,9 @@ public class BookingPageGUI {
         User user = new User();
         BookingSystem bookSys = new BookingSystem();
         ArrayList <Destination> recommendSystem = bookSys.suggestDestinations(user.getCoordinate()) ; //return Arraylist with destination and distance
-        ArrayList <Double> distances = bookSys.distanceAway(user.getCoordinate()); //in Double
+        ArrayList <Double> distances = bookSys.distanceAway(user.getCoordinate()); 
+        ArrayList <Integer> destinationId = new ArrayList <Integer>();
+
         // Loop to create the boxes
         for (int i = 0; i < recommendSystem.size(); i++) {
             HBox dataBox = new HBox();
@@ -70,13 +77,17 @@ public class BookingPageGUI {
 
             Label number = new Label(String.valueOf(i + 1));  //fetch the value from the db
             number.setPadding(new Insets(5,10,5,5));
-            Label destinations = new Label(recommendSystem.get(i).toString());
+            String destinationName = recommendSystem.get(i).toString();
+            Label destinations = new Label(destinationName);
             destinations.setPadding(new Insets(5,10,5,5));
-            Label distance = new Label(distances.get(i).toString());
+            destinationId.add(bookSys.findDestinationID(destinationName));  
+            Label distance = new Label(distances.get(i).toString() + " km");
             Button bookingBtn = new Button("Book");
-            bookingBtn.setOnAction(event ->{
+            //go recommendSystem get the string find the string in the destinationName to get the id
+
+            bookingBtn.setOnAction(event ->{  
                 Stage stage = new Stage();
-                stage.setScene(new Scene(AvailableTimeSlot(), 400, 300));
+                stage.setScene(new Scene(AvailableTimeSlot(destinationId, recommendSystem,bookSys, user), 400, 300));
                 stage.setTitle("Available Time Slot");
                 stage.show();
             });
@@ -108,13 +119,12 @@ public class BookingPageGUI {
 
         return mainvbox;
     }
- 
 
 
 
-
-
-    public static VBox AvailableTimeSlot(){
+    //select part
+    public static VBox AvailableTimeSlot(ArrayList<Integer> destinationId, ArrayList<Destination> recommendSystem, BookingSystem bookSys, User user){
+        
         BorderPane borderPane = new BorderPane();
         Label titleLabel = new Label("Available Time Slot");
         borderPane.setTop(titleLabel);
@@ -135,35 +145,46 @@ public class BookingPageGUI {
         HBox headerBox = new HBox();
         HBox.setHgrow(headerBox, javafx.scene.layout.Priority.ALWAYS); 
 
-        int numberOfBoxes = 3;
+        // Loop to create the boxes  //destination.size???
+        for (int i = 0; i < destinationId.size(); i++) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String dateString = dateFormat.format(bookSys.getAvailableDates(user.getCurrentUser(),destinationId.get(i)).get(i)); //convert Date to String
 
-        // Loop to create the boxes
-        for (int i = 0; i < numberOfBoxes; i++) {
-            HBox dataBox = new HBox();
-            dataBox.setPadding(new Insets(5)); //padding for the databox
-           
-            // if (i % 2 == 0) {
-            //    dataBox.setStyle("-fx-background-color:#909C86;");
-                
-            // } else {
+            boolean check = Booking.checkDate(Lantern.getConn(),user.getUsername(),dateString);
+            if(check){ //mean occupied by others event
+
+            }else{ //if still available then show datebox with date 
+                HBox dataBox = new HBox();
+                dataBox.setPadding(new Insets(5)); //padding for the databox      
                 dataBox.setStyle("-fx-background-color: #C9DFC9;-fx-border-color:white; -fx-border-width: 1px;");
-            
-            // }
+                Label number2 = new Label(String.valueOf(i + 1));  //fetch the value from the db
+                number2.setPadding(new Insets(5,10,5,5));
+                Label availableTimeLabel = new Label(dateString); 
+                availableTimeLabel.setPadding(new Insets(5,10,5,5));
+                BookingData bd = new BookingData (recommendSystem.get(i).toString(), dateString);
+                
 
-            Label number2 = new Label(String.valueOf(i + 1));  //fetch the value from the db
-            number2.setPadding(new Insets(5,10,5,5));
-            Label availableTimeLabel = new Label("Time " + (i + 1));
-            availableTimeLabel.setPadding(new Insets(5,10,5,5));
-            Button selectBtn = new Button("Select");
-            selectBtn.setOnAction(event ->{
-               //
-            });
-            Region spacer = new Region();
-            HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+                Button selectBtn = new Button("Select");  //saved
+                selectBtn.setOnAction(event ->{
+                    Booking.bookingTour(Lantern.getConn(), bd, user.getUsername());
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Success");
+                    alert.setContentText("Your booking has been confirmed.");
+                    alert.showAndWait();
+                    });
 
-            dataBox.getChildren().addAll(number2, availableTimeLabel , spacer, selectBtn);  //adding every info into hbox for each line
-            
-            vBox.getChildren().add(dataBox); 
+
+                    Region spacer = new Region();
+                    HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+        
+                    dataBox.getChildren().addAll(number2, availableTimeLabel , spacer, selectBtn);  //adding every info into hbox for each line
+                    
+                    vBox.getChildren().add(dataBox); 
+                
+
+                
+            }
+
         }
 
         scrollPane.setContent(vBox);

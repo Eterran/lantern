@@ -13,8 +13,8 @@ import java.sql.*;
 
 
 public class Booking {
-  //checkExistingBooking 
-  // if true (already exist) --> you hv registered !
+  //checkExistingBooking (false mean booking is not made yet) 
+  // if true (already exist for certain day...remove it in the availale time slot ) 
   // else  false --> checkDate (whether got clash with another booking ) --> false, --> bookingTour (make booking)
 
 

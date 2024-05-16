@@ -7,6 +7,7 @@ import Database.Booking;
 import Database.User;
 import GUI.Lantern;
 import Database.Database;
+import Database.Login_Register;
 import Database.BookingData;
 
 import java.util.*;
@@ -148,7 +149,20 @@ public class BookingSystem {
         return temp;
     }
 
-    // show all the available timeslot
+    public int findDestinationID(String destination){
+        String destinationName[] = { "Petrosaincs Science Discovery Centre", "Tech Dome Penang",
+                "Agro Technology Park in MARDI", "National Science Centre", "Marine Aquarium and Musuem",
+                "Pusat Sains & Kreativiti Terengganu", "Biomedical Museum", "Telegraph Museum",
+                "Penang Science Cluster" };
+        for(int i=0; i<9; i++){
+            if(destination.equals(destinationName[i])){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    // show all the available timeslot, wi
     public ArrayList<Date> getAvailableDates(User user, int destinationId) {
         ArrayList<Date> availableDates = new ArrayList<>();
         String destinationName = destinationName(destinationId);
@@ -157,6 +171,8 @@ public class BookingSystem {
                 Connection connection = Lantern.getConn();
                 Statement statement = connection.createStatement();
                 String username = user.getUsername();
+                Login_Register lg=new Login_Register();
+                int id =lg.getID(username, connection);
 
                 // Get current date
                 Calendar calendar = Calendar.getInstance();
@@ -168,14 +184,12 @@ public class BookingSystem {
                     String currentDateString = sdf.format(currentDate);
 
                     // Check if there is an existing booking for the current date
-                    String query = "SELECT * FROM bookings WHERE user_date = '" + username + "' AND date = '"
-                            + currentDateString + "'";
+                    String query = "SELECT * FROM BookingDate WHERE main_id = " + id + " AND bookingDate = '"+ currentDateString + "'"; //id is not String no need single quote??
                     ResultSet resultSet = statement.executeQuery(query);
 
                     if (!resultSet.next()) {
                         // If there is no booking for the current date, add it to the available dates
-                        if (!new Booking().checkExistingBooking(connection, username,
-                                new BookingData(destinationName, currentDateString))) {
+                        if (!new Booking().checkExistingBooking(connection, username, new BookingData(destinationName, currentDateString))) {
                             availableDates.add(new Date(currentDate.getTime()));
                         }
                     }
