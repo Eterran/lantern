@@ -33,7 +33,7 @@ public class QuizPage {
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(10));
         
-        Label titleLabel = new Label("Quiz"); //if not at the center, then just adjust this bah
+        Label titleLabel = new Label("Quiz"); 
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 25));
 
         User user = User.getCurrentUser(); 
@@ -41,7 +41,7 @@ public class QuizPage {
         pointsLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 
         Region spacer1 = new Region();
-        HBox.setHgrow(spacer1, javafx.scene.layout.Priority.ALWAYS); // add a space between each label in a hbx
+        HBox.setHgrow(spacer1, javafx.scene.layout.Priority.ALWAYS); 
 
         HBox hbox= new HBox();
         hbox.getChildren().addAll(titleLabel,spacer1, pointsLabel);
@@ -62,9 +62,7 @@ public class QuizPage {
         gridPane.setVgap(10);
 
         ArrayList<QuizData> quizDataList = Quiz.getAllQuiz(Lantern.getConn());
-        
-     //   int totalNumOfQuiz = Quiz.getTotalNumberOfQuizzes(Lantern.getConn());
-        for (int i = 0; i < 5; i++) { 
+        for (int i = 0; i < quizDataList.size(); i++) { 
             QuizData qd = quizDataList.get(i);
             String quizTitle= qd.getQuizTitle();
             String quizDescription= qd.getDescription();
@@ -72,7 +70,7 @@ public class QuizPage {
             String quiztheme = qd.getTheme();
 
             BorderPane borderPane = BPForEveryQuiz(quizTitle, quiztheme, quizDescription, quizContent,user);
-            gridPane.add(borderPane, i % 4, i / 4);
+            gridPane.add(borderPane, i % 5, i / 5);
         }
 
         root.setBottom(gridPane);
@@ -101,7 +99,6 @@ public class QuizPage {
         label3.setFont(Font.font("Arial", 10));
         Button button = new Button("Start Attempt");
         button.setAlignment(Pos.BOTTOM_RIGHT);
-       //// User user =  new User();
         String username = user.getUsername();
         // Quiz update = new Quiz();
 
@@ -150,12 +147,12 @@ public class QuizPage {
         Login_Register lr = new Login_Register();
         GlobalLeaderBoard glb= new GlobalLeaderBoard();
         Database db = new Database();
-        double point = user.getPoints();
        
         finishAttemptBtn.setOnAction(e ->{
-            double updatedpoint = point+ 2; //only can update once [Problem]
+            double updatedpoint = user.getPoints() + 2; 
             glb.insertXpState(Lantern.getConn(),lr.getId());  
             glb.updateXpState(Lantern.getConn(), lr.getId());
+            user.setPoints(updatedpoint);
             try {
                 db.updatePoint(Lantern.getConn(), lr.getId(), updatedpoint);
             } catch (SQLException ex) {
@@ -165,19 +162,5 @@ public class QuizPage {
         });
        return borderPane;
     }
-    
-   
-   // @Override
-    // public void start(Stage primaryStage) {
-    //     Scene scene = new Scene(quizPageTab(), 800, 600);
-    //     scene.setFill(Color.valueOf("#e1e8f0"));
-    //     primaryStage.setResizable(false);
-    //     primaryStage.setScene(scene);
-    //     primaryStage.setTitle("Quiz Page");
-    //     primaryStage.show();
-    // }
-   
-    // public static void main(String[] args) {
-    //     launch(args);
-    // }
+ 
 }

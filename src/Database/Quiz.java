@@ -262,21 +262,4 @@ public class Quiz {
       e.printStackTrace();
     }
   }
-  // public static int getTotalNumberOfQuizzes(Connection connection) {
-  // int totalQuizzes = 0;
-  // int maxId = 0;
-  // String query = "SELECT MAX(id) AS id FROM Quiz";
-  // try {
-  // Statement statement = connection.createStatement();
-  // ResultSet resultSet = statement.executeQuery(query);
-  // if (resultSet.next()) {
-  // maxId = resultSet.getInt("id");
-  // }
-  // } catch (SQLException e) {
-  // e.printStackTrace();
-  // }
-  // totalQuizzes = maxId;
-  // return totalQuizzes;
-  // }
-
 }

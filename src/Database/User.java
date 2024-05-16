@@ -119,7 +119,9 @@ public class User {
     public Double getPoints() {
         return points;
     }
-
+    public void setPoints(Double p){
+        this.points = p;
+    }
     public ArrayList<String> getParents() {
         return parents;
     }

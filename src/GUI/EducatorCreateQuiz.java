@@ -43,7 +43,7 @@ public class EducatorCreateQuiz {
         ComboBox<String> themeComboBox = new ComboBox<>();
         themeComboBox.getItems().addAll("Science", "Technology", "Engineering", "Mathematics");
         themeComboBox.setPromptText("Select themes");
-        themeComboBox.setEditable(true); // Allow manual input
+        themeComboBox.setEditable(true); 
         TextArea quizContentTF = new TextArea();
 
         quizTitleTF.setPromptText("Enter title");

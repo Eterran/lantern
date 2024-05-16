@@ -4,6 +4,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -13,13 +14,11 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-
 import java.sql.Connection;
 import Database.Event;
 import Database.Database;
 import Database.EventData;
 import Database.User;
-
 
 public class EducatorCreateEvent  {
 
@@ -42,28 +41,29 @@ public class EducatorCreateEvent  {
         TextArea eventDescriptionTA = new TextArea();
         TextField eventVenueTF = new TextField();
         TextField eventDateTF = new TextField();
-        TextField eventTimeTF = new TextField();
-
-        eventTitleTF.setPromptText("Enter text");
+        ComboBox<String> eventTimeComboBox = new ComboBox<>();
+        eventTimeComboBox.getItems().addAll(
+            "8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM",
+            "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM",
+            "4:00 PM", "5:00 PM", "6:00 PM", "7:00 PM", "8:00 PM"
+        );
+        eventTimeComboBox.setEditable(true);
+        eventTitleTF.setPromptText("Enter title");
         eventDescriptionTA.setPromptText("Enter description");
         eventVenueTF.setPromptText("Enter venue");
-        eventDateTF.setPromptText("xx/xx/xxxx");
-        eventTimeTF.setPromptText("Enter time");
+        eventDateTF.setPromptText("xxxx/xx/xx");
+        eventTimeComboBox.setPromptText("Select time");
 
         Button saveBtn = new Button("Save");
         Button cancelBtn = new Button("Cancel");
         saveBtn.setStyle("-fx-background-color: #9068be; -fx-text-fill: white");
         cancelBtn.setStyle("-fx-background-color:#9068be; -fx-text-fill: white");
 
-        // cancelBtn.setOnAction(e -> {
-        // }
-        // Creating gridpane
         GridPane gridPane = new GridPane();
         gridPane.setPadding(new Insets(10, 10, 10, 10));
         gridPane.setVgap(6);
         gridPane.setHgap(6);
 
-        // Set ColumnConstraints
         ColumnConstraints column1 = new ColumnConstraints();
         column1.setPercentWidth(20);
         ColumnConstraints column2 = new ColumnConstraints();
@@ -87,7 +87,7 @@ public class EducatorCreateEvent  {
         gridPane.add(eventDate, 0, 3);
         gridPane.add(eventDateTF, 1, 3);
         gridPane.add(eventTime, 0, 4);
-        gridPane.add(eventTimeTF, 1, 4);
+        gridPane.add(eventTimeComboBox, 1, 4);
         gridPane.add(saveBtn, 0, 5);
         gridPane.add(cancelBtn, 0, 6);
 
@@ -97,15 +97,13 @@ public class EducatorCreateEvent  {
         VBox.setVgrow(mainvBox, Priority.ALWAYS);
 
         User user = User.getCurrentUser();
-       // user.userData(1);
         saveBtn.setOnAction(e -> {
             String ETitle = eventTitleTF.getText();
             String Edescription = eventDescriptionTA.getText();
             String Evenue = eventVenueTF.getText();
             String Edate = eventDateTF.getText();
-            String Etime = eventTimeTF.getText();
+            String Etime = eventTimeComboBox.getValue();
         
-           // User user = User.getCurrentUser();
             EventData events = new EventData(ETitle, Edescription, Evenue, Edate, Etime);
         
             boolean savedSuccessfully = Event.createEvent(Lantern.getConn(), events, user.getUsername());
@@ -114,6 +112,12 @@ public class EducatorCreateEvent  {
                 alert.setTitle("Success");
                 alert.setContentText("Event saved successfully!");
                 alert.showAndWait();
+                eventTitleTF.clear();
+                eventDescriptionTA.clear();
+                eventVenueTF.clear();
+                eventDateTF.clear();
+                eventTimeComboBox.getSelectionModel().clearSelection();
+
             } else {
                 Alert alert = new Alert(AlertType.ERROR);
                 alert.setTitle("Error");
