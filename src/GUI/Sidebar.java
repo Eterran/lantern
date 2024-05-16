@@ -36,6 +36,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.sql.Statement;
+
+
 public class Sidebar {
     private static VBox[] pages = new VBox[10];
     private static Button[] tabs = new Button[10];

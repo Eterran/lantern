@@ -161,7 +161,7 @@ public class FriendList {
         return new ArrayList<>(set1);
     }
     private static VBox createFriendRequestsVBox(){
-        ArrayList<String> friendRequests = friend.showPending(conn, User.getCurrentUser().getUsername());
+        ArrayList<String> friendRequests = friend.showPendingReceived(conn, User.getCurrentUser().getUsername());
         VBox friendRequestsVBox = new VBox();
         Label friendRequestsLabel = new Label("Friend Requests");
         friendRequestsLabel.getStyleClass().add("title");
