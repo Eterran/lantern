@@ -91,9 +91,9 @@ public class Quiz {
     }
         
         public static void deleteColumn(Connection connection,String title) {
-          String columnName = "\"" + title + "\"";
           String table ="QuizAttempt";
-         String query = "ALTER TABLE "+table+" DROP COLUMN "+title;
+          String query = "ALTER TABLE " + table + " DROP COLUMN \"" + title + "\"";
+        //  System.out.println(query);
          try{
              Statement stm = connection.createStatement();
              stm.executeUpdate(query);
