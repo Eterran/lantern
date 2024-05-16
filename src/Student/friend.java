@@ -111,31 +111,75 @@ public class friend {
 
     }
 
-    public static ArrayList<String> showPending(Connection connection, String username) {
-        Login_Register lr = new Login_Register();
-        int main_id = lr.getID(username, connection);
-        ArrayList<String> list = new ArrayList<>();
-        try {
-            String query = "SELECT pending FROM friends WHERE main_id=?";
+   public static ArrayList<String> showPendingReceived(Connection connection,String username){
+        Login_Register lr=new Login_Register();
+        int main_id=lr.getID(username, connection);
+        ArrayList <String>list=new ArrayList<>();
+         try{
+       String query = "SELECT pending FROM friends WHERE main_id=?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, main_id);
-            ResultSet result = preparedStatement.executeQuery();
-            while (result.next()) {
-                String hold = result.getString("pending");
-                if (hold == null)
+            ResultSet result=preparedStatement.executeQuery();
+            while(result.next()){
+                String hold=result.getString("pending");
+                if(hold==null)
                     continue;
-                list.add(hold);
+               list.add(hold);
             }
         }
-
-        catch (SQLException e) {
+     
+        catch(SQLException e){
             e.printStackTrace();
         }
-
-        return list;
-
+    
+    
+         return list;
+         
     }
-
+    //usernaem of send 
+    public static ArrayList<String> showPendingSend (Connection connection,String username){
+        Login_Register lr=new Login_Register();
+        int main_id=lr.getID(username, connection);
+        ArrayList <Integer>listID=new ArrayList<>();
+        ArrayList <String>name=new ArrayList<>();
+        String query = "SELECT main_id FROM friends WHERE pending=?";
+       String query2 = "SELECT username FROM user WHERE id=?";
+         try{
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1,username);
+            ResultSet result=preparedStatement.executeQuery();
+            while(result.next()){
+                int hold=result.getInt("main_id");
+                listID.add(hold);
+            }
+            
+        }
+     
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    
+         
+          try{
+            PreparedStatement preparedStatement = connection.prepareStatement(query2);
+            for(int id :listID){
+            preparedStatement.setInt(1,id);
+            ResultSet result=preparedStatement.executeQuery();
+            if(result.next()){
+                String hold=result.getString("username");
+                name.add(hold);
+            }
+            }
+            
+        }
+     
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    
+         return name;
+         
+    }
     public static ArrayList<String> showFriend(Connection connection, String username) {
         Login_Register lr = new Login_Register();
         int main_id = lr.getID(username, connection);
