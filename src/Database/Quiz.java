@@ -90,10 +90,17 @@ public class Quiz {
         decreaseQuizNumber(connection,getNumberOfQuiz(connection,username),username);
     }
         
+<<<<<<< HEAD
         public static void deleteColumn(Connection connection,String title) {
           String table ="QuizAttempt";
           String query = "ALTER TABLE " + table + " DROP COLUMN \"" + title + "\"";
         //  System.out.println(query);
+=======
+       public static void deleteColumn(Connection connection,String title) {
+          String table ="QuizAttempt";
+         String query = "ALTER TABLE " + table + " DROP COLUMN \"" + title + "\"";
+           // System.out.println(query);
+>>>>>>> 0cc7411451820fccc645dd10755aded466f84f1b
          try{
              Statement stm = connection.createStatement();
              stm.executeUpdate(query);
