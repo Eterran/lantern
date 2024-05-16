@@ -61,4 +61,7 @@ public class Destination {
     public String getId() {
         return id;
     }
+    public String toString(){
+        return name;
+    }
 }
