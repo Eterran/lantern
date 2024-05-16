@@ -13,6 +13,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
+
+import java.util.ArrayList;
+
+import Booking.BookingSystem;
+import Booking.Destination;
+import Database.User;
 public class BookingPageGUI {
 
     // @Override
@@ -37,38 +43,22 @@ public class BookingPageGUI {
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setFitToWidth(true);
         scrollPane.setPrefSize(391.0, 247.0);
-      //  scrollPane.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
 
         //vbox contain lots of hbox
         VBox vBox = new VBox();
         VBox.setVgrow(vBox, javafx.scene.layout.Priority.ALWAYS); 
         HBox headerBox = new HBox();
         HBox.setHgrow(headerBox, javafx.scene.layout.Priority.ALWAYS); 
-        // headerBox.setStyle("-fx-background-color:#730099;");
-             
-        // Label rankLabel = new Label("No.");
-        // rankLabel.setPadding(new Insets(5));
-        // rankLabel.setStyle("-fx-font-weight: bold; -fx-font-size:14px; -fx-font-family: Arial;-fx-text-fill: white");
-        // Label usernameLabel = new Label("Destination");
-        // usernameLabel.setStyle("-fx-font-weight:bold;-fx-font-size: 14px; -fx-font-family: Arial;-fx-text-fill: white");
-        // usernameLabel.setPadding(new Insets(5));
-        // Label pointLabel = new Label("");
-        // pointLabel.setStyle("-fx-font-weight:bold; -fx-font-size: 14px; -fx-font-family: Arial;-fx-text-fill: white");
-        // pointLabel.setPadding(new Insets(5,10,5,5));
 
-        // Region spacer1 = new Region();
-        // HBox.setHgrow(spacer1, javafx.scene.layout.Priority.ALWAYS);
-        // Region spacer2 = new Region();
-        // HBox.setHgrow(spacer2, javafx.scene.layout.Priority.ALWAYS);
-        // headerBox.setPadding(new Insets(5));
-        // headerBox.getChildren().addAll(rankLabel,spacer1, usernameLabel, spacer2, pointLabel);
-
-        // vBox.getChildren().add(headerBox);
-
-        int numberOfBoxes = 20;
-
+      
+        //display all the destination list (based on user location ---> recommendation system)
+        //BookingSystem....destinationName, disntance from the user
+        User user = new User();
+        BookingSystem bookSys = new BookingSystem();
+        ArrayList <Destination> recommendSystem = bookSys.suggestDestinations(user.getCoordinate()) ; //return Arraylist with destination and distance
+        ArrayList <Double> distances = bookSys.distanceAway(user.getCoordinate()); //in Double
         // Loop to create the boxes
-        for (int i = 0; i < numberOfBoxes; i++) {
+        for (int i = 0; i < recommendSystem.size(); i++) {
             HBox dataBox = new HBox();
             dataBox.setPadding(new Insets(5)); //padding for the databox
            
@@ -80,8 +70,9 @@ public class BookingPageGUI {
 
             Label number = new Label(String.valueOf(i + 1));  //fetch the value from the db
             number.setPadding(new Insets(5,10,5,5));
-            Label destinationData = new Label("Destination " + (i + 1));
-            destinationData.setPadding(new Insets(5,10,5,5));
+            Label destinations = new Label(recommendSystem.get(i).toString());
+            destinations.setPadding(new Insets(5,10,5,5));
+            Label distance = new Label(distances.get(i).toString());
             Button bookingBtn = new Button("Book");
             bookingBtn.setOnAction(event ->{
                 Stage stage = new Stage();
@@ -92,7 +83,7 @@ public class BookingPageGUI {
             Region spacer = new Region();
             HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
 
-            dataBox.getChildren().addAll(number,  destinationData, spacer, bookingBtn);  //adding every info into hbox for each line
+            dataBox.getChildren().addAll(number,  destinations, distance, spacer, bookingBtn);  //adding every info into hbox for each line
             
             vBox.getChildren().add(dataBox); //continue add all the databox into vbox
         }
@@ -118,6 +109,10 @@ public class BookingPageGUI {
         return mainvbox;
     }
  
+
+
+
+
 
     public static VBox AvailableTimeSlot(){
         BorderPane borderPane = new BorderPane();
@@ -161,14 +156,14 @@ public class BookingPageGUI {
             availableTimeLabel.setPadding(new Insets(5,10,5,5));
             Button selectBtn = new Button("Select");
             selectBtn.setOnAction(event ->{
-               // 
+               //
             });
             Region spacer = new Region();
             HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
 
             dataBox.getChildren().addAll(number2, availableTimeLabel , spacer, selectBtn);  //adding every info into hbox for each line
             
-            vBox.getChildren().add(dataBox); //continue add all the databox into vbox
+            vBox.getChildren().add(dataBox); 
         }
 
         scrollPane.setContent(vBox);
@@ -178,15 +173,11 @@ public class BookingPageGUI {
         VBox mainvbox = new VBox();
         mainvbox.setStyle("-fx-background-color:white;");
         mainvbox.getChildren().add(borderPane);
-        VBox.setVgrow(borderPane, Priority.ALWAYS); //ensure borderPane grow together with Vbox
+        VBox.setVgrow(borderPane, Priority.ALWAYS); 
 
         return mainvbox;
     }
 
-
-//     public static void main(String[] args) {
-//         launch(args);
-//     }
  }
 
 
