@@ -1,3 +1,5 @@
+package Database;
+
 import java.util.*;
 import java.sql.*;
 
@@ -108,7 +110,7 @@ public class Quiz {
     
      public static void decreaseQuizNumber(Connection connection,int num,String username){
       int count =num-1;
-      Login_Register_Gui lg=new Login_Register_Gui();
+      Login_Register lg=new Login_Register();
       int id =lg.getID(username, connection);
       String sql = "UPDATE Quiz SET numQuizCreated = ? WHERE main_id= ?";
       try{
