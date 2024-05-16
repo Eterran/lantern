@@ -107,8 +107,9 @@ public class QuizPage {
             //update.updateLatestQuizColumn(Lantern.getConn());
             // update.updateLatestQuizRow(Lantern.getConn());  
             // Quiz.initializeRow(Lantern.getConn(), username);
-            String quiz = "q"+ Quiz.getColumnNumber(Lantern.getConn())  ;
-            Quiz.attempQuiz(Lantern.getConn(), quiz, username);
+            QuizData qd= new QuizData(qtitle, qdescrip, qtheme, qContent);
+         //   String quiz = "q"+ Quiz.getColumnNumber(Lantern.getConn())  ;
+            Quiz.attemptQuiz(Lantern.getConn(), qd, username);
 
             Stage stage = new Stage();
             stage.setScene(new Scene(showQuiz(qContent, stage, user), 400, 200));
