@@ -78,6 +78,7 @@ public class BookingSystem {
 
     // label for distance away
     public ArrayList<Double> distanceAway(String coordinate) {
+    
         ArrayList<Double> distances = new ArrayList<>();
         String data[] = coordinate.split(",");
         double userX = Double.parseDouble(data[0]);
