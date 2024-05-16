@@ -1,3 +1,4 @@
+package Database;
 import java.util.*;
 import java.sql.*;
 
@@ -90,17 +91,10 @@ public class Quiz {
         decreaseQuizNumber(connection,getNumberOfQuiz(connection,username),username);
     }
         
-<<<<<<< HEAD
-        public static void deleteColumn(Connection connection,String title) {
-          String table ="QuizAttempt";
-          String query = "ALTER TABLE " + table + " DROP COLUMN \"" + title + "\"";
-        //  System.out.println(query);
-=======
        public static void deleteColumn(Connection connection,String title) {
           String table ="QuizAttempt";
          String query = "ALTER TABLE " + table + " DROP COLUMN \"" + title + "\"";
            // System.out.println(query);
->>>>>>> 0cc7411451820fccc645dd10755aded466f84f1b
          try{
              Statement stm = connection.createStatement();
              stm.executeUpdate(query);
@@ -115,7 +109,7 @@ public class Quiz {
     
      public static void decreaseQuizNumber(Connection connection,int num,String username){
       int count =num-1;
-      Login_Register_Gui lg=new Login_Register_Gui();
+      Login_Register lg=new Login_Register();
       int id =lg.getID(username, connection);
       String sql = "UPDATE Quiz SET numQuizCreated = ? WHERE main_id= ?";
       try{
