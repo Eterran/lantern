@@ -33,9 +33,9 @@ public class Login_Register {
         database.updateCoordinate(connection, coordinate);
         id = getID(name_email, connection);
         user.userData(id);
-        boolean comfirmPw = passwordEncoder.matches(pw, User.getCurrentUser().getPassword());
-        if ((name_email.equalsIgnoreCase(User.getCurrentUser().getUsername()) && comfirmPw)
-                || (name_email.equalsIgnoreCase(User.getCurrentUser().getEmail()) && comfirmPw)) {
+        boolean comfirmPw = passwordEncoder.matches(pw, user.getPassword());
+        if ((name_email.equalsIgnoreCase(user.getUsername()) && comfirmPw)
+                || (name_email.equalsIgnoreCase(user.getEmail()) && comfirmPw)) {
             // glb.updateXpState(connection, id);
             User.setCurrentUser(user);
             return true;

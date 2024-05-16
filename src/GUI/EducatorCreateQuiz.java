@@ -3,6 +3,7 @@ package GUI;
 import java.util.LinkedList;
 import java.util.List;
 import Database.Quiz;
+import Database.QuizData;
 import Database.User;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -43,7 +44,7 @@ public class EducatorCreateQuiz {
         ComboBox<String> themeComboBox = new ComboBox<>();
         themeComboBox.getItems().addAll("Science", "Technology", "Engineering", "Mathematics");
         themeComboBox.setPromptText("Select themes");
-        themeComboBox.setEditable(true); // Allow manual input
+        themeComboBox.setEditable(true); 
         TextArea quizContentTF = new TextArea();
 
         quizTitleTF.setPromptText("Enter title");
@@ -67,11 +68,11 @@ public class EducatorCreateQuiz {
                 String Qdescription = quizDescriptionTA.getText();
                 String Qtheme = themeComboBox.getValue();
                 String Qcontent = quizContentTF.getText();
-                Quiz updatecol = new Quiz();
                 boolean savedSuccessfully = Quiz.createQuiz(Lantern.getConn(), QTitle, Qdescription, Qtheme, Qcontent, user.getUsername());
+                QuizData qd = new QuizData(QTitle, Qdescription, Qtheme, Qcontent);
                 if (savedSuccessfully) {
                     //update columns in QuizAttempt 
-                    updatecol.updateLatestQuizColumn(Lantern.getConn());
+                    Quiz.updateLatestQuiz(Lantern.getConn(),qd);   
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Success");
                     alert.setContentText("Quiz saved successfully!");

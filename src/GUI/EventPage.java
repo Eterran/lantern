@@ -1,4 +1,10 @@
 package GUI;
+import java.sql.Connection;
+import java.util.ArrayList;
+
+import Database.Event;
+import Database.EventData;
+import Database.QuizData;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -19,36 +25,33 @@ public class EventPage {
     public static VBox viewEventTab() {
         VBox vbox1 = new VBox();
         vbox1.setStyle("-fx-background-color:lightyellow");
-        vbox1.setPrefSize(600, 80); //adjust 
+        vbox1.setPrefSize(600, 80); 
         Label label1 = new Label("Live Event");
         label1.setStyle("-fx-font-weight: bold; -fx-font-size: 16");
         label1.setPadding(new Insets(10));
         vbox1.getChildren().add(label1);
 
-        //content in the scrollpane
         HBox content1 = new HBox();
         content1.setStyle("-fx-background-color: lightblue");
-        content1.setSpacing(20); // Set spacing between items
-       
+        content1.setSpacing(20);
 
-        for (int i = 0; i <5; i++) {
-            //String labelText = (calling method to fetch the question theme from db);  fetchingmethod(int index)
-            //String labelText2 = (calling method to fetch the theme description from db);  fetchingmethod(int index)
-            String labelText1 = "Event Title";
-            String labelText2 = "Event Description";
-            String labelText3 = "Event Venue";
-            String labelText4 =  "Event Date";
-            String labelText5 = "Event time";
-            BorderPane borderPane = BPForAllEvents(labelText1, labelText2, labelText3, labelText4, labelText5, "Register","#226c94");
+       
+        ArrayList<EventData> liveEventList = Event.getLiveEvents(Lantern.getConn());
+        for (int i = 0; i <liveEventList.size(); i++) {
+            EventData ed = liveEventList.get(i);
+            String labelText1 = ed.getEventTitle();
+            String labelText2 = ed.getDescription();
+            String labelText3 = ed.getVenue();
+            String labelText4 =  ed.getDate();
+            String labelText5 = ed.getTime();
+            BorderPane borderPane = BPForAllEvents(labelText1, labelText2, labelText3, labelText4, labelText5);
             content1.getChildren().addAll(borderPane);
         }
 
-        //creating scrollpane
         ScrollPane scrollPane1 = new ScrollPane(content1);
         scrollPane1.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS); // Always show horizontal scrollbar
         scrollPane1.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);//disable vertical scrollbar
 
-        //vbox2 in bp
         BorderPane bp = new BorderPane();
         VBox vbox2 = new VBox();
        vbox2.setStyle("-fx-background-color: lightblue");
@@ -88,16 +91,16 @@ public class EventPage {
         content2.setStyle("-fx-background-color: lightblue");
         content2.setSpacing(20); // Set spacing between items
       
-        for (int i = 0; i <3; i++) {
-            //String labelText = (calling method to fetch the question theme from db);  fetchingmethod(int index)
-            //String labelText2 = (calling method to fetch the theme description from db);  fetchingmethod(int index)
-            String labelText1 = "Event Title";
-            String labelText2 = "Event Description";
-            String labelText3 = "Event Venue";
-            String labelText4 =  "Event Date";
-            String labelText5 = "Event time";
-            BorderPane borderPane = BPForAllEvents(labelText1, labelText2, labelText3, labelText4, labelText5, "Register","#226c94");
-            content2.getChildren().addAll(borderPane);
+        ArrayList<EventData> closestUpcoming = Event.getLatestEvent(Lantern.getConn());
+        for (int i = 0; i <closestUpcoming.size(); i++) {
+            EventData ed = closestUpcoming.get(i);
+            String labelText1 = ed.getEventTitle();
+            String labelText2 = ed.getDescription();
+            String labelText3 = ed.getVenue();
+            String labelText4 =  ed.getDate();
+            String labelText5 = ed.getTime();
+            BorderPane borderPane2 = BPForAllEvents(labelText1, labelText2, labelText3, labelText4, labelText5);
+            content2.getChildren().addAll(borderPane2);
         }
 
         //creating scrollpane2
@@ -136,13 +139,13 @@ public class EventPage {
     }
 
     
-    public static BorderPane BPForAllEvents(String labelText1, String labelText2, String labelText3, String labelText4, String labelText5, String buttonText, String backgroundColor) {
+    public static BorderPane BPForAllEvents(String labelText1, String labelText2, String labelText3, String labelText4, String labelText5) {
         BorderPane borderPane = new BorderPane();
         borderPane.setPrefWidth(300);
         borderPane.setPrefHeight(180);
-        borderPane.setStyle("-fx-background-color: " + backgroundColor + ";");
+        borderPane.setStyle("-fx-background-color: #226c94;");
         borderPane.setPadding(new Insets(15));
-
+  
         Label label1 = new Label(labelText1);
         label1.setTextFill(Color.WHITE); 
         label1.setFont(Font.font("Arial", FontWeight.BOLD, 25));
@@ -156,7 +159,7 @@ public class EventPage {
         label5.setTextFill(Color.WHITE); 
 
         label1.setFont(Font.font("Arial", FontWeight.BOLD, 15));
-        Button button = new Button(buttonText);
+        Button button = new Button("Register");
         button.setAlignment(Pos.BOTTOM_RIGHT);
 
         button.setOnAction(event->{

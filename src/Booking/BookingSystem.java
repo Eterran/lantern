@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import Database.Booking;
 import Database.User;
+import GUI.Lantern;
 import Database.Database;
 import Database.BookingData;
 
@@ -24,7 +25,9 @@ public class BookingSystem {
 
     private ArrayList<Destination> readDestinationsFromFile() {
     ArrayList<Destination> destinations = new ArrayList<>();
-    try (Scanner s = new Scanner(new FileInputStream("lantern-1/Booking.txt"))) {
+    // try (Scanner s = new Scanner(new FileInputStream("lantern-1/Booking.txt"))) {
+    try (Scanner s = new Scanner(new FileInputStream("Booking.txt"))) {
+
         while (s.hasNextLine()) {
             String line = s.nextLine();
             String name = line;
@@ -43,6 +46,7 @@ public class BookingSystem {
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 
+    //return the destination arraylist based on the distance
     public ArrayList<Destination> suggestDestinations(String coordinate) {
         ArrayList<Double> distances = new ArrayList<>();
         String data[] = coordinate.split(",");
@@ -72,9 +76,35 @@ public class BookingSystem {
         
         return destinations;
     }
+    //label for distance away
+    public ArrayList<Double> distanceAway(String coordinate) {
+        ArrayList<Double> distances = new ArrayList<>();
+        String data[] = coordinate.split(",");
+        double userX = Double.parseDouble(data[0]);
+        double userY = Double.parseDouble(data[1]);
     
+        for (int i = 0; i < destinations.size(); i++) {
+            double x = destinations.get(i).getX();
+            double y = destinations.get(i).getY();
+            double distance = calculateDistance(userX, userY, x, y);
+            distances.add(distance);
+        }
     
-
+        for (int i = 0; i < destinations.size() - 1; i++) {
+            for (int j = i + 1; j < destinations.size(); j++) {
+                if (distances.get(i) > distances.get(j)) {
+                    double tempDistance = distances.get(i);
+                    distances.set(i, distances.get(j));
+                    distances.set(j, tempDistance);
+    
+                }
+            }
+        }
+        
+        return distances;
+    }
+    
+    //
     public ArrayList<String> getTimeSlots(int destinationId, Date currentDate, User user) {
         ArrayList<String> timeSlots = new ArrayList<>();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -117,13 +147,16 @@ public class BookingSystem {
            return temp; 
     }
 
+
+    //show all the available timeslot 
     private ArrayList<Date> getAvailableDates(User user, int destinationId) {
     ArrayList<Date> availableDates = new ArrayList<>();
     String destinationName = destinationName(destinationId);
 
     try {
         if ("parent".equals(user.getRole())) {
-            Connection connection = Database.connectionDatabase();
+          //  Connection connection = Database.connectionDatabase();
+            Connection connection = Lantern.getConn();
             Statement statement = connection.createStatement();
             String username = user.getUsername(); 
 
@@ -155,7 +188,7 @@ public class BookingSystem {
     return availableDates;
 }
 
-
+    //show you have booked the event by this date
     private ArrayList<Date> getBookedDatesForDestination(int destinationId) {
         ArrayList<Date> bookedDates = new ArrayList<>();
     try (Connection connection = Database.connectionDatabase()) {
@@ -178,6 +211,7 @@ public class BookingSystem {
     }
     return bookedDates;
 }
+//Applied
        private boolean isDateBooked(Date specificDate, ArrayList<Date> bookedDates) {
            for (Date bookedDate : bookedDates) {
               if (specificDate.equals(bookedDate)) {

@@ -44,7 +44,6 @@ public class Event {
       catch(SQLException e){
         e.printStackTrace();
       }
-      //increaseEventNumber(connection,getNumberOfEvent(connection,username),username);
       return false;
     }
 
@@ -196,27 +195,27 @@ public class Event {
                  }
             }
         }
+    //      //live events
+           String description="",venue="",time="",eventName="",date="";
          
-       String description="",venue="",time="",eventName="",date="";
-         
-          try{
-            String sql = "SELECT EventTitle,Description,Venue,Time FROM event WHERE Date=?";
-             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, currentDate.toString());
-            ResultSet result = preparedStatement.executeQuery();
-            while(result.next()){
-                 eventName=result.getString("EventTitle");
-            description=result.getString("Description");
-            venue=result.getString("Venue");
-            time=result.getString("Time");
-            latestEvent.add(new EventData(eventName,description,venue,currentDate.toString(),time));
-            }
-    }
+    //       try{
+    //         String sql = "SELECT EventTitle,Description,Venue,Time FROM event WHERE Date=?";
+    //          PreparedStatement preparedStatement = connection.prepareStatement(sql);
+    //         preparedStatement.setString(1, currentDate.toString());
+    //         ResultSet result = preparedStatement.executeQuery();
+    //         while(result.next()){
+    //              eventName=result.getString("EventTitle");
+    //         description=result.getString("Description");
+    //         venue=result.getString("Venue");
+    //         time=result.getString("Time");
+    //         latestEvent.add(new EventData(eventName,description,venue,currentDate.toString(),time));
+    //         }
+    // }
             
-            catch(SQLException e){
-            e.printStackTrace();}
+    //         catch(SQLException e){
+    //         e.printStackTrace();}
             
-         
+        //latest 3upcoming events
          int count = 0;
          ArrayList<String> check = new ArrayList<>();
          check.add("a"); 
@@ -241,13 +240,43 @@ public class Event {
         
         check.add(date);
     }
-}     catch (SQLException e) {
-         e.printStackTrace();
-}
+    }     catch (SQLException e) {
+            e.printStackTrace();
+    }
 
         return latestEvent;
     }
+
+
+    //live event
+    public static ArrayList<EventData> getLiveEvents(Connection connection) {
+        LocalDate currentDate=LocalDate.now();
+        ArrayList<EventData> liveEvents = new ArrayList<>();
+        
+        try {
+            String sql = "SELECT EventTitle, Description, Venue, Time FROM event WHERE Date=?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, currentDate.toString());
+            ResultSet result = preparedStatement.executeQuery();
+            
+            while (result.next()) {
+                String eventName = result.getString("EventTitle");
+                String description = result.getString("Description");
+                String venue = result.getString("Venue");
+                String time = result.getString("Time");
+                liveEvents.add(new EventData(eventName, description, venue, currentDate.toString(), time));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return liveEvents;
+    }
     
+
+
+
+
     //doing arraylist in case there are multiple same event with different date
     public static ArrayList<String> dateOfEvent(Connection connection,String eventName){
         ArrayList<String>date=new ArrayList<>();
@@ -265,7 +294,7 @@ public class Event {
      return date;
     }
     
-    //the same event in same data is not allowed to create
+    //the same event in same data is not allowed to creates
     public static boolean checkSameEvent(Connection connection,EventData event){
     //boolean check=false;
         //ArrayList<String>allEvent=getAllEvent(connection);
@@ -317,7 +346,7 @@ public class Event {
         return ed;
     }*/
     
-    //get all events create by a user
+    //get all events create by a user, edit list
     public static ArrayList<EventData>getEventOfUser(Connection connection,String username){
     String description="",venue="",time="",eventName="",date="";
         ArrayList<EventData>events=new ArrayList<>();

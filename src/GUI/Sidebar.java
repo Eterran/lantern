@@ -35,6 +35,7 @@ import javafx.scene.paint.Stop;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import java.sql.Statement;
 
 public class Sidebar {
     private static VBox[] pages = new VBox[10];
@@ -70,7 +71,7 @@ public class Sidebar {
 
     private static StackPane stackPane = new StackPane();
     private static VBox profileBox = Profile.loadProfileTab();
-    private static VBox eventBox = new VBox();
+    private static VBox eventBox = EventPage.viewEventTab();
     private static VBox discussionBox = new VBox();
     private static VBox leaderboardBox = GlobalLeaderboard.globalLeaderBoardTab();
     private static VBox box5 = new VBox(10);
@@ -216,14 +217,14 @@ public class Sidebar {
             if(tabs[i] == null)
                 break;
             if(i == index){
+                tabs[i].getStyleClass().clear();
                 tabs[i].getStyleClass().add("sidebar_button_selected");
-                tabs[i].getStyleClass().remove("sidebar_button");
+                rtabs[i].getStyleClass().clear();;
                 rtabs[i].getStyleClass().add("sidebar_button_selected");
-                rtabs[i].getStyleClass().remove("sidebar_button");
             } else {
-                tabs[i].getStyleClass().remove("sidebar_button_selected");
+                tabs[i].getStyleClass().clear();
                 tabs[i].getStyleClass().add("sidebar_button");
-                rtabs[i].getStyleClass().remove("sidebar_button_selected");
+                rtabs[i].getStyleClass().clear();
                 rtabs[i].getStyleClass().add("sidebar_button");
             }
         }
@@ -575,7 +576,8 @@ public class Sidebar {
         return rfriendlistIcon;
     }
     public static void setBox7(VBox box){
-        box7 = box;
+        box7.getChildren().clear();
+        box7.getChildren().add(box);
         setOneVisible(7);
     }
 }

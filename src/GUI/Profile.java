@@ -2,17 +2,24 @@ package GUI;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import Database.User;
 import Student.friend;
 import Database.Database;
-
+import Database.ParentChildren;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.layout.StackPane;
 
 public class Profile {
     private final static AccessManager accessManager = Sidebar.getAccessManager();
@@ -30,14 +37,64 @@ public class Profile {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println(System.getProperty("user.dir"));;
+        VBox profileRootBox = new VBox();
+        StackPane stackpane = new StackPane();
         VBox profileTab = new VBox(10);
         Label profileLabel = new Label("My Profile");
         profileLabel.getStyleClass().add("title");
         HBox profileLabelBox = new HBox();
-        profileLabelBox.getChildren().add(profileLabel);
         profileLabelBox.setPadding(new Insets(12, 0, 12, 12));
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        profileLabelBox.getChildren().addAll(profileLabel, spacer);
 
+        if(User.getCurrentUser().getRole().toLowerCase().equals("student")){
+            Button pendingRequestsButton = new Button();
+            pendingRequestsButton.getStyleClass().add("add_friend_button");
+            ImageView pendingRequestsImageView = new ImageView(new Image("resources/assets/three_dots_icon.png"));
+            pendingRequestsImageView.setFitWidth(40);
+            pendingRequestsImageView.setFitHeight(40);
+            pendingRequestsButton.setGraphic(pendingRequestsImageView);
+            pendingRequestsButton.setOnAction(e -> {
+                VBox pendingRequestsVBox = createPendingRequestsVBox();
+                VBox overlay = new VBox();
+                VBox backgroundBlocker = new VBox();
+                Button closeButton = new Button();
+                ImageView closeImageView = new ImageView(new Image("resources/assets/close_icon.png"));
+                closeImageView.setFitWidth(40);
+                closeImageView.setFitHeight(40);
+                closeButton.getStyleClass().add("close_button");
+                closeButton.setGraphic(closeImageView);
+
+                closeButton.setOnAction(event -> stackpane.getChildren().remove(overlay));
+
+                HBox closeButtonBox = new HBox();
+                closeButtonBox.setAlignment(Pos.TOP_RIGHT);
+                closeButtonBox.getChildren().add(closeButton);
+
+                overlay.getChildren().addAll(closeButtonBox, pendingRequestsVBox);
+                overlay.getStyleClass().add("overlay");
+                overlay.minHeightProperty().bind(stackpane.heightProperty().multiply(0.85));
+                overlay.minWidthProperty().bind(stackpane.widthProperty().multiply(0.75));
+                overlay.maxHeightProperty().bind(stackpane.heightProperty().multiply(0.85));
+                overlay.maxWidthProperty().bind(stackpane.widthProperty().multiply(0.75));
+                
+                backgroundBlocker.getStyleClass().add("background_transparent");
+                backgroundBlocker.minHeightProperty().bind(stackpane.heightProperty());
+                backgroundBlocker.minWidthProperty().bind(stackpane.widthProperty());
+                backgroundBlocker.maxHeightProperty().bind(stackpane.heightProperty());
+                backgroundBlocker.maxWidthProperty().bind(stackpane.widthProperty());
+                backgroundBlocker.setOnMouseClicked(event -> {
+                    stackpane.getChildren().remove(overlay);
+                    stackpane.getChildren().remove(backgroundBlocker);
+                });
+
+                stackpane.getChildren().add(backgroundBlocker);
+                stackpane.getChildren().add(overlay);
+            });
+            profileLabelBox.getChildren().add(pendingRequestsButton);
+        }
+        
         profileTab.setStyle("-fx-background-color: " + color.BACKGROUND.getCode() + ";");
         profileTab.getChildren().add(profileLabelBox);
         profileTab.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
@@ -56,13 +113,18 @@ public class Profile {
         profileContents.maxWidthProperty().bind(profileTab.widthProperty().multiply(0.9));
         profileContents.setPadding(new Insets(30, 10, 30, 10));
 
-        accessManager.getAccessibleVBoxes(accessManager.getUserRole(User.getCurrentUser())).forEach(
+        accessManager.getAccessiblePrivateProfile(accessManager.getUserRole(User.getCurrentUser())).forEach(
+                    vBoxSupplier -> profileContents.getChildren().add(vBoxSupplier.get()));
+        accessManager.getAccessiblePublicProfile(accessManager.getUserRole(User.getCurrentUser())).forEach(
                     vBoxSupplier -> profileContents.getChildren().add(vBoxSupplier.get()));
 
         profileTab.getChildren().addAll(profileContents);
         profileTab.setAlignment(javafx.geometry.Pos.TOP_CENTER);
+        stackpane.getChildren().add(profileTab);
+        profileRootBox.getChildren().add(stackpane);
+        profileRootBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
-        return profileTab;
+        return profileRootBox;
     }
 
     public static VBox loadOthersProfileTab(User user){
@@ -77,7 +139,6 @@ public class Profile {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println(System.getProperty("user.dir"));;
         VBox profileTab = new VBox(10);
         Label profileLabel = new Label(user.getUsername() + "'s Profile");
         profileLabel.getStyleClass().add("title");
@@ -99,12 +160,19 @@ public class Profile {
         profileContents.maxWidthProperty().bind(profileTab.widthProperty().multiply(0.9));
         profileContents.setPadding(new Insets(30, 10, 30, 10));
 
-        accessManager.getAccessibleVBoxes(accessManager.getUserRole(user)).forEach(
-                    vBoxSupplier -> profileContents.getChildren().add(vBoxSupplier.get()));
-        
         profileTab.setAlignment(javafx.geometry.Pos.TOP_CENTER);
+        profileContents.getChildren().addAll(usernameBox, roleBox);
+        accessManager.getAccessiblePublicProfile(accessManager.getUserRole(user)).forEach(
+                            vBoxSupplier -> profileContents.getChildren().add(vBoxSupplier.get()));
+                            
+        boolean isBothStudents = User.getCurrentUser().getRole().toLowerCase().equals("student") && user.getRole().toLowerCase().equals("student");
+        boolean isParentStudent = User.getCurrentUser().getRole().toLowerCase().equals("parent") && user.getRole().toLowerCase().equals("student") ;
 
-        if(User.getCurrentUser().getRole().equals("student") && user.getRole().equals("student") && friend.checkExistingFriend(conn, user.getUsername(), User.getCurrentUser().getUsername())){
+        if(isBothStudents){
+            VBox commonFriendsBox = Lantern.createInfoVBox("NUMBER OF FRIENDS IN COMMON: ", FriendList.findCommonFriends(User.getCurrentUser().getUsername(), user.getUsername()).size(), padding);
+            profileContents.getChildren().add(commonFriendsBox);
+        }
+        if(isBothStudents && !friend.checkExistingFriend(conn, user.getUsername(), User.getCurrentUser().getUsername())){
             Button addFriendButton = new Button("Send Friend Request");
             addFriendButton.getStyleClass().add("add_friend_button");
             addFriendButton.setOnAction(e -> {
@@ -112,9 +180,51 @@ public class Profile {
             });
             profileContents.getChildren().add(addFriendButton);
         }
-
-        profileContents.getChildren().addAll(usernameBox, roleBox);
+        if(isParentStudent && !ParentChildren.checkExistingChildren(conn, user.getUsername(), User.getCurrentUser().getUsername())){
+            Button parentButton = new Button("Request to be Parent");
+            parentButton.getStyleClass().add("add_friend_button");
+            parentButton.setOnAction(e -> {
+                ParentChildren.request(conn, user.getUsername(), User.getCurrentUser().getUsername());
+            });
+            profileContents.getChildren().add(parentButton);
+        }
+        
         profileTab.getChildren().addAll(profileContents);
         return profileTab;
+    }
+    private static VBox createPendingRequestsVBox(){
+        VBox pendingRequestsVBox = new VBox();      
+        ArrayList<String> pendingRequests = ParentChildren.showRequestParent(conn, User.getCurrentUser().getUsername());
+        Label pendingRequestsLabel = new Label("Pending Requests");
+        pendingRequestsLabel.getStyleClass().add("title");
+        pendingRequestsLabel.setPadding(new Insets(12, 0, 12, 12));
+        pendingRequestsVBox.getChildren().add(pendingRequestsLabel);
+        for (String pendingRequest : pendingRequests) {
+            HBox pendingRequestHBox = new HBox();
+            Label pendingRequestLabel = new Label(pendingRequest);
+            pendingRequestLabel.getStyleClass().add("text_content_black");
+            Button acceptButton = new Button();
+            acceptButton.setPrefSize(30, 30);
+            acceptButton.getStyleClass().add("accept_button");
+            acceptButton.setOnAction(e -> {
+                ParentChildren.acceptRequest(conn, User.getCurrentUser().getUsername(), pendingRequest);
+                pendingRequestsVBox.getChildren().remove(pendingRequestHBox);
+            });
+            Button declineButton = new Button();
+            declineButton.setPrefSize(30, 30);
+            declineButton.getStyleClass().add("decline_button");
+            declineButton.setOnAction(e -> {
+                ParentChildren.declineRequest(conn, User.getCurrentUser().getUsername(), pendingRequest);
+                pendingRequestsVBox.getChildren().remove(pendingRequestHBox);
+            });
+            pendingRequestHBox.getChildren().addAll(pendingRequestLabel, Lantern.createSpacer(), acceptButton, declineButton);
+            pendingRequestsVBox.getChildren().add(pendingRequestHBox);
+        }
+        if(pendingRequests.isEmpty()){
+            Label noFriendRequestsLabel = new Label("No pending requests");
+            noFriendRequestsLabel.getStyleClass().add("friend_request_label");
+            pendingRequestsVBox.getChildren().add(noFriendRequestsLabel);
+        }
+        return pendingRequestsVBox;
     }
 }

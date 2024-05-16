@@ -11,6 +11,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -112,6 +113,11 @@ public class Lantern extends Application {
         } else {
             return false;
         }
+    }
+    public static Region createSpacer(){
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+        return spacer;
     }
     public static VBox createHorizontalSeparator(int spacing){
         Separator separator = new Separator();
@@ -238,6 +244,34 @@ public class Lantern extends Application {
         infoBox.setPadding(spacing);
         infoBox.getChildren().addAll(label, value);
         infoBox.getStylesheets().add("resources/style.css");
+        return infoBox;
+    }
+    public static HBox createInfoHBox(String labelText, ArrayList<String> relationships, Insets spacing) {
+        Text label = new Text(labelText);
+        StringBuilder valueText = new StringBuilder();
+        if (relationships != null) {
+            for (String relation : relationships) {
+                if (relation != null) {
+                    valueText.append(relation).append(", ");
+                }
+            }
+        }
+        if (valueText.length() > 0) {
+            valueText.delete(valueText.length() - 2, valueText.length());
+        }
+        Text value = new Text("None");
+        if(valueText.length() > 0){
+            value = new Text(valueText.toString());
+            value.getStyleClass().add("text_content");
+        } else {
+            value.getStyleClass().add("text_greyed_out");
+        }
+        label.getStyleClass().add("text_label");
+        
+        HBox infoBox = new HBox(0);
+        infoBox.setPadding(spacing);
+        infoBox.getStylesheets().add("resources/style.css");
+        infoBox.getChildren().addAll(label, value);
         return infoBox;
     }
 }
