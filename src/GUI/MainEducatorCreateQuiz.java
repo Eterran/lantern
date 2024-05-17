@@ -52,7 +52,7 @@ public class MainEducatorCreateQuiz{
 
         });
         button1.setOnAction(e ->{
-            VBox listOutQBox = listOutQuizcreated();
+            VBox listOutQBox = listOutQuizCreated.educatorEditList();
             Stage stage = new Stage();
             stage.setScene(new Scene(listOutQBox, 500, 300));
             stage.setTitle("Edit quiz");
@@ -75,70 +75,70 @@ public class MainEducatorCreateQuiz{
         
     }
 
-    public static VBox listOutQuizcreated(){
-        BorderPane borderPane = new BorderPane();
-        Label titleLabel = new Label("Edit Quiz");
-        borderPane.setTop(titleLabel);
-        titleLabel.setAlignment(Pos.CENTER);
-        BorderPane.setAlignment(titleLabel, Pos.CENTER);
-        titleLabel.setFont(new Font(23));
-        titleLabel.setStyle("-fx-font-weight: bold;");
+    // public static VBox listOutQuizcreated(){
+    //     BorderPane borderPane = new BorderPane();
+    //     Label titleLabel = new Label("Edit Quiz");
+    //     borderPane.setTop(titleLabel);
+    //     titleLabel.setAlignment(Pos.CENTER);
+    //     BorderPane.setAlignment(titleLabel, Pos.CENTER);
+    //     titleLabel.setFont(new Font(23));
+    //     titleLabel.setStyle("-fx-font-weight: bold;");
      
-        //creating ScrollPane 
-        ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setFitToWidth(true);
-        scrollPane.setPrefSize(391.0, 247.0);
+    //     //creating ScrollPane 
+    //     ScrollPane scrollPane = new ScrollPane();
+    //     scrollPane.setFitToWidth(true);
+    //     scrollPane.setPrefSize(391.0, 247.0);
 
-        //vbox contain lots of hbox
-        VBox vBox = new VBox();
-        VBox.setVgrow(vBox, Priority.ALWAYS); 
-        User user = new User();
-        Quiz.getQuizUser(Lantern.getConn(),user.getUsername()); //arraylist
+    //     //vbox contain lots of hbox
+    //     VBox vBox = new VBox();
+    //     VBox.setVgrow(vBox, Priority.ALWAYS); 
+    //     User user = new User();
+    //     Quiz.getQuizUser(Lantern.getConn(),user.getUsername()); //arraylist
 
-        for (int i = 0; i < 20; i++) {
-            VBox dataBox = new VBox();
-            dataBox.setPadding(new Insets(5));
-            Button showAllQuiz = new Button("1" + "     "+ "quiztitle");
+    //     for (int i = 0; i < 20; i++) {
+    //         VBox dataBox = new VBox();
+    //         dataBox.setPadding(new Insets(5));
+    //         Button showAllQuiz = new Button("1" + "     "+ "quiztitle");
 
-            if (i % 2 == 0) {
-                dataBox.setStyle("-fx-background-color: #ADEFD1;");
-                showAllQuiz.setStyle("-fx-background-color: #ADEFD1;");
+    //         if (i % 2 == 0) {
+    //             dataBox.setStyle("-fx-background-color: #ADEFD1;");
+    //             showAllQuiz.setStyle("-fx-background-color: #ADEFD1;");
 
-            } else {
-                dataBox.setStyle("-fx-background-color: #ffffff;");
-                showAllQuiz.setStyle("-fx-background-color: #ffffff;");
-            }
+    //         } else {
+    //             dataBox.setStyle("-fx-background-color: #ffffff;");
+    //             showAllQuiz.setStyle("-fx-background-color: #ffffff;");
+    //         }
             
-            showAllQuiz.setPadding(new Insets(5, 10, 5, 5));
-            showAllQuiz.setMaxWidth(Double.MAX_VALUE);
+    //         showAllQuiz.setPadding(new Insets(5, 10, 5, 5));
+    //         showAllQuiz.setMaxWidth(Double.MAX_VALUE);
             
-            dataBox.getChildren().add(showAllQuiz); 
-            VBox.setVgrow(dataBox, Priority.ALWAYS);
+    //         dataBox.getChildren().add(showAllQuiz); 
+    //         VBox.setVgrow(dataBox, Priority.ALWAYS);
             
-            vBox.getChildren().add(dataBox);
-        }
+    //         vBox.getChildren().add(dataBox);
+    //     }
         
-        scrollPane.setContent(vBox);
-        borderPane.setCenter(scrollPane);
+    //     scrollPane.setContent(vBox);
+    //     borderPane.setCenter(scrollPane);
         
-        // Pane leftPane = new Pane();
-        // leftPane.setPrefSize(50.0, 250.0);
-        // Pane rightPane = new Pane();
-        // rightPane.setPrefSize(50.0, 250.0);
-        Pane bottomPane = new Pane();
-        bottomPane.setPrefSize(400, 20);
-        // borderPane.setLeft(leftPane);
-        // borderPane.setRight(rightPane);
-        borderPane.setBottom(bottomPane);
+    //     // Pane leftPane = new Pane();
+    //     // leftPane.setPrefSize(50.0, 250.0);
+    //     // Pane rightPane = new Pane();
+    //     // rightPane.setPrefSize(50.0, 250.0);
+    //     Pane bottomPane = new Pane();
+    //     bottomPane.setPrefSize(400, 20);
+    //     // borderPane.setLeft(leftPane);
+    //     // borderPane.setRight(rightPane);
+    //     borderPane.setBottom(bottomPane);
 
-        VBox mainvbox = new VBox();
-        // mainvbox.setStyle("-fx-background-color:white;");
-        mainvbox.getChildren().add(borderPane);
-        VBox.setVgrow(borderPane, Priority.ALWAYS); //ensure borderPane grow together with Vbox
-        mainvbox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        return mainvbox;
+    //     VBox mainvbox = new VBox();
+    //     // mainvbox.setStyle("-fx-background-color:white;");
+    //     mainvbox.getChildren().add(borderPane);
+    //     VBox.setVgrow(borderPane, Priority.ALWAYS); //ensure borderPane grow together with Vbox
+    //     mainvbox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+    //     return mainvbox;
 
-    }
+    //}
 
 }
 
