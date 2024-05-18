@@ -13,7 +13,15 @@ import java.sql.*;
 
 
 public class Booking {
-    
+  //checkExistingBooking (false mean booking is not made yet) 
+  // if true (already exist for certain day...remove it in the availale time slot ) 
+  // else  false --> checkDate (whether got clash with another booking ) --> false, --> bookingTour (make booking)
+
+
+  // viewBooking (view all the list made by user )
+
+
+    //make booking
     public static void bookingTour(Connection connection,BookingData booking,String username){
          Login_Register lg=new Login_Register();
         int id =lg.getID(username, connection);
@@ -106,7 +114,7 @@ public class Booking {
     return check;
     }
     
-    //datesList contain all the bookingdate made by user
+    //view all the booking data (in BookingDate table based on the username)
     public static ArrayList<BookingData> viewBooking(Connection connection,String username){
      ArrayList<BookingData>bookingList=new ArrayList<>();
         Login_Register lg=new Login_Register();

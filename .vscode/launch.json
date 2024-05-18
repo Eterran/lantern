@@ -6,6 +6,15 @@
     "configurations": [
         {
             "type": "java",
+            "name": "listOutQuizCreated",
+            "request": "launch",
+            "mainClass": "GUI.listOutQuizCreated",
+            "projectName": "lantern_14a445b6",
+            "vmArgs": "--module-path \"C:\\Users\\User\\Downloads\\openjfx-22.0.1_windows-x64_bin-sdk\\javafx-sdk-22.0.1\\lib\" --add-modules javafx.controls,javafx.fxml"
+
+        },
+        {
+            "type": "java",
             "name": "EducatorCreateEvent",
             "request": "launch",
             "mainClass": "GUI2.EducatorCreateEvent",
