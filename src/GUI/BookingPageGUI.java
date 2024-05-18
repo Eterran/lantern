@@ -58,10 +58,11 @@ public class BookingPageGUI {
       
         //display all the destination list (based on user location ---> recommendation system)
         //BookingSystem....destinationName, disntance from the user
-        User user = new User();
+      //  User user = new User();
         BookingSystem bookSys = new BookingSystem();
-        ArrayList <Destination> recommendSystem = bookSys.suggestDestinations(user.getCoordinate()) ; //return Arraylist with destination and distance
-        ArrayList <Double> distances = bookSys.distanceAway(user.getCoordinate()); 
+        ArrayList <Destination> recommendSystem = bookSys.suggestDestinations(User.getCurrentUser().getCoordinate()) ; //return Arraylist with destination and distance
+        System.out.print(User.getCurrentUser().getCoordinate());
+        ArrayList <Double> distances = bookSys.distanceAway(User.getCurrentUser().getCoordinate()); 
         ArrayList <Integer> destinationId = new ArrayList <Integer>();
 
         // Loop to create the boxes
@@ -82,12 +83,13 @@ public class BookingPageGUI {
             destinations.setPadding(new Insets(5,10,5,5));
             destinationId.add(bookSys.findDestinationID(destinationName));  
             Label distance = new Label(distances.get(i).toString() + " km");
+            distance.setPadding(new Insets(5,10, 5, 5));
             Button bookingBtn = new Button("Book");
             //go recommendSystem get the string find the string in the destinationName to get the id
 
             bookingBtn.setOnAction(event ->{  
                 Stage stage = new Stage();
-                stage.setScene(new Scene(AvailableTimeSlot(destinationId, recommendSystem,bookSys, user), 400, 300));
+                stage.setScene(new Scene(AvailableTimeSlot(destinationId, recommendSystem,bookSys), 400, 300));
                 stage.setTitle("Available Time Slot");
                 stage.show();
             });
@@ -123,7 +125,7 @@ public class BookingPageGUI {
 
 
     //select part
-    public static VBox AvailableTimeSlot(ArrayList<Integer> destinationId, ArrayList<Destination> recommendSystem, BookingSystem bookSys, User user){
+    public static VBox AvailableTimeSlot(ArrayList<Integer> destinationId, ArrayList<Destination> recommendSystem, BookingSystem bookSys){
         
         BorderPane borderPane = new BorderPane();
         Label titleLabel = new Label("Available Time Slot");
@@ -145,12 +147,27 @@ public class BookingPageGUI {
         HBox headerBox = new HBox();
         HBox.setHgrow(headerBox, javafx.scene.layout.Priority.ALWAYS); 
 
+        //method to be used
+        //getTimeSlot  && checkDate
+        Date currentDate = new Date();
+
+        // get the date from the event table by referring to eventRegistered
+        //go the eventRegistered, select event_id based on main_id
+        //based on event_id in eventRegistered, go to get the eventTitle (not in db based on the code)
+        //based on the eventTitle, select the Date in event table in database
+
+        //public ArrayList<String> getTimeSlots(destinationId.get(i), currentDate, User.getCurrentUser()) 
+        //public static boolean checkDate(Lantern.getConn(),User.getCurrentUser().getUsername(),String date)
+
         // Loop to create the boxes  //destination.size???
         for (int i = 0; i < destinationId.size(); i++) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String dateString = dateFormat.format(bookSys.getAvailableDates(user.getCurrentUser(),destinationId.get(i)).get(i)); //convert Date to String
+            String dateString = dateFormat.format(bookSys.getAvailableDates(User.getCurrentUser(),destinationId.get(i)).get(i)); //convert Date to String
 
-            boolean check = Booking.checkDate(Lantern.getConn(),user.getUsername(),dateString);
+
+
+            //get the date 
+            boolean check = Booking.checkDate(Lantern.getConn(),User.getCurrentUser().getUsername(),dateString);  //should be the date tht you registered for the event
             if(check){ //mean occupied by others event
 
             }else{ //if still available then show datebox with date 
@@ -166,7 +183,7 @@ public class BookingPageGUI {
 
                 Button selectBtn = new Button("Select");  //saved
                 selectBtn.setOnAction(event ->{
-                    Booking.bookingTour(Lantern.getConn(), bd, user.getUsername());
+                    Booking.bookingTour(Lantern.getConn(), bd,User.getCurrentUser().getUsername());
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Success");
                     alert.setContentText("Your booking has been confirmed.");

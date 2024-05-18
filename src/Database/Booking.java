@@ -57,7 +57,7 @@ public class Booking {
       }
     
     }*/
-    //false mean booking is not made yet
+    //false mean booking is not make yet
     public static boolean checkExistingBooking(Connection connection,String username,BookingData booking){
         ArrayList<String>datesList=new ArrayList<>();
         ArrayList<String>destination=new ArrayList<>();
@@ -87,12 +87,14 @@ public class Booking {
     
     }
     
-    //check the date is occupied by other event or not ,true mean occupied
+    //check the date is occupied by other event or not ,true mean occupied based on (7 days)
+    //date from event database
+    //fetch the date from event db
     public static boolean checkDate(Connection connection,String username,String date){
         ArrayList<String>datesList=new ArrayList<>();
         Login_Register lg=new Login_Register();
         int id =lg.getID(username, connection);
-    String query = "SELECT bookingDate FROM BookingDate WHERE main_id=?";
+    String query = "SELECT bookingDate FROM BookingDate WHERE main_id=?"; 
     try{
       PreparedStatement preparedStatement = connection.prepareStatement(query);
       preparedStatement.setInt(1, id);
@@ -107,10 +109,10 @@ public class Booking {
       }
     
     boolean check=false;
-    for(String hold: datesList)
+    for(String hold: datesList){
         if(date.equals(hold))
             check=true;
-    
+    }
     return check;
     }
     

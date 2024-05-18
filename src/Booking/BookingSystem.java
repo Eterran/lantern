@@ -26,7 +26,7 @@ public class BookingSystem {
     private ArrayList<Destination> readDestinationsFromFile() {
         ArrayList<Destination> destinations = new ArrayList<>();
         // try (Scanner s = new Scanner(new FileInputStream("lantern-1/Booking.txt"))) {
-        try (Scanner s = new Scanner(new FileInputStream("Booking.txt"))) {
+        try (Scanner s = new Scanner(new FileInputStream("C:\\Users\\User\\Documents\\GitHub\\lantern\\Booking.txt"))) {
 
             while (s.hasNextLine()) {
                 String line = s.nextLine();
@@ -47,6 +47,7 @@ public class BookingSystem {
 
     // return the destination arraylist based on the distance
     public ArrayList<Destination> suggestDestinations(String coordinate) {
+       
         ArrayList<Double> distances = new ArrayList<>();
         String data[] = coordinate.split(",");
         double userX = Double.parseDouble(data[0]);
@@ -105,12 +106,12 @@ public class BookingSystem {
         return distances;
     }
 
-    //
+    //available time slot (including c)
     public ArrayList<String> getTimeSlots(int destinationId, Date currentDate, User user) {
         ArrayList<String> timeSlots = new ArrayList<>();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-        ArrayList<Date> availableDates = getAvailableDates(user, destinationId);
+        ArrayList<Date> availableDates = getAvailableDates(user, destinationId); //7 days
         if (availableDates.isEmpty()) {
             return null;
         }
@@ -118,7 +119,7 @@ public class BookingSystem {
             if (availableDate.compareTo(currentDate) < 0) {
                 continue; // Skip dates that are in the past
             }
-            ArrayList<Date> bookedDates = getBookedDatesForDestination(destinationId);
+            ArrayList<Date> bookedDates = getBookedDatesForDestination(destinationId); //check for existing booking (prevent duplication)
             if (isDateBooked(availableDate, bookedDates)) {
                 continue; // Skip dates that are already booked
             }
@@ -163,7 +164,7 @@ public class BookingSystem {
         return -1;
     }
 
-    // show all the available timeslot, wi
+    // get the 7 days from the current dates 
     public ArrayList<Date> getAvailableDates(User user, int destinationId) {
         ArrayList<Date> availableDates = new ArrayList<>();
         String destinationName = destinationName(destinationId);
@@ -210,10 +211,10 @@ public class BookingSystem {
         return availableDates;
     }
 
-    // show you have booked the event by this date
+    // applied
     private ArrayList<Date> getBookedDatesForDestination(int destinationId) {
         ArrayList<Date> bookedDates = new ArrayList<>();
-        try (Connection connection = Database.connectionDatabase()) {
+        try (Connection connection = Lantern.getConn()) {
             String query = "SELECT date FROM bookings WHERE destination_id = ?"; // Query to retrieve booked dates
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, destinationId);
