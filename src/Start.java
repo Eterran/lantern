@@ -1,4 +1,3 @@
-import Database.User;
 import GUI.Lantern;
 
 public class Start extends Lantern{
