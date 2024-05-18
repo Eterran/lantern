@@ -76,6 +76,33 @@ public class RegisterEvent {
     
     return events;
     }
+
+
+
+     //check that day got other event at same time or booking from parent
+    public static boolean checkClashDate(Connection connection,String username,EventData event){
+        boolean check=false;
+        Booking booking=new Booking();
+    ArrayList<EventData>list=getAllEventRegistered(connection,username);
+    for(EventData hold:list){
+    if(hold.date.equalsIgnoreCase(event.date))
+        check=true;
+    }
+    check=booking.checkDate(connection, username, event.date);
+    return check;
+    }
+    
+    //pass the event that want to check
+    public static boolean checkEventRegistered(Connection connection,String username,EventData event){
+    ArrayList<EventData>list=getAllEventRegistered(connection,username);
+    
+    boolean check=false;
+    for(EventData hold:list){
+    if(hold.eventTitle.equals(event.eventTitle)&&hold.description.equals(event.description)&&hold.date.equals(event.date)&&hold.venue.equals(event.venue))
+        check=true;
+    }
+  return check;
+    }
    /* //in case several different date but same event
     public ArrayList<String>getEventDate(Connection connection,String event,String username){
          ArrayList<String>data=new ArrayList<>();
