@@ -261,6 +261,7 @@ public class Quiz {
     }
     */
     //use to insert the new quiz in quiz attempt table//call it everytime create a quiz 
+    //adding one column at the quizAttempt
     public static void updateLatestQuiz(Connection connection, QuizData quiz) {
     try {
         // Properly format the SQL statement with a space before INTEGER
@@ -300,6 +301,7 @@ public class Quiz {
     }*/
     
     //when a student is incresed in database,update it into a QuizAttempt table 
+    //when a student press startAttempt, increase one row for students
     public static void updateLatestQuizRow(Connection connection){
          ArrayList<Integer>IDList=new ArrayList<>();
          ArrayList<Integer>checkList=new ArrayList<>();
@@ -308,7 +310,7 @@ public class Quiz {
         String query3="INSERT INTO QuizAttempt (main_id) VALUES (?)";
          try{
       PreparedStatement preparedStatement = connection.prepareStatement(query);
-      preparedStatement.setString(1,"Student");
+      preparedStatement.setString(1,"student");
       ResultSet result=preparedStatement.executeQuery();
       while(result.next()){
           IDList.add(result.getInt("id"));
@@ -359,7 +361,8 @@ public class Quiz {
       
     }
     
-    //pass the quiz parameter in q1,q2,q3.....format
+    //pass the quiz parameter in q1,q2,q3 (quiztitle).....format,after click finish button
+    //update the 1 into QuizAttempt table
     public static void attemptQuiz(Connection connection,QuizData quiz,String username){
           Login_Register lg=new Login_Register();
           int id =lg.getID(username, connection);
@@ -376,20 +379,20 @@ public class Quiz {
       e.printStackTrace();
       }
  }
-    
-    public static boolean checkAttempted(Connection connection,QuizData quiz,String username){
+    //start attempt button
+    public static boolean checkAttempted(Connection connection,String quiztitle,String username){
     
         Login_Register lg=new Login_Register();
         int id =lg.getID(username, connection);
         int check=0;
-        String columnName = "\"" + quiz.quizTitle+ "\"";  
+        String columnName = "\"" + quiztitle+ "\"";  
         String query="SELECT "+columnName+" FROM QuizAttempt WHERE main_id=?";
          try{
           PreparedStatement preparedStatement = connection.prepareStatement(query);
           preparedStatement.setInt(1,id);
           ResultSet result=preparedStatement.executeQuery();
           if(result.next()){
-          check=result.getInt(quiz.quizTitle);
+          check=result.getInt(quiztitle);
           }
       }
       

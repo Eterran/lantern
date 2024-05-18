@@ -294,7 +294,7 @@ public class Event {
      return date;
     }
     
-    //the same event in same data is not allowed to creates
+    //the same event in same data is not allowed to create
     public static boolean checkSameEvent(Connection connection,EventData event){
     //boolean check=false;
         //ArrayList<String>allEvent=getAllEvent(connection);

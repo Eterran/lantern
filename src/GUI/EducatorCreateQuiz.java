@@ -77,6 +77,7 @@ public class EducatorCreateQuiz {
                     alert.setTitle("Success");
                     alert.setContentText("Quiz saved successfully!");
                     alert.showAndWait();
+                    
                     quizTitleTF.clear();
                     quizDescriptionTA.clear();
                     themeComboBox.getSelectionModel().clearSelection();

@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import Database.Event;
 import Database.EventData;
 import Database.QuizData;
+import Database.RegisterEvent;
+import Database.User;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -38,19 +41,19 @@ public class EventPage {
        
         ArrayList<EventData> liveEventList = Event.getLiveEvents(Lantern.getConn());
         for (int i = 0; i <liveEventList.size(); i++) {
-            EventData ed = liveEventList.get(i);
-            String labelText1 = ed.getEventTitle();
-            String labelText2 = ed.getDescription();
-            String labelText3 = ed.getVenue();
-            String labelText4 =  ed.getDate();
-            String labelText5 = ed.getTime();
-            BorderPane borderPane = BPForAllEvents(labelText1, labelText2, labelText3, labelText4, labelText5);
+            // EventData ed = liveEventList.get(i);
+            // String labelText1 = ed.getEventTitle();
+            // String labelText2 = ed.getDescription();
+            // String labelText3 = ed.getVenue();
+            // String labelText4 =  ed.getDate();
+            // String labelText5 = ed.getTime();
+            BorderPane borderPane = BPForAllEvents(liveEventList.get(i));
             content1.getChildren().addAll(borderPane);
         }
 
         ScrollPane scrollPane1 = new ScrollPane(content1);
-        scrollPane1.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS); // Always show horizontal scrollbar
-        scrollPane1.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);//disable vertical scrollbar
+        scrollPane1.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS); 
+        scrollPane1.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         BorderPane bp = new BorderPane();
         VBox vbox2 = new VBox();
@@ -93,13 +96,14 @@ public class EventPage {
       
         ArrayList<EventData> closestUpcoming = Event.getLatestEvent(Lantern.getConn());
         for (int i = 0; i <closestUpcoming.size(); i++) {
-            EventData ed = closestUpcoming.get(i);
-            String labelText1 = ed.getEventTitle();
-            String labelText2 = ed.getDescription();
-            String labelText3 = ed.getVenue();
-            String labelText4 =  ed.getDate();
-            String labelText5 = ed.getTime();
-            BorderPane borderPane2 = BPForAllEvents(labelText1, labelText2, labelText3, labelText4, labelText5);
+            // EventData ed = closestUpcoming.get(i);
+            // String labelText1 = ed.getEventTitle();
+            // String labelText2 = ed.getDescription();
+            // String labelText3 = ed.getVenue();
+            // String labelText4 =  ed.getDate();
+            // String labelText5 = ed.getTime();
+            BorderPane borderPane2 = BPForAllEvents(closestUpcoming.get(i));
+
             content2.getChildren().addAll(borderPane2);
         }
 
@@ -139,52 +143,68 @@ public class EventPage {
     }
 
     
-    public static BorderPane BPForAllEvents(String labelText1, String labelText2, String labelText3, String labelText4, String labelText5) {
+    public static BorderPane BPForAllEvents(EventData thisevent) {
         BorderPane borderPane = new BorderPane();
         borderPane.setPrefWidth(300);
         borderPane.setPrefHeight(180);
         borderPane.setStyle("-fx-background-color: #226c94;");
         borderPane.setPadding(new Insets(15));
   
-        Label label1 = new Label(labelText1);
+        Label label1 = new Label(thisevent.getEventTitle());
         label1.setTextFill(Color.WHITE); 
         label1.setFont(Font.font("Arial", FontWeight.BOLD, 25));
-        Label label2 = new Label(labelText2);
+        Label label2 = new Label(thisevent.getDescription());
         label2.setTextFill(Color.WHITE); 
-        Label label3 = new Label(labelText3);
+        Label label3 = new Label(thisevent.getVenue());
         label3.setTextFill(Color.WHITE); 
-        Label label4 = new Label(labelText4);
+        Label label4 = new Label(thisevent.getDate());
         label4.setTextFill(Color.WHITE); 
-        Label label5 = new Label(labelText5);
+        Label label5 = new Label(thisevent.getTime());
         label5.setTextFill(Color.WHITE); 
 
         label1.setFont(Font.font("Arial", FontWeight.BOLD, 15));
-        Button button = new Button("Register");
-        button.setAlignment(Pos.BOTTOM_RIGHT);
+        ToggleButton toggleButton= new ToggleButton("Register");
+        toggleButton.setAlignment(Pos.BOTTOM_RIGHT);
 
-        button.setOnAction(event->{
-           ;
-        });
+        //check, if the event registered already OR clash with booking date
+        //check, if yes, clash
+        //return true, toggleButton.setDisable(true)
+
+        //else register successfully, save into database, toggle the button to become disable
+        //everytime display button check for these three rules
+
+        // if(true or clash with other bookingdate){
+        //     toggleButton.setDisable(true);
+        // }else{
+           
+        //     toggleButton.setOnAction(event->{
+        //         RegisterEvent.registerEvent(Lantern.getConn(), thisevent,User.getCurrentUser().getUsername()) ;
+        //         toggleButton.setDisable(true);
+
+        //        // display register successfully
+    
+        //     });
+
+        // }
+       
         
         BorderPane.setAlignment(label1, Pos.TOP_LEFT);
         BorderPane.setAlignment(label2, Pos.TOP_LEFT);
         BorderPane.setAlignment(label3, Pos.CENTER_LEFT);
         BorderPane.setAlignment(label4, Pos.CENTER_LEFT);
         BorderPane.setAlignment(label5, Pos.BOTTOM_CENTER);
-        BorderPane.setAlignment(button, Pos.BOTTOM_RIGHT);
+        BorderPane.setAlignment(toggleButton, Pos.BOTTOM_RIGHT);
 
         Region spacer= new Region();
         VBox topBox = new VBox(label1);
         topBox.setPrefHeight(40);
         VBox middleBox = new VBox(label2,label3, label4); 
-        HBox bottomBox = new HBox(label5, spacer, button);
+        HBox bottomBox = new HBox(label5, spacer, toggleButton);
         HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
-     //   bottomBox.setAlignment(Pos.CENTER_RIGHT);
         
         // Set nodes to the BorderPane
         borderPane.setTop(topBox);
         borderPane.setCenter(middleBox);
-      //  borderPane.setLeft();
         borderPane.setBottom(bottomBox);
 
         return borderPane;

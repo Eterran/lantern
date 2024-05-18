@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -16,6 +17,8 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import Database.User;
 import Student.GlobalLeaderBoard;
+
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import Database.Login_Register;
@@ -36,7 +39,6 @@ public class QuizPage {
         Label titleLabel = new Label("Quiz"); 
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 25));
 
-        User user = User.getCurrentUser(); 
         Label pointsLabel = new Label("Points:"+ label);
         pointsLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 
@@ -69,7 +71,7 @@ public class QuizPage {
             String quizContent = qd.getContent();
             String quiztheme = qd.getTheme();
 
-            BorderPane borderPane = BPForEveryQuiz(quizTitle, quiztheme, quizDescription, quizContent,user);
+            BorderPane borderPane = BPForEveryQuiz(quizTitle, quiztheme, quizDescription, quizContent);
             gridPane.add(borderPane, i % 5, i / 5);
         }
 
@@ -81,7 +83,7 @@ public class QuizPage {
     }
 
 
-    public static BorderPane BPForEveryQuiz(String qtitle, String qtheme, String qdescrip, String qContent, User user) {
+    public static BorderPane BPForEveryQuiz(String qtitle, String qtheme, String qdescrip, String qContent) {
         BorderPane borderPane = new BorderPane();
         borderPane.setPrefWidth(180);
         borderPane.setPrefHeight(120);
@@ -97,42 +99,46 @@ public class QuizPage {
         Label label3 = new Label(qdescrip);
         label3.setTextFill(Color.WHITE); 
         label3.setFont(Font.font("Arial", 10));
-        Button button = new Button("Start Attempt");
-        button.setAlignment(Pos.BOTTOM_RIGHT);
-        String username = user.getUsername();
-        // Quiz update = new Quiz();
-
-        button.setOnAction(event->{
-            //attempt the quiz
-            //update.updateLatestQuizColumn(Lantern.getConn());
-            // update.updateLatestQuizRow(Lantern.getConn());  
-            // Quiz.initializeRow(Lantern.getConn(), username);
-            QuizData qd= new QuizData(qtitle, qdescrip, qtheme, qContent);
-         //   String quiz = "q"+ Quiz.getColumnNumber(Lantern.getConn())  ;
-            Quiz.attemptQuiz(Lantern.getConn(), qd, username);
-
-            Stage stage = new Stage();
-            stage.setScene(new Scene(showQuiz(qContent, stage, user), 400, 200));
-            stage.setTitle("Quiz Description");
-            stage.show();
-     
-        });
+        ToggleButton toggleBtn = new ToggleButton("Start Attempt");
+        toggleBtn.setAlignment(Pos.BOTTOM_RIGHT);
+   
+        if(Quiz.checkAttempted(Lantern.getConn(),qtitle,User.getCurrentUser().getUsername())){
+            toggleBtn.setDisable(true);
+        }else{
+            toggleBtn.setOnAction(event->{
+                //attempt the quiz
+                if(toggleBtn.isSelected()){
+                    toggleBtn.setDisable(true);
+                  //  Quiz.updateLatestQuizRow(Lantern.getConn());  
+                  //  Quiz.initializeRow(Lantern.getConn(), User.getCurrentUser().getUsername());
+                    QuizData qd= new QuizData(qtitle, qdescrip, qtheme, qContent);
+                    Quiz.attemptQuiz(Lantern.getConn(), qd, User.getCurrentUser().getUsername());
         
+                    Stage stage = new Stage();
+                    stage.setScene(new Scene(showQuiz(qContent, stage, qd), 400, 200));
+                    stage.setTitle("Quiz Description");
+                    stage.show();
+
+                }
+            });
+            
+        }
+ 
         BorderPane.setAlignment(label1, Pos.TOP_LEFT);
         VBox storelabel23 = new VBox();
         storelabel23.getChildren().addAll(label2, label3);
         BorderPane.setAlignment(storelabel23, Pos.CENTER);
-        BorderPane.setAlignment(button, Pos.BOTTOM_RIGHT);
+        BorderPane.setAlignment(toggleBtn, Pos.BOTTOM_RIGHT);
 
         borderPane.setTop(label1);
         borderPane.setLeft(storelabel23);
-        borderPane.setBottom(button);
+        borderPane.setBottom(toggleBtn);
 
         return borderPane;
     }
 
     //show quiz description and finish attempt button
-    public static BorderPane showQuiz(String quizContent,Stage stage, User user){
+    public static BorderPane showQuiz(String quizContent,Stage stage, QuizData qd){
         BorderPane borderPane= new BorderPane();
         
         Label quizC = new Label (quizContent);
@@ -150,10 +156,11 @@ public class QuizPage {
         Database db = new Database();
        
         finishAttemptBtn.setOnAction(e ->{
-            double updatedpoint = user.getPoints() + 2; 
+            Quiz.attemptQuiz(Lantern.getConn(), qd, User.getCurrentUser().getUsername());
+            double updatedpoint = User.getCurrentUser().getPoints() + 2; 
             glb.insertXpState(Lantern.getConn(),lr.getId());  
             glb.updateXpState(Lantern.getConn(), lr.getId());
-            user.setPoints(updatedpoint);
+            User.getCurrentUser().setPoints(updatedpoint);
             try {
                 db.updatePoint(Lantern.getConn(), lr.getId(), updatedpoint);
             } catch (SQLException ex) {

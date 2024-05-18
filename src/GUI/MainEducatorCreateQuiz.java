@@ -28,22 +28,20 @@ public class MainEducatorCreateQuiz{
 
     public static VBox QuizButton() {
         HBox hbox = new HBox(20);
-        Button button = new Button("Add");
-        Button button1 = new Button("Edit");
-        Button button2 = new Button("Delete");
-        Button button3 = new Button("Refresh");
-        button.setPrefSize(100, 50);
-        button1.setPrefSize(100, 50);
-        button2.setPrefSize(100, 50);
-        button3.setPrefSize(50,50);
+        Button Addbutton = new Button("Add");
+        Button Editbutton = new Button("Edit");
+        Button Deletebutton = new Button("Delete");
+        Addbutton.setPrefSize(100, 50);
+        Editbutton.setPrefSize(100, 50);
+        Deletebutton.setPrefSize(100, 50);
 
-        hbox.getChildren().addAll(button, button1, button2, button3);
+        hbox.getChildren().addAll(Addbutton, Editbutton, Deletebutton);
 
         VBox mainVBox = new VBox();
         mainVBox.getChildren().add(hbox);
         VBox.setVgrow(hbox, javafx.scene.layout.Priority.ALWAYS);
 
-        button.setOnAction(e -> {
+        Addbutton.setOnAction(e -> {
             VBox content = EducatorCreateQuiz.tabCreateQuiz();
             Stage stage = new Stage();
             stage.setScene(new Scene(content, 500, 300));
@@ -51,7 +49,7 @@ public class MainEducatorCreateQuiz{
             stage.show();
 
         });
-        button1.setOnAction(e ->{
+        Editbutton.setOnAction(e ->{
             VBox listOutQBox = listOutQuizCreated.educatorEditList();
             Stage stage = new Stage();
             stage.setScene(new Scene(listOutQBox, 500, 300));
@@ -63,14 +61,12 @@ public class MainEducatorCreateQuiz{
             //put in edit function once the user choose to edit
 
         });
-        button2.setOnAction(e->{
+        Deletebutton.setOnAction(e->{
             //delete 
             
         });
     
-        button3.setOnAction(e->{
-
-        });
+        
         return mainVBox;
         
     }

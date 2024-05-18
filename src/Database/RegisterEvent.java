@@ -11,7 +11,7 @@ package Database;
 import java.util.*;
 import java.sql.*;
 public class RegisterEvent {
-    
+    //register event
     public static void registerEvent(Connection connection,EventData event,String username) throws IllegalArgumentException{
         Login_Register lg=new Login_Register();
       int id =lg.getID(username, connection);
@@ -39,7 +39,7 @@ public class RegisterEvent {
       e.printStackTrace();
       }
     }
-    
+    //display all the event registered
     public static ArrayList<EventData>getAllEventRegistered(Connection connection,String username){
         ArrayList<Integer>data=new ArrayList<>();
         String description="",venue="",time="",eventName="",date="";
