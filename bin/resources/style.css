@@ -65,6 +65,8 @@
     src: url('./fonts/Nunito/Nunito-MediumItalic.ttf');
 }
 
+
+/*Background*/
 .background {
     -fx-background-image: url('./assets/lantern_background.jpg');
     -fx-background-size: cover;
@@ -84,6 +86,8 @@
     -fx-background-color: transparent;
 }
 
+
+/*Login*/
 .back_button {
     -fx-background-color: radial-gradient(center 50% 50%, radius 100%, #424242, #FFAB40 );
     -fx-text-fill: white;
@@ -162,6 +166,8 @@
     -fx-text-fill: white;
 }
 
+
+/*Sidebar*/
 .sidebar_button {
     -fx-background-color: transparent ;
     -fx-text-fill: white;
@@ -194,6 +200,8 @@
     -fx-background-color: white;
 }
 
+
+/*Button*/
 .search_button {
     -fx-background-color: white;
 }
@@ -243,6 +251,8 @@
     -fx-effect: dropshadow(gaussian, rgb(255, 25, 25), 3, 0, 0, 0);
 }
 
+
+/*Separator*/
 .separator {
     -fx-alignment: center;
     -fx-background-color: linear-gradient(to right, transparent, white, transparent);
@@ -261,6 +271,8 @@
     -fx-border-color: transparent;
 }
 
+
+/*Text */
 .title {
     -fx-font-family: 'Nunito ExtraBold';
     -fx-font-size: 40;
@@ -286,18 +298,24 @@
     -fx-text-fill: rgb(0, 0, 0);
     -fx-padding: 0 0 0 10;
 }
+.text_black {
+    -fx-font-family: 'Nunito Regular';
+    -fx-font-size: 18;
+    -fx-text-fill: rgb(0, 0, 0);
+}
 .text_greyed_out{
     -fx-font-family: 'Nunito Medium';
     -fx-font-size: 18;
     -fx-text-fill: rgb(154, 154, 154);
     -fx-font-style: italic;
 }
-
 .subtext {
     -fx-font-size: 16;
     -fx-text-fill: rgb(154, 154, 154);
 }
 
+
+/*Text Field*/
 .search_field {
     -fx-background-color: #fff;
     -fx-border-color: transparent;
@@ -339,6 +357,8 @@
     -fx-background-insets: 0 0 0 25px;
 }
 
+
+/*Overlay*/
 .overlay{
     -fx-background-color: rgb(255, 251, 184);
     -fx-border-color: white;
@@ -351,4 +371,13 @@
 }
 .close_button:hover {
     -fx-background-color: rgb(155, 153, 117);
+}
+
+
+/*Discussion*/
+.new_post{
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
 }
