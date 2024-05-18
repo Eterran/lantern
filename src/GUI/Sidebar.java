@@ -35,7 +35,6 @@ import javafx.scene.paint.Stop;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import java.sql.Statement;
 
 public class Sidebar {
     private static VBox[] pages = new VBox[10];
@@ -182,7 +181,7 @@ public class Sidebar {
     }
 
 
-
+    // sidebar navigation functions
     private static void setOneVisible(int index){
         for(int i = 1; i <= pages.length; i++){
             if(pages[i] == null)
