@@ -26,7 +26,7 @@ public class BookingSystem {
     private ArrayList<Destination> readDestinationsFromFile() {
         ArrayList<Destination> destinations = new ArrayList<>();
         // try (Scanner s = new Scanner(new FileInputStream("lantern-1/Booking.txt"))) {
-        try (Scanner s = new Scanner(new FileInputStream("C:\\Users\\User\\Documents\\GitHub\\lantern\\Booking.txt"))) {
+        try (Scanner s = new Scanner(new FileInputStream("../Booking.txt"))) {
 
             while (s.hasNextLine()) {
                 String line = s.nextLine();

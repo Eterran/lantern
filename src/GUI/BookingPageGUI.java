@@ -12,6 +12,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 
@@ -67,6 +68,7 @@ public class BookingPageGUI {
 
         // Loop to create the boxes
         for (int i = 0; i < recommendSystem.size(); i++) {
+            final int ind = i;
             HBox dataBox = new HBox();
             dataBox.setPadding(new Insets(5)); //padding for the databox
            
@@ -89,9 +91,10 @@ public class BookingPageGUI {
 
             bookingBtn.setOnAction(event ->{  
                 Stage stage = new Stage();
-                stage.setScene(new Scene(AvailableTimeSlot(destinationId, recommendSystem,bookSys), 400, 300));
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setScene(new Scene(AvailableTimeSlot(destinationId.get(ind), recommendSystem,bookSys), 400, 300));
                 stage.setTitle("Available Time Slot");
-                stage.show();
+                stage.showAndWait();
             });
             Region spacer = new Region();
             HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
@@ -125,7 +128,7 @@ public class BookingPageGUI {
 
 
     //select part
-    public static VBox AvailableTimeSlot(ArrayList<Integer> destinationId, ArrayList<Destination> recommendSystem, BookingSystem bookSys){
+    public static VBox AvailableTimeSlot(int destinationId, ArrayList<Destination> recommendSystem, BookingSystem bookSys){
         
         BorderPane borderPane = new BorderPane();
         Label titleLabel = new Label("Available Time Slot");
@@ -160,13 +163,11 @@ public class BookingPageGUI {
         //public static boolean checkDate(Lantern.getConn(),User.getCurrentUser().getUsername(),String date)
 
         // Loop to create the boxes  //destination.size???
-        for (int i = 0; i < destinationId.size(); i++) {
+        for (int i = 0; i < bookSys.getAvailableDates(User.getCurrentUser(),destinationId).size(); i++) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String dateString = dateFormat.format(bookSys.getAvailableDates(User.getCurrentUser(),destinationId.get(i)).get(i)); //convert Date to String
+            String dateString = dateFormat.format(bookSys.getAvailableDates(User.getCurrentUser(),destinationId).get(i)); //convert Date to String
 
-
-
-            //get the date 
+            //get the date
             boolean check = Booking.checkDate(Lantern.getConn(),User.getCurrentUser().getUsername(),dateString);  //should be the date tht you registered for the event
             if(check){ //mean occupied by others event
 
@@ -188,25 +189,22 @@ public class BookingPageGUI {
                     alert.setTitle("Success");
                     alert.setContentText("Your booking has been confirmed.");
                     alert.showAndWait();
-                    });
 
+                    Stage stage = (Stage) selectBtn.getScene().getWindow();
+                    stage.close();
+                });
 
-                    Region spacer = new Region();
-                    HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
-        
-                    dataBox.getChildren().addAll(number2, availableTimeLabel , spacer, selectBtn);  //adding every info into hbox for each line
-                    
-                    vBox.getChildren().add(dataBox); 
+                Region spacer = new Region();
+                HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+    
+                dataBox.getChildren().addAll(number2, availableTimeLabel , spacer, selectBtn);  //adding every info into hbox for each line
                 
-
+                vBox.getChildren().add(dataBox); 
                 
             }
-
         }
-
         scrollPane.setContent(vBox);
         borderPane.setCenter(scrollPane);
-
 
         VBox mainvbox = new VBox();
         mainvbox.setStyle("-fx-background-color:white;");

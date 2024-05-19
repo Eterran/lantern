@@ -4,16 +4,12 @@
  */
 package Database;
 
+import GUI.Lantern;
+
 /**
  *
  * @author den51
  */
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
-import GUI.Lantern;
-
 import java.sql.*;
 
 
@@ -60,17 +56,18 @@ while (resultSet.next()) {
 }*/
 public class Database {
     private static Connection conn = null;
-    public static Connection connectionDatabase(){
+
+    public static Connection connectionDatabase() {
         String databasePath = "jdbc:sqlite:..\\database.db";
-        if(conn == null)
-            try {
+        try {
+            if (conn == null || conn.isClosed()) {
                 conn = DriverManager.getConnection(databasePath);
                 Statement stmt = conn.createStatement();
                 stmt.execute("PRAGMA foreign_keys = ON;");
             }
-            catch (SQLException e) {
-                e.printStackTrace();
-            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return conn;
     }
   
