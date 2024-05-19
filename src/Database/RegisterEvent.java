@@ -80,15 +80,17 @@ public class RegisterEvent {
 
 
      //check that day got other event at same time or booking from parent
-    public static boolean checkClashDate(Connection connection,String username,EventData event){
+     //true mean occupied
+     //EventData mean the event you want to register for (get all the title)
+    public static boolean checkClashDate(Connection connection,String username,EventData event){ //event going to register
         boolean check=false;
         Booking booking=new Booking();
-    ArrayList<EventData>list=getAllEventRegistered(connection,username);
+    ArrayList<EventData>list=getAllEventRegistered(connection,username);  //event already registred
     for(EventData hold:list){
     if(hold.date.equalsIgnoreCase(event.date))
         check=true;
     }
-    check=booking.checkDate(connection, username, event.date);
+    check=booking.checkDate(connection, username, event.date); //check whether clash with booking made by parents
     return check;
     }
     

@@ -1,5 +1,11 @@
 package GUI;
 
+import java.sql.Connection;
+import java.util.ArrayList;
+
+import Database.Quiz;
+import Database.QuizData;
+import Database.User;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -64,21 +70,29 @@ public class listOutQuizCreated{
           contentCol.setCellFactory(TextFieldTableCell.forTableColumn()); 
   
           Button updateButton = new Button("Update");
-          //updateButton.setOnAction(event -> updateDatabase(tableView.getItems()));
         
           topvbox.getChildren().addAll(title, updateButton);
           tableView.getColumns().addAll(titleCol, descriptionCol, themeCol, contentCol);
          tableView.setColumnResizePolicy(TableView. CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
-  
-  
-          //fetch data from database  .....
-          ObservableList<EditQuiz> data = FXCollections.observableArrayList(
-            new EditQuiz("Quiz 1", "Description 1", "Theme 1", "Content 1"),
-            new EditQuiz("Quiz 2", "Description 2", "Theme 2", "Content 2"),
-            new EditQuiz("Quiz 3", "Description 3", "Theme 3", "Content 3")
-    );
+
+
+        ArrayList<QuizData> quizList = Quiz.getQuizUser(Lantern.getConn(), User.getCurrentUser().getUsername());
+        ObservableList<EditQuiz> data = FXCollections.observableArrayList();
+        for (QuizData quiz : quizList) {
+            EditQuiz editQuiz = new EditQuiz(
+                    quiz.getQuizTitle(),
+                    quiz.getDescription(),
+                    quiz.getTheme(),
+                    quiz.getContent()
+            );
+            data.add(editQuiz);
+        };
     
- 
+    //     public static void updateLatestQuiz(Connection connection, QuizData quiz) {
+
+    //    updateButton.setOnAction(event ->{
+    //         Quiz.updateLatestQuiz(Lanter.getConn(), )
+    //    });
           tableView.setItems(data);
           tableView.setEditable(true);
   

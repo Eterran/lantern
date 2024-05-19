@@ -9,6 +9,7 @@ import Database.RegisterEvent;
 import Database.User;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -173,19 +174,21 @@ public class EventPage {
         //else register successfully, save into database, toggle the button to become disable
         //everytime display button check for these three rules
 
-        // if(true or clash with other bookingdate){
-        //     toggleButton.setDisable(true);
-        // }else{
-           
-        //     toggleButton.setOnAction(event->{
-        //         RegisterEvent.registerEvent(Lantern.getConn(), thisevent,User.getCurrentUser().getUsername()) ;
-        //         toggleButton.setDisable(true);
-
-        //        // display register successfully
+        if(RegisterEvent.checkClashDate(Lantern.getConn(), User.getCurrentUser().getUsername(),thisevent) || RegisterEvent.checkEventRegistered (Lantern.getConn(),User.getCurrentUser().getUsername(),thisevent)){
+                toggleButton.setDisable(true);
+        }else{        
+            toggleButton.setOnAction(event->{
+            RegisterEvent.registerEvent(Lantern.getConn(), thisevent,User.getCurrentUser().getUsername()) ;
+            toggleButton.setDisable(true);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText(null);
+            alert.setContentText("Alarm registered successfully!");
+            alert.showAndWait();
     
-        //     });
+             });
 
-        // }
+        }
        
         
         BorderPane.setAlignment(label1, Pos.TOP_LEFT);
