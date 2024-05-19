@@ -50,9 +50,9 @@ public class MainEducatorCreateQuiz{
 
         });
         Editbutton.setOnAction(e ->{
-            VBox listOutQBox = listOutQuizCreated.educatorEditList();
+            VBox listOutQBox = listOutQuizCreated.educatorEditQuizList();
             Stage stage = new Stage();
-            stage.setScene(new Scene(listOutQBox, 500, 300));
+            stage.setScene(new Scene(listOutQBox, 600, 500));
             stage.setTitle("Edit quiz");
             stage.show();
 
@@ -62,7 +62,12 @@ public class MainEducatorCreateQuiz{
 
         });
         Deletebutton.setOnAction(e->{
-            //delete 
+            VBox listOutEBox = listOutEventCreated.educatorEditEventList();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(listOutEBox, 700, 400));
+            stage.setTitle("Edit quiz");
+            stage.show();
+
             
         });
     
