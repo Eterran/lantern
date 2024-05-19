@@ -405,6 +405,38 @@ public class Quiz {
          else 
              return false;
     }
+
+    public static void editQuiz(Connection connection,QuizData originalQuiz,QuizData modifiedQuiz){
+        String oldColumnName = "\"" + originalQuiz.quizTitle+ "\""; 
+        String newColumnName = "\"" + modifiedQuiz.quizTitle+ "\""; 
+        String sql = "ALTER TABLE QuizAttempt RENAME COLUMN "+oldColumnName+" TO "+newColumnName;
+        String sql2 = "UPDATE Quiz SET quizTitle=? ,description=? ,theme=? ,content=? WHERE id= ?";
+        String sql3 = "SELECT id FROM Quiz WHERE quizTitle=? AND description=? AND theme=? AND content=?";
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(sql3);
+            preparedStatement.setString(1,originalQuiz.quizTitle);
+            preparedStatement.setString(2,originalQuiz.description);
+            preparedStatement.setString(3,originalQuiz.theme);
+            preparedStatement.setString(4,originalQuiz.content);
+            ResultSet result=preparedStatement.executeQuery();
+            int id=-1;
+            if(result.next())
+                id=result.getInt("id");
+            preparedStatement = connection.prepareStatement(sql2);
+            preparedStatement.setString(1,modifiedQuiz.quizTitle);
+            preparedStatement.setString(2,modifiedQuiz.description);
+            preparedStatement.setString(3,modifiedQuiz.theme);
+            preparedStatement.setString(4,modifiedQuiz.content);
+            preparedStatement.setInt(5,id);
+            preparedStatement.executeUpdate();
+            
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate(sql);
+        }
+         catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
     
     
     
