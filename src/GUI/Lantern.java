@@ -74,28 +74,12 @@ public class Lantern extends Application {
         primaryStage.show();
     }
     
-    public static void showScene1(Stage stg) {
-        if (!history.isEmpty())
-            if (history.peek() != stg.getScene()) {
-                history.push(stg.getScene());
-            }
-        Button backButton = new Button("Back");
-        Button nextButton = new Button("Next");
-
-        backButton.setOnAction(e -> goBack(stg));
-        //nextButton.setOnAction(e -> showScene2(stg));
-
-        VBox layout1 = new VBox(10);
-        layout1.getChildren().addAll(new javafx.scene.control.Label("Scene 1"));
-
-        BorderPane pane1 = new BorderPane();
-        pane1.setTop(backButton);
-        pane1.setCenter(layout1);
-        pane1.setBottom(nextButton);
-
-        Scene scene1 = new Scene(pane1, 500, 450);
-
-        stg.setScene(scene1);
+    public static String capitalizeFirstLetter(String str) {
+        if (str == null || str.isEmpty()) {
+            return str;
+        } else {
+            return str.substring(0, 1).toUpperCase() + str.substring(1);
+        }
     }
 
     public static boolean goBack(Stage stg) {

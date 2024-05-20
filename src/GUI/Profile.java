@@ -152,7 +152,7 @@ public class Profile {
 
         Insets padding = new Insets(8, 10, 8, 15);
         VBox usernameBox = Lantern.createInfoVBox("USERNAME: ", user.getUsername(), padding);
-        VBox roleBox = Lantern.createInfoVBox("ROLE: ", user.getRole(), padding);
+        VBox roleBox = Lantern.createInfoVBox("ROLE: ", Lantern.capitalizeFirstLetter(user.getRole()), padding);
 
         VBox profileContents = new VBox();
         
