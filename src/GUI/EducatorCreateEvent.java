@@ -52,7 +52,7 @@ public class EducatorCreateEvent  {
         eventTitleTF.setPromptText("Enter title");
         eventDescriptionTA.setPromptText("Enter description");
         eventVenueTF.setPromptText("Enter venue");
-        eventDateTF.setPromptText("xxxx/xx/xx");
+        eventDateTF.setPromptText("yyyy-MM-dd");
         eventTimeComboBox.setPromptText("Select time");
 
         Button saveBtn = new Button("Save");
@@ -103,36 +103,41 @@ public class EducatorCreateEvent  {
             eventVenueTF.getText().isEmpty()|| eventDateTF.getText().isEmpty() || eventTimeComboBox.getSelectionModel().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Please fill in all fields before saving.", ButtonType.OK);
                 alert.showAndWait();
-            } else {
-            String ETitle = eventTitleTF.getText();
-            String Edescription = eventDescriptionTA.getText();
-            String Evenue = eventVenueTF.getText();
-            String Edate = eventDateTF.getText();
-            String Etime = eventTimeComboBox.getValue();
-        
-            EventData events = new EventData(ETitle, Edescription, Evenue, Edate, Etime);
-        
-            boolean savedSuccessfully = Event.createEvent(Lantern.getConn(), events, user.getUsername());
-            if (savedSuccessfully) {
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Success");
-                alert.setContentText("Event saved successfully!");
-                alert.showAndWait();
-                eventTitleTF.clear();
-                eventDescriptionTA.clear();
-                eventVenueTF.clear();
-                eventDateTF.clear();
-                eventTimeComboBox.getSelectionModel().clearSelection();
-                //EducatorCheckEventCreated.vboxput();
-                //how to straight away update in the ui 
-
-            } else {
+            } else if (!EducatorCheckEventCreated.isValidDateFormat(eventDateTF.getText())) {
                 Alert alert = new Alert(AlertType.ERROR);
                 alert.setTitle("Error");
-                alert.setContentText("Failed to save event.");
+                alert.setContentText("Invalid date format. Please enter date in yyyy-MM-dd format.");
                 alert.showAndWait();
+            } else {
+                String ETitle = eventTitleTF.getText();
+                String Edescription = eventDescriptionTA.getText();
+                String Evenue = eventVenueTF.getText();
+                String Edate = eventDateTF.getText();
+                String Etime = eventTimeComboBox.getValue();
+            
+                EventData events = new EventData(ETitle, Edescription, Evenue, Edate, Etime);
+            
+                boolean savedSuccessfully = Event.createEvent(Lantern.getConn(), events, user.getUsername());
+                if (savedSuccessfully) {
+                    Alert alert = new Alert(AlertType.INFORMATION);
+                    alert.setTitle("Success");
+                    alert.setContentText("Event saved successfully!");
+                    alert.showAndWait();
+                    eventTitleTF.clear();
+                    eventDescriptionTA.clear();
+                    eventVenueTF.clear();
+                    eventDateTF.clear();
+                    eventTimeComboBox.getSelectionModel().clearSelection();
+                    //EducatorCheckEventCreated.vboxput();
+                    //how to straight away update in the ui 
+                    EducatorCheckEventCreated.refreshUI();
+                } else {
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setContentText("Failed to save event.");
+                    alert.showAndWait();
+                }
             }
-        }
         });
         
         return mainvBox;
