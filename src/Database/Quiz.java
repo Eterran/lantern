@@ -72,24 +72,24 @@ public class Quiz {
       }
     }
     
-        public static void deleteQuiz(Connection connection,QuizData quiz,String username){
-        Login_Register lg=new Login_Register();
-        int id =lg.getID(username, connection);
-        try{
-       String query = "DELETE FROM Quiz WHERE (quizTitle=? AND description=? AND theme=? AND content=?) ";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1,quiz.quizTitle);
-            preparedStatement.setString(2,quiz.description);
-            preparedStatement.setString(3,quiz.theme);
-            preparedStatement.setString(4,quiz.content);
-            preparedStatement.executeUpdate();
-        }
-         catch(SQLException e){
-            e.printStackTrace();
-        }
-        deleteColumn(connection,quiz.quizTitle);
-        decreaseQuizNumber(connection,getNumberOfQuiz(connection,username),username);
-    }
+    //     public static void deleteQuiz(Connection connection,QuizData quiz,String username){
+    //     Login_Register lg=new Login_Register();
+    //     int id =lg.getID(username, connection);
+    //     try{
+    //    String query = "DELETE FROM Quiz WHERE (quizTitle=? AND description=? AND theme=? AND content=?) ";
+    //         PreparedStatement preparedStatement = connection.prepareStatement(query);
+    //         preparedStatement.setString(1,quiz.quizTitle);
+    //         preparedStatement.setString(2,quiz.description);
+    //         preparedStatement.setString(3,quiz.theme);
+    //         preparedStatement.setString(4,quiz.content);
+    //         preparedStatement.executeUpdate();
+    //     }
+    //      catch(SQLException e){
+    //         e.printStackTrace();
+    //     }
+    //     deleteColumn2(connection,quiz.quizTitle);
+    //     decreaseQuizNumber(connection,getNumberOfQuiz(connection,username),username);
+    // }
         
        public static void deleteColumn(Connection connection,String title) {
           String table ="QuizAttempt";
@@ -99,10 +99,61 @@ public class Quiz {
              Statement stm = connection.createStatement();
              stm.executeUpdate(query);
              
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+    }
+
+    public static void deleteQuiz2(Connection connection, QuizData quiz, String username) {
+        Login_Register lg = new Login_Register();
+        int id = lg.getID(username, connection);
+        
+        try {
+            String query = "DELETE FROM Quiz WHERE quizTitle = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, quiz.quizTitle);
+            
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Quiz deleted successfully.");
+                deleteColumn(connection, quiz.quizTitle);
+                decreaseQuizNumber(connection, getNumberOfQuiz(connection, username), username);
+            } else {
+                System.out.println("No quiz found matching the criteria.");
+            }
+        } catch (SQLException e) {
+            // Handle the exception appropriately, e.g., logging
+            System.err.println("Error deleting quiz: " + e.getMessage());
+        }
+        
+        
+    }
+    
+    //drop column in quizAttempt
+    public static void deleteColumn2(Connection connection, String title) {
+        String table = "QuizAttempt";
+        String queryCheckExistence = "SELECT * FROM " + table + " WHERE column_name = ?";
+        String queryDropColumn = "ALTER TABLE " + table + " DROP COLUMN \"" + title + "\"";
+
+        try {
+            // Check if the column exists
+            PreparedStatement checkStatement = connection.prepareStatement(queryCheckExistence);
+            checkStatement.setString(1, title);
+            ResultSet resultSet = checkStatement.executeQuery();
+
+            if (resultSet.next()) {
+                // If the column exists, drop it
+                Statement dropStatement = connection.createStatement();
+                dropStatement.executeUpdate(queryDropColumn);
+                System.out.println("Column '" + title + "' dropped successfully.");
+            } else {
+                // If the column doesn't exist, handle it gracefully
+                System.out.println("Column '" + title + "' doesn't exist in table '" + table + "'.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 

@@ -1,7 +1,5 @@
 package GUI;
 
-import java.util.LinkedList;
-import java.util.List;
 import Database.Quiz;
 import Database.QuizData;
 import Database.User;
@@ -22,8 +20,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 public class EducatorCreateQuiz {
-
-    //private static List<String> QthemeList = new LinkedList<>();
 
     public static VBox tabCreateQuiz() {
         Label title = new Label("Create Quiz");

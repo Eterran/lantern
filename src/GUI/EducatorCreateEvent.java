@@ -4,6 +4,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -43,9 +44,9 @@ public class EducatorCreateEvent  {
         TextField eventDateTF = new TextField();
         ComboBox<String> eventTimeComboBox = new ComboBox<>();
         eventTimeComboBox.getItems().addAll(
-            "8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM",
-            "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM",
-            "4:00 PM", "5:00 PM", "6:00 PM", "7:00 PM", "8:00 PM"
+            "08:00", "09:00", "10:00", "11:00",
+            "12:00", "13:00", "14:00", "15:00",
+            "16:00", "17:00", "18:00", "19:00", "20:00"
         );
         eventTimeComboBox.setEditable(true);
         eventTitleTF.setPromptText("Enter title");
@@ -98,6 +99,11 @@ public class EducatorCreateEvent  {
 
         User user = User.getCurrentUser();
         saveBtn.setOnAction(e -> {
+            if (eventTitleTF.getText().isEmpty() || eventDescriptionTA.getText().isEmpty() ||
+            eventVenueTF.getText().isEmpty()|| eventDateTF.getText().isEmpty() || eventTimeComboBox.getSelectionModel().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Please fill in all fields before saving.", ButtonType.OK);
+                alert.showAndWait();
+            } else {
             String ETitle = eventTitleTF.getText();
             String Edescription = eventDescriptionTA.getText();
             String Evenue = eventVenueTF.getText();
@@ -117,6 +123,8 @@ public class EducatorCreateEvent  {
                 eventVenueTF.clear();
                 eventDateTF.clear();
                 eventTimeComboBox.getSelectionModel().clearSelection();
+                //EducatorCheckEventCreated.vboxput();
+                //how to straight away update in the ui 
 
             } else {
                 Alert alert = new Alert(AlertType.ERROR);
@@ -124,6 +132,7 @@ public class EducatorCreateEvent  {
                 alert.setContentText("Failed to save event.");
                 alert.showAndWait();
             }
+        }
         });
         
         return mainvBox;
