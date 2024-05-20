@@ -20,6 +20,65 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class EducatorCheckEventCreated {
+    
+    private static ArrayList<EventData> eventCreated = Event.getEventOfUser(Lantern.getConn(), User.getCurrentUser().getUsername());
+    private static VBox eventCheckBox = new VBox(); 
+    public static void refreshUI() {
+        System.out.println("Refresh UI is being executed");
+        eventCreated = Event.getEventOfUser(Lantern.getConn(), User.getCurrentUser().getUsername());
+        eventCheckBox.getChildren().clear();
+        VBox temp = new VBox();
+
+        //VBox refreshContent = new VBox();
+
+        HBox row =  new HBox(); 
+        VBox column1 = new VBox(); 
+        VBox column2 = new VBox(); 
+        column1.setPadding(new Insets(10));
+        column2.setPadding(new Insets(10));
+        row.getChildren().addAll(column1, column2);
+
+        int size = eventCreated.size();
+        for(EventData data: eventCreated){
+            String labelText1 = data.getEventTitle();
+            String labelText2 = data.getDescription();
+            String labelText3 = data.getVenue();
+            String labelText4 = data.getDate();
+            String labelText5 = data.getTime();
+            BorderPane borderPane = BPForAllEvents(labelText1, labelText2, labelText3, labelText4, labelText5);
+
+            if(size%2==0){
+                column1.getChildren().addAll(borderPane);
+            }else{
+                column2.getChildren().addAll(borderPane);
+            }
+        }     
+        if (size % 2 == 0) {
+            column1.getChildren().add(AddBorderPane());
+        } else {
+            column2.getChildren().add(AddBorderPane());
+        }
+
+        //creating scrollpane
+        ScrollPane scrollPane1 = new ScrollPane(row);
+        scrollPane1.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); //Never show horizontal scrollbar
+        scrollPane1.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS); // Alaways show vertical scrollbar as needed
+
+        scrollPane1.setFitToWidth(true);
+        scrollPane1.setFitToHeight(true);
+        BorderPane borderPane2 = new BorderPane();
+        borderPane2.setCenter(scrollPane1);
+
+       // refreshContent.getChildren().addAll(borderPane2);
+
+        temp.getChildren().add(borderPane2);
+        eventCheckBox.getChildren().add(temp);
+        System.out.println("Display updated UI");
+
+        
+
+    }
+
 
     public static VBox vboxput() {
         //title
@@ -46,6 +105,7 @@ public class EducatorCheckEventCreated {
         column2.setStyle("-fx-background-color: lightblue");
         column2.setSpacing(20); // Set spacing between items
 
+      //  VBox refreshContent = new VBox();
         ArrayList<EventData> eventCreated = Event.getEventOfUser(Lantern.getConn(), User.getCurrentUser().getUsername());
         int size = eventCreated.size();
         for (int i = 0; i <size ; i++) {
@@ -69,6 +129,7 @@ public class EducatorCheckEventCreated {
         } else {
             column2.getChildren().add(AddBorderPane());
         }
+
         //creating scrollpane
         ScrollPane scrollPane1 = new ScrollPane(row);
         scrollPane1.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); //Never show horizontal scrollbar
@@ -76,11 +137,14 @@ public class EducatorCheckEventCreated {
 
         scrollPane1.setFitToWidth(true);
         scrollPane1.setFitToHeight(true);
-        BorderPane borderPane = new BorderPane();
-        borderPane.setCenter(scrollPane1);
+        BorderPane borderPane2 = new BorderPane();
+        borderPane2.setCenter(scrollPane1);
 
+        eventCheckBox.getChildren().add(borderPane2);
+
+        refreshUI();
         VBox mainvbox = new VBox();
-        mainvbox.getChildren().addAll(vbox1, borderPane);
+        mainvbox.getChildren().addAll(vbox1, borderPane2);
        return mainvbox;
     }
 
@@ -115,17 +179,19 @@ public class EducatorCheckEventCreated {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(showEditPage(labelText1,labelText2,labelText3,labelText4,labelText5), 400, 300));
             stage.setTitle("Edit Event");
-            stage.showAndWait();
-
-            
+            stage.showAndWait();      
   
         });
 
         deleteItem.setOnAction(event ->{
             Event.deleteEvent(Lantern.getConn(),labelText4);  ///delete based on the date???? Logically incorrect........
             //update the latest list on the gui, how?
-
+            if (borderPane.getParent() instanceof VBox) {
+                VBox parentVBox = (VBox) borderPane.getParent();
+                parentVBox.getChildren().remove(borderPane);
+            } 
         });
+
 
 
         BorderPane.setAlignment(label1, Pos.TOP_LEFT);
@@ -164,6 +230,7 @@ public class EducatorCheckEventCreated {
             stage.setScene(new Scene(content, 500, 300));
             stage.setTitle("Create Quiz");
             stage.show();
+            refreshUI();
         });
 
         BorderPane.setAlignment(addButton, Pos.CENTER);
@@ -248,8 +315,7 @@ public class EducatorCheckEventCreated {
         VBox.setVgrow(mainvBox, Priority.ALWAYS);
 
         saveBtn.setOnAction(e -> {
-            ///replace the old with the latest in the db
-            ///create a method
+            
             String ETitle = eventTitleTF.getText();
             String Edescription = eventDescriptionTA.getText();
             String Evenue = eventVenueTF.getText();
@@ -259,14 +325,14 @@ public class EducatorCheckEventCreated {
             EventData newevents = new EventData(ETitle, Edescription, Evenue, Edate, Etime);
             EventData oldevents = new EventData(title, description, venue, date, time);
             boolean updateEvent = updateEvent(Lantern.getConn(), oldevents, newevents, User.getCurrentUser().getUsername());
-            
+            refreshUI();
 
             if (updateEvent) {
                 Alert alert = new Alert(AlertType.INFORMATION);
                 alert.setTitle("Success");
                 alert.setContentText("Event updated successfully!");
                 alert.show();
-                
+                //refreshEducatorCheckEvent();
                 //how to straight away update in the ui 
 
             } else {
