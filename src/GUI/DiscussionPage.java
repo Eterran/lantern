@@ -135,20 +135,27 @@ public class DiscussionPage {
 
     private static void loadComments(int postId, VBox commentsSection) {
         commentsSection.getChildren().clear();
-
+    
         try (ResultSet rs = DiscussionDatabase.getComments(postId)) {
             while (rs.next()) {
                 String commentText = rs.getString("comment");
                 String author = rs.getString("author");
                 String datetime = rs.getString("datetime");
-
+    
                 Label commentLabel = new Label(commentText);
                 commentLabel.setWrapText(true);
                 commentLabel.setStyle("-fx-background-color: #e8e8e8; -fx-padding: 5; -fx-background-radius: 5;");
+    
                 Label commentAuthor = new Label("Author: " + author);
+                commentAuthor.setStyle("-fx-font-weight: bold;");
+    
                 Label commentDateTime = new Label("DateTime: " + datetime);
-
+                commentDateTime.setStyle("-fx-font-size: 10px; -fx-text-fill: gray;");
+    
                 VBox commentBox = new VBox(5, commentLabel, commentAuthor, commentDateTime);
+                commentBox.setPadding(new Insets(10));
+                commentBox.setStyle("-fx-background-color: #ffffff; -fx-border-color: #cccccc; -fx-border-radius: 5; -fx-background-radius: 5;");
+    
                 commentsSection.getChildren().add(commentBox);
             }
         } catch (SQLException e) {

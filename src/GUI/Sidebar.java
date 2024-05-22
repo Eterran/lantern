@@ -564,4 +564,9 @@ public class Sidebar {
         box7.getChildren().add(box);
         setOneVisible(7);
     }
+    public static void setBox1(VBox box){
+        box7.getChildren().clear();
+        box7.getChildren().add(box);
+        setOneVisible(1);
+    }
 }
