@@ -178,6 +178,23 @@ public class Booking {
     }
   }
 
+  public static void decreaseCount(Connection connection, int num, String parentName) {
+    int count = num - 1;
+    Login_Register lg = new Login_Register();
+    int id = lg.getID(parentName, connection);
+
+    String sql = "UPDATE BookingDate SET count = ? WHERE main_id= ?";
+    try {
+      PreparedStatement preparedStatement = connection.prepareStatement(sql);
+      preparedStatement.setInt(1, count);
+      preparedStatement.setInt(2, id);
+      preparedStatement.executeUpdate();
+    }
+
+    catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
   public static int getCount(Connection connection, String username) {
     int count = 0;
     Login_Register lg = new Login_Register();
