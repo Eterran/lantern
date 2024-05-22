@@ -15,6 +15,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+
 import java.sql.Connection;
 import Database.Event;
 import Database.Database;
@@ -131,6 +133,8 @@ public class EducatorCreateEvent  {
                     //EducatorCheckEventCreated.vboxput();
                     //how to straight away update in the ui 
                     EducatorCheckEventCreated.refreshUI();
+                    Stage stage = (Stage) saveBtn.getScene().getWindow();
+                    stage.close();
                 } else {
                     Alert alert = new Alert(AlertType.ERROR);
                     alert.setTitle("Error");

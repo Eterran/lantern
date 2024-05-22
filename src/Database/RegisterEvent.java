@@ -85,13 +85,13 @@ public class RegisterEvent {
     public static boolean checkClashDate(Connection connection,String username,EventData event){ //event going to register
         boolean check=false;
         Booking booking=new Booking();
-    ArrayList<EventData>list=getAllEventRegistered(connection,username);  //event already registred
-    for(EventData hold:list){
-    if(hold.date.equalsIgnoreCase(event.date))
-        check=true;
-    }
-    check=booking.checkDate(connection, username, event.date); //check whether clash with booking made by parents
-    return check;
+        ArrayList<EventData>list=getAllEventRegistered(connection,username);  //event already registred
+        for(EventData hold:list){
+        if(hold.date.equalsIgnoreCase(event.date))
+            check=true;
+        }
+        check=booking.checkDate(connection, username, event.date); //check whether clash with booking made by parents
+        return check;
     }
     
     //pass the event that want to check

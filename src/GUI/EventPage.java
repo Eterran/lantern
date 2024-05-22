@@ -42,12 +42,6 @@ public class EventPage {
        
         ArrayList<EventData> liveEventList = Event.getLiveEvents(Lantern.getConn());
         for (int i = 0; i <liveEventList.size(); i++) {
-            // EventData ed = liveEventList.get(i);
-            // String labelText1 = ed.getEventTitle();
-            // String labelText2 = ed.getDescription();
-            // String labelText3 = ed.getVenue();
-            // String labelText4 =  ed.getDate();
-            // String labelText5 = ed.getTime();
             BorderPane borderPane = BPForAllEvents(liveEventList.get(i));
             content1.getChildren().addAll(borderPane);
         }
@@ -97,12 +91,6 @@ public class EventPage {
       
         ArrayList<EventData> closestUpcoming = Event.getLatestEvent(Lantern.getConn());
         for (int i = 0; i <closestUpcoming.size(); i++) {
-            // EventData ed = closestUpcoming.get(i);
-            // String labelText1 = ed.getEventTitle();
-            // String labelText2 = ed.getDescription();
-            // String labelText3 = ed.getVenue();
-            // String labelText4 =  ed.getDate();
-            // String labelText5 = ed.getTime();
             BorderPane borderPane2 = BPForAllEvents(closestUpcoming.get(i));
 
             content2.getChildren().addAll(borderPane2);
