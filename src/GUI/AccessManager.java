@@ -261,14 +261,11 @@ public class AccessManager {
     private VBox createParentSidebar1() {
         VBox vBox = BookingPageGUI.BookingTabPage();
         //VBox vBox = viewBookingTab.vboxput();
-<<<<<<< HEAD
-=======
         return vBox;
     }
     private VBox createParentSidebar2() {
         //VBox vBox = BookingPageGUI.BookingTabPage();
         VBox vBox = viewBookingTab.vboxput();
->>>>>>> e99fce1bfc1ac9712dc4528996202169cd90a390
         return vBox;
     }
     public static enum UserRole {
