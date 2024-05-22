@@ -162,6 +162,7 @@ public class EventPage {
         //else register successfully, save into database, toggle the button to become disable
         //everytime display button check for these three rules
 
+        //checkClashDate (event clash with parents' booking or registered event)
         if(RegisterEvent.checkClashDate(Lantern.getConn(), User.getCurrentUser().getUsername(),thisevent) || RegisterEvent.checkEventRegistered (Lantern.getConn(),User.getCurrentUser().getUsername(),thisevent)){
                 toggleButton.setDisable(true);
         }else{        
@@ -171,12 +172,12 @@ public class EventPage {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Success");
             alert.setHeaderText(null);
-            alert.setContentText("Alarm registered successfully!");
+            alert.setContentText("Events registered successfully!");
             alert.showAndWait();
     
              });
 
-        }
+       }
        
         
         BorderPane.setAlignment(label1, Pos.TOP_LEFT);

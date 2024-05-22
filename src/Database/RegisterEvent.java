@@ -87,40 +87,38 @@ public class RegisterEvent {
         boolean check=false;
         Login_Register lg=new Login_Register();
          int children_id =lg.getID(childrenName, connection);
-         ArrayList<String> parentName=new ArrayList<>();
+         ArrayList<String> parentName = new ArrayList<>();
      try{
             String query = "SELECT parent FROM children WHERE main_id=?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, children_id);
-            ResultSet result=preparedStatement.executeQuery();
+            ResultSet result = preparedStatement.executeQuery();
             while(result.next())
                 parentName.add(result.getString("parent"));
         }
      
         catch(SQLException e){
             e.printStackTrace();
+        } 
+        ArrayList<BookingData> allBooking = new ArrayList<>();
+        for(int i=0;i<parentName.size();i++){
+            ArrayList<BookingData> hold = new ArrayList<>();
+            hold = Booking.viewBooking(connection,parentName.get(i));
+            for(int j=0; j<hold.size(); j++){
+                 allBooking.add(hold.get(j));
+            }
         }
-     
-     
-         ArrayList<BookingData>allBooking=new ArrayList<>();
-         for(int i=0;i<parentName.size();i++){
-         ArrayList<BookingData>hold=new ArrayList<>();
-         hold=Booking.viewBooking(connection,parentName.get(i));
-         for(int j=0;j<hold.size();i++){
-         allBooking.add(hold.get(i));
-          }
-         }
          
-         for(int i=0;i<allBooking.size();i++){
-         if(allBooking.get(i).date.equalsIgnoreCase(event.date))
-             check=true;
+        for(int i=0;i<allBooking.size();i++){
+            if(allBooking.get(i).date.equalsIgnoreCase(event.date))
+                check=true;
          }
          
     ArrayList<EventData>list=getAllEventRegistered(connection,childrenName);
-    for(EventData hold:list){
-    if(hold.date.equalsIgnoreCase(event.date))
-        check=true;
-    }
+        for(EventData hold:list){
+            if(hold.date.equalsIgnoreCase(event.date))
+                check=true;
+        }
     return check;
     }
     
