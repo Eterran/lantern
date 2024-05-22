@@ -187,7 +187,7 @@ import java.time.format.DateTimeFormatter;
         return XP2;
     }
     
-    
+    //when the student first log in  (set point to 0?)
     public void insertXpState(Connection connection,int id ){
       LocalDate date =LocalDate.now();
       String dat=date.toString();

@@ -5,10 +5,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -17,8 +18,6 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import Database.User;
 import Student.GlobalLeaderBoard;
-
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import Database.Login_Register;
@@ -26,29 +25,81 @@ import Database.Database;
 import Database.Quiz;
 import Database.QuizData;
 public class QuizPage {
-    private static Double label = User.getCurrentUser().getPoints();//fetch from the user db
+    private static Double pointLabel = User.getCurrentUser().getPoints();//fetch from the user db
+    private static VBox displayQuizBox = new VBox();
+    private static VBox column1 = new VBox();
+    private static VBox column2 = new VBox();
+    private static ArrayList<String> selectedThemes = new ArrayList<>();
 
     public static void updatePoints(){
-        label = User.getCurrentUser().getPoints();
+        pointLabel = User.getCurrentUser().getPoints() + 2;
     }
-    public static VBox quizPageTab(){
 
-        BorderPane root = new BorderPane();
-        root.setPadding(new Insets(10));
+    public static void refreshQuizBasedOnThemes(ArrayList<String> themes) {
+        displayQuizBox.getChildren().clear();
+        VBox temp = new VBox();
         
+        ScrollPane scrollPane1 = new ScrollPane();
+        scrollPane1.setFitToWidth(true);
+        scrollPane1.setFitToHeight(true);
+        scrollPane1.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); 
+        scrollPane1.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS); 
+    
+        HBox row = new HBox();
+        row.setPadding(new Insets(10));
+        VBox column1 = new VBox();
+        column1.setPadding(new Insets(10));
+        VBox column2 = new VBox();
+        column2.setPadding(new Insets(10));
+        row.getChildren().addAll(column1, column2);
+        scrollPane1.setContent(row);
+       
+        HBox.setHgrow(column1, Priority.ALWAYS);
+        HBox.setHgrow(column2, Priority.ALWAYS);
+        column1.setSpacing(20); 
+        column2.setSpacing(20);
+    
+        ArrayList<QuizData> filteredData = new ArrayList<>();
+        for (String theme : themes) {
+            filteredData.addAll(Quiz.getQuizBasedTheme(Lantern.getConn(), theme));
+        }
+       
+        column1.getChildren().clear();
+        column2.getChildren().clear();
+       
+        for (int i = 0; i < filteredData.size(); i++) {
+            QuizData qd = filteredData.get(i);
+            String quizTitle = qd.getQuizTitle();
+            String quizDescription = qd.getDescription();
+            String quizContent = qd.getContent();
+            String quizTheme = qd.getTheme();
+    
+            BorderPane borderPane = BPForEveryQuiz(quizTitle, quizTheme, quizDescription, quizContent);
+            if (i % 2 == 0) {
+                column1.getChildren().add(borderPane);
+            } else {
+                column2.getChildren().add(borderPane);
+            }
+        }
+      
+        temp.getChildren().add(scrollPane1);
+        displayQuizBox.getChildren().add(temp);
+    }
+    
+
+    public static VBox quizPageTab(){    
+        VBox topvbox = new VBox(); 
         Label titleLabel = new Label("Quiz"); 
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 25));
-
-        Label pointsLabel = new Label("Points:"+ label);
+        updatePoints();
+        Label pointsLabel = new Label("Points:"+ pointLabel);
         pointsLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 
         Region spacer1 = new Region();
         HBox.setHgrow(spacer1, javafx.scene.layout.Priority.ALWAYS); 
-
         HBox hbox= new HBox();
         hbox.getChildren().addAll(titleLabel,spacer1, pointsLabel);
-        root.setTop(hbox);
-
+       
         HBox hbox2 = new HBox();
         hbox2.setPadding(new Insets (10));
         CheckBox checkBox = new CheckBox("Science");
@@ -57,12 +108,43 @@ public class QuizPage {
         CheckBox checkBox4 = new CheckBox("Mathematics");
         hbox2.getChildren().addAll(checkBox, checkBox2, checkBox3, checkBox4);
         hbox2.setSpacing(10);
-        root.setCenter(hbox2);
 
-        GridPane gridPane = new GridPane();
-        gridPane.setHgap(10);
-        gridPane.setVgap(10);
-
+        checkBox.setOnAction(event ->{
+            if (checkBox.isSelected()) {
+                selectedThemes.add("Science");
+            } else {
+                selectedThemes.remove("Science");
+            }
+            refreshQuizBasedOnThemes(selectedThemes);
+        });
+        
+        checkBox2.setOnAction(event ->{
+            if (checkBox2.isSelected()) {
+                selectedThemes.add("Technology");
+            } else {
+                selectedThemes.remove("Technology");
+            }
+            refreshQuizBasedOnThemes(selectedThemes);
+        });
+        
+        checkBox3.setOnAction(event ->{
+            if (checkBox3.isSelected()) {
+                selectedThemes.add("Engineering");
+            } else {
+                selectedThemes.remove("Engineering");
+            }
+            refreshQuizBasedOnThemes(selectedThemes);
+        });
+        
+        checkBox4.setOnAction(event ->{
+            if (checkBox4.isSelected()) {
+                selectedThemes.add("Mathematics");
+            } else {
+                selectedThemes.remove("Mathematics");
+            }
+            refreshQuizBasedOnThemes(selectedThemes);
+        });
+        
         ArrayList<QuizData> quizDataList = Quiz.getAllQuiz(Lantern.getConn());
         for (int i = 0; i < quizDataList.size(); i++) { 
             QuizData qd = quizDataList.get(i);
@@ -72,14 +154,17 @@ public class QuizPage {
             String quiztheme = qd.getTheme();
 
             BorderPane borderPane = BPForEveryQuiz(quizTitle, quiztheme, quizDescription, quizContent);
-            gridPane.add(borderPane, i % 5, i / 5);
+            if(i%2==0){
+                column1.getChildren().add(borderPane);
+            }else{
+                column2.getChildren().add(borderPane);
+            }         
         }
+        topvbox.getChildren().addAll(hbox,hbox2);
 
-        root.setBottom(gridPane);
         VBox mainvBox = new VBox();
-        mainvBox.getChildren().add(root);
+        mainvBox.getChildren().addAll(topvbox, displayQuizBox);
         return mainvBox;
-
     }
 
 
@@ -106,11 +191,9 @@ public class QuizPage {
             toggleBtn.setDisable(true);
         }else{
             toggleBtn.setOnAction(event->{
-                //attempt the quiz
                 if(toggleBtn.isSelected()){
                     toggleBtn.setDisable(true);
-                  //  Quiz.updateLatestQuizRow(Lantern.getConn());  
-                  //  Quiz.initializeRow(Lantern.getConn(), User.getCurrentUser().getUsername());
+                    Quiz.initializeRow(Lantern.getConn(), User.getCurrentUser().getUsername());
                     QuizData qd= new QuizData(qtitle, qdescrip, qtheme, qContent);
                     Quiz.attemptQuiz(Lantern.getConn(), qd, User.getCurrentUser().getUsername());
         
@@ -148,8 +231,8 @@ public class QuizPage {
         borderPane.setBottom(finishAttemptBtn);
         BorderPane.setAlignment(finishAttemptBtn,Pos.BOTTOM_RIGHT);
 
-       BorderPane.setMargin(quizC, new Insets(10)); 
-       BorderPane.setMargin(finishAttemptBtn, new Insets(0, 10, 10, 0)); 
+        BorderPane.setMargin(quizC, new Insets(10)); 
+        BorderPane.setMargin(finishAttemptBtn, new Insets(0, 10, 10, 0)); 
 
         Login_Register lr = new Login_Register();
         GlobalLeaderBoard glb= new GlobalLeaderBoard();
@@ -157,12 +240,13 @@ public class QuizPage {
        
         finishAttemptBtn.setOnAction(e ->{
             Quiz.attemptQuiz(Lantern.getConn(), qd, User.getCurrentUser().getUsername());
-            double updatedpoint = User.getCurrentUser().getPoints() + 2; 
-            glb.insertXpState(Lantern.getConn(),lr.getId());  
+           // double updatedpoint = User.getCurrentUser().getPoints() + 2; 
+            //glb.insertXpState(Lantern.getConn(),lr.getId());  
             glb.updateXpState(Lantern.getConn(), lr.getId());
-            User.getCurrentUser().setPoints(updatedpoint);
+            updatePoints();
+            User.getCurrentUser().setPoints(pointLabel);
             try {
-                db.updatePoint(Lantern.getConn(), lr.getId(), updatedpoint);
+                db.updatePoint(Lantern.getConn(), lr.getId(), pointLabel);
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
