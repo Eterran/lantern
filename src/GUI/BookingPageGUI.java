@@ -2,6 +2,7 @@ package GUI;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -115,9 +116,22 @@ public class BookingPageGUI {
         VBox mainvbox = new VBox();
         mainvbox.setStyle("-fx-background-color: white;");
         mainvbox.getChildren().add(borderPane);
-        VBox.setVgrow(borderPane, Priority.ALWAYS); 
+        VBox.setVgrow(borderPane, Priority.ALWAYS);
+      
+        ArrayList<Integer> childrenId =  getChildren(Lantern.getConn(), User.getCurrentUser().getUsername());
+        if(childrenId.isEmpty()){
+            return showNoChild();
+        }else{
+            return mainvbox;
+        }  
+    }
 
-        return mainvbox;
+    public static VBox showNoChild(){
+
+        VBox vbox = new VBox();
+        Label text = new Label("Add a child before you make a booking");
+        vbox.getChildren().add(text);
+        return vbox;
     }
 
     public static VBox AvailableTimeSlot(int destinationId, String destinationName, BookingSystem bookSys){
@@ -140,17 +154,40 @@ public class BookingPageGUI {
         HBox headerBox = new HBox();
         HBox.setHgrow(headerBox, javafx.scene.layout.Priority.ALWAYS); 
 
-        ArrayList<Integer> childrenId =  getChildren(Lantern.getConn());
-        ArrayList<Integer> eventIds = geteventId(Lantern.getConn(), childrenId);
-        ArrayList <Date> availableDate = bookSys.getAvailableDates(User.getCurrentUser(),destinationId);
-        ArrayList <Date> registeredEventDate = getDateForEventRegistered(Lantern.getConn(), eventIds);
-        ArrayList <String> finalDate = getFinalAvailableDates(availableDate, registeredEventDate) ;
-      
-        for(String finaldate: finalDate){
-            System.out.print(finaldate + " ");
+        ArrayList<Integer> childrenId =  getChildren(Lantern.getConn(), User.getCurrentUser().getUsername());
+        for(Integer childrenid : childrenId){
+            System.out.print("Children id: " + childrenid +" ");
         }
+        
+        ArrayList<Integer> eventIds = geteventId(Lantern.getConn(), childrenId);
+        ArrayList<String> finalDate = new ArrayList<>();
 
-
+        // for(Integer eventid: eventIds){
+        //     System.out.print("Event id" + eventid + " ");
+        //
+        if(eventIds.isEmpty()){
+            ArrayList<Date> convertDateToString = bookSys.getAvailableDates(User.getCurrentUser(),destinationId);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
+            for (Date date : convertDateToString) {
+                String dateString = dateFormat.format(date);
+                finalDate.add(dateString);
+            }
+        }else{
+            ArrayList <Date> availableDate = bookSys.getAvailableDates(User.getCurrentUser(),destinationId);
+            ArrayList <Date> registeredEventDate = getDateForEventRegistered(Lantern.getConn(), eventIds);
+            finalDate = getFinalAvailableDates(availableDate, registeredEventDate) ;
+            // for(String finaldate: finalDate){
+            //     System.out.print("Final Date: " +finaldate + " ");
+                
+            // }
+        }
+        // for(Date ad : availableDate){
+        //     System.out.print("Available date: "+ ad + " ");
+        // }
+        // for(Date re: registeredEventDate){
+        //     System.out.print("Registered date: "+ re + " ");
+        // }
+        
         for (int i = 0; i <finalDate.size() ; i++) {
             
             HBox dataBox = new HBox();
@@ -192,9 +229,8 @@ public class BookingPageGUI {
         return mainvbox;
     }
 
-    public static ArrayList<Integer> getChildren(Connection conn) {
+    public static ArrayList<Integer> getChildren(Connection conn, String username) {
         ArrayList<Integer> childrenList = new ArrayList<>();
-        String username = User.getCurrentUser().getUsername(); 
         String query = "SELECT main_id FROM children WHERE parent = ?";
         
         try (PreparedStatement statement = conn.prepareStatement(query)) {
@@ -210,6 +246,8 @@ public class BookingPageGUI {
         
         return childrenList;
     }
+    
+
     
     public static ArrayList<Integer> geteventId(Connection conn, ArrayList<Integer> childrenList) {
         ArrayList<Integer> eventIds = new ArrayList<>();
@@ -231,10 +269,9 @@ public class BookingPageGUI {
             }
         } catch (SQLException e) {
             e.printStackTrace(); 
-            return null; 
         }
         
-        return eventIds.isEmpty() ? null : eventIds;
+        return eventIds;
     }
   
 
@@ -292,10 +329,6 @@ public class BookingPageGUI {
     
         return finalAvailableDate.isEmpty() ? null : finalAvailableDate;
     }
-    
-    
-     
-
 
  }
 
