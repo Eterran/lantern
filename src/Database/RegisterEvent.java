@@ -82,16 +82,46 @@ public class RegisterEvent {
      //check that day got other event at same time or booking from parent
      //true mean occupied
      //EventData mean the event you want to register for (get all the title)
-    public static boolean checkClashDate(Connection connection,String username,EventData event){ //event going to register
+    //check that day got other event at same time or booking from parent
+    public static boolean checkClashDate(Connection connection,String childrenName,EventData event){
         boolean check=false;
-        Booking booking=new Booking();
-        ArrayList<EventData>list=getAllEventRegistered(connection,username);  //event already registred
-        for(EventData hold:list){
-        if(hold.date.equalsIgnoreCase(event.date))
-            check=true;
+        Login_Register lg=new Login_Register();
+         int children_id =lg.getID(childrenName, connection);
+         ArrayList<String> parentName=new ArrayList<>();
+     try{
+            String query = "SELECT parent FROM children WHERE main_id=?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, children_id);
+            ResultSet result=preparedStatement.executeQuery();
+            while(result.next())
+                parentName.add(result.getString("parent"));
         }
-        check=booking.checkDate(connection, username, event.date); //check whether clash with booking made by parents
-        return check;
+     
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+     
+     
+         ArrayList<BookingData>allBooking=new ArrayList<>();
+         for(int i=0;i<parentName.size();i++){
+         ArrayList<BookingData>hold=new ArrayList<>();
+         hold=Booking.viewBooking(connection,parentName.get(i));
+         for(int j=0;j<hold.size();i++){
+         allBooking.add(hold.get(i));
+          }
+         }
+         
+         for(int i=0;i<allBooking.size();i++){
+         if(allBooking.get(i).date.equalsIgnoreCase(event.date))
+             check=true;
+         }
+         
+    ArrayList<EventData>list=getAllEventRegistered(connection,childrenName);
+    for(EventData hold:list){
+    if(hold.date.equalsIgnoreCase(event.date))
+        check=true;
+    }
+    return check;
     }
     
     //pass the event that want to check
@@ -105,6 +135,7 @@ public class RegisterEvent {
     }
   return check;
     }
+    
    /* //in case several different date but same event
     public ArrayList<String>getEventDate(Connection connection,String event,String username){
          ArrayList<String>data=new ArrayList<>();
