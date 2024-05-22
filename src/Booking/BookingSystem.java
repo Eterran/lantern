@@ -25,7 +25,6 @@ public class BookingSystem {
 
     private ArrayList<Destination> readDestinationsFromFile() {
         ArrayList<Destination> destinations = new ArrayList<>();
-        // try (Scanner s = new Scanner(new FileInputStream("lantern-1/Booking.txt"))) {
         try (Scanner s = new Scanner(new FileInputStream("../Booking.txt"))) {
 
             while (s.hasNextLine()) {
@@ -106,10 +105,10 @@ public class BookingSystem {
         return distances;
     }
 
-    //available time slot (including c)
+    //Same as Dennis function (get existing booking)
     public ArrayList<String> getTimeSlots(int destinationId, Date currentDate, User user) {
         ArrayList<String> timeSlots = new ArrayList<>();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         ArrayList<Date> availableDates = getAvailableDates(user, destinationId); //7 days
         if (availableDates.isEmpty()) {
@@ -136,6 +135,7 @@ public class BookingSystem {
         return timeSlots;
     }
 
+    //find destination name based on id
     public String destinationName(int destinationId) {
         String destinationName[] = { "Petrosaincs Science Discovery Centre", "Tech Dome Penang",
                 "Agro Technology Park in MARDI", "National Science Centre", "Marine Aquarium and Musuem",
@@ -150,7 +150,7 @@ public class BookingSystem {
         }
         return temp;
     }
-
+    //find id based on destination name
     public int findDestinationID(String destination){
         String destinationName[] = { "Petrosaincs Science Discovery Centre", "Tech Dome Penang",
                 "Agro Technology Park in MARDI", "National Science Centre", "Marine Aquarium and Musuem",
@@ -164,10 +164,10 @@ public class BookingSystem {
         return -1;
     }
 
-    // get the 7 days from the current dates 
+    // get the 7 days from the current dates and check if there is any existing booking based on the main_id
     public ArrayList<Date> getAvailableDates(User user, int destinationId) {
         ArrayList<Date> availableDates = new ArrayList<>();
-        String destinationName = destinationName(destinationId);
+        String destinationName = destinationName(destinationId); //get name based on the id
 
         try {
                 Connection connection = Lantern.getConn();

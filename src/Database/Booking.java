@@ -59,6 +59,8 @@ public class Booking {
    * }
    */
   // false mean booking is not make yet
+  //applied 
+  //check if there's any existing booking from the db prevent duplication on the same booking date, destination based on main_id
   public static boolean checkExistingBooking(Connection connection, String username, BookingData booking) {
     ArrayList<String> datesList = new ArrayList<>();
     ArrayList<String> destination = new ArrayList<>();
@@ -89,10 +91,9 @@ public class Booking {
 
   }
 
-  // check the date is occupied by other event or not ,true mean occupied based on
-  // (7 days)
-  // date from event database
+  // get all the booking date made by the user (main_id), check with the date from the eventdb
   // fetch the date from event db
+  // apply in eventpage gui (for register event)
   public static boolean checkDate(Connection connection, String username, String date) {
     ArrayList<String> datesList = new ArrayList<>();
     int id = Login_Register.getID(username, connection);

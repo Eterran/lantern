@@ -33,18 +33,16 @@ public class EducatorCheckEventCreated {
         eventCheckBox.getChildren().clear();
         VBox temp = new VBox();
 
-        //VBox refreshContent = new VBox();
-
         HBox row =  new HBox(); 
         VBox column1 = new VBox(); 
-        VBox column2 = new VBox(); 
-        // column1.getChildren().add(new Label("COLUMN1"));
-        // column2.getChildren().add(new Label("COLUMN2"));
         column1.setPadding(new Insets(10));
-        column2.setPadding(new Insets(10));
-        row.getChildren().addAll(column1, column2);
+        row.getChildren().addAll(column1);
+        HBox.setHgrow(column1, Priority.ALWAYS);
 
-        int size = eventCreated.size();
+        column1.setStyle("-fx-background-color: lightblue");
+        column1.setSpacing(20); // Set spacing between items
+        column1.getChildren().add(AddBorderPane());
+
         for(EventData data: eventCreated){
             String labelText1 = data.getEventTitle();
             String labelText2 = data.getDescription();
@@ -54,35 +52,17 @@ public class EducatorCheckEventCreated {
             BorderPane borderPane = BPForAllEvents(labelText1, labelText2, labelText3, labelText4, labelText5);
 
             // odd then first column
-            if(size%2==1){
-                column1.getChildren().addAll(borderPane);
-            }else{
-                column2.getChildren().addAll(borderPane);
-            }
+            column1.getChildren().addAll(borderPane);
+        
         }
-
-        if (size % 2 == 0) {
-            column1.getChildren().add(AddBorderPane());
-        } else {
-            column2.getChildren().add(AddBorderPane());
-        }
-
-        // I dont really understand but I think you wanted two vbox to scroll?
-        ScrollPane scrollPane1 = new ScrollPane(column1);
+        ScrollPane scrollPane1 = new ScrollPane(row);
         scrollPane1.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); //Never show horizontal scrollbar
         scrollPane1.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS); // Alaways show vertical scrollbar as needed
-        ScrollPane scrollPane2 = new ScrollPane(column2);
-        scrollPane2.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPane2.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS); 
-        
-        HBox.setHgrow(scrollPane1, Priority.ALWAYS);
-        HBox.setHgrow(scrollPane2, Priority.ALWAYS);
-        row.getChildren().addAll(scrollPane1, scrollPane2);
-
+      
+        scrollPane1.setFitToWidth(true);
+        scrollPane1.setFitToHeight(true);
         BorderPane borderPane2 = new BorderPane();
-        borderPane2.setCenter(row);
-
-       // refreshContent.getChildren().addAll(borderPane2);
+        borderPane2.setCenter(scrollPane1);
 
         temp.getChildren().add(borderPane2);
         eventCheckBox.getChildren().add(temp);
@@ -98,71 +78,6 @@ public class EducatorCheckEventCreated {
         label1.setStyle("-fx-font-weight: bold; -fx-font-size: 16");
         label1.setPadding(new Insets(10));
         vbox1.getChildren().add(label1);
-
-        //content in the scrollpane
-        // VBox column1 = new VBox(); 
-        // VBox column2 = new VBox(); 
-        // column1.getChildren().add(new Label("COLUMN1"));
-        // column2.getChildren().add(new Label("COLUMN2"));
-        // column1.setPadding(new Insets(10));
-        // column2.setPadding(new Insets(10));
-
-        // HBox row = new HBox();
-        // HBox.setHgrow(row, Priority.ALWAYS);
-
-        // HBox.setHgrow(column1, Priority.ALWAYS);
-        // HBox.setHgrow(column2, Priority.ALWAYS);
-
-        // column1.setStyle("-fx-background-color: lightblue");
-        // column1.setSpacing(20); // Set spacing between items
-        // column2.setStyle("-fx-background-color: lightblue");
-        // column2.setSpacing(20); // Set spacing between items
-
-      //  VBox refreshContent = new VBox();
-        // ArrayList<EventData> eventCreated = Event.getEventOfUser(Lantern.getConn(), User.getCurrentUser().getUsername());
-        // int size = eventCreated.size();
-        // for (int i = 0; i <size ; i++) {
-
-        //     String labelText1 = eventCreated.get(i).getEventTitle();
-        //     String labelText2 = eventCreated.get(i).getDescription();
-        //     String labelText3 = eventCreated.get(i).getVenue();
-        //     String labelText4 = eventCreated.get(i).getDate();
-        //     String labelText5 = eventCreated.get(i).getTime();
-        
-        //     BorderPane borderPane = BPForAllEvents(labelText1, labelText2, labelText3, labelText4, labelText5);
-        //     if(i%2==0){
-        //         column1.getChildren().addAll(borderPane);
-        //     }else{
-        //         column2.getChildren().addAll(borderPane);
-        //     }
-        // }
-
-        // if (size % 2 == 0) {
-        //     column1.getChildren().add(AddBorderPane());
-        // } else {
-        //     column2.getChildren().add(AddBorderPane());
-        // }
-
-        //creating scrollpane
-        // ScrollPane scrollPane1 = new ScrollPane(column1);
-        // scrollPane1.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); //Never show horizontal scrollbar
-        // scrollPane1.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS); // Alaways show vertical scrollbar as needed
-        // ScrollPane scrollPane2 = new ScrollPane(column2);
-        // scrollPane2.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        // scrollPane2.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS); 
-
-        // scrollPane1.setFitToWidth(true);
-        // scrollPane1.setFitToHeight(true);
-        // scrollPane2.setFitToWidth(true);
-        // scrollPane2.setFitToHeight(true);
-        
-        // HBox.setHgrow(scrollPane1, Priority.ALWAYS);
-        // HBox.setHgrow(scrollPane2, Priority.ALWAYS);
-        // row.getChildren().addAll(scrollPane1, scrollPane2);
-
-        // BorderPane borderPane2 = new BorderPane();
-        // borderPane2.setTop(eventCheckBox);
-        // borderPane2.setCenter(row);
 
         refreshUI();
         VBox mainvbox = new VBox();
@@ -208,7 +123,6 @@ public class EducatorCheckEventCreated {
 
         deleteItem.setOnAction(event ->{
             Event.deleteEvent(Lantern.getConn(),labelText4);  ///delete based on the date???? Logically incorrect........
-            //update the latest list on the gui, how?
             if (borderPane.getParent() instanceof VBox) {
                 VBox parentVBox = (VBox) borderPane.getParent();
                 parentVBox.getChildren().remove(borderPane);
@@ -405,7 +319,7 @@ public class EducatorCheckEventCreated {
     }
 
     public static boolean isValidDateFormat(String date) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         dateFormat.setLenient(false);
         try {
             dateFormat.parse(date);

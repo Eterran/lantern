@@ -15,8 +15,11 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
-
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,14 +29,6 @@ import Booking.BookingSystem;
 import Booking.Destination;
 import Database.User;
 public class BookingPageGUI {
-
-    // @Override
-    // public void start(Stage primaryStage) {
-    //     Scene scene = new Scene(BookingTabPage(), 600, 400);
-    //     primaryStage.setScene(scene);
-    //     primaryStage.setTitle("Booking Page");
-    //     primaryStage.show();
-    // }
 
     public static VBox BookingTabPage(){
         BorderPane borderPane = new BorderPane();
@@ -45,32 +40,26 @@ public class BookingPageGUI {
         titleLabel.setFont(new Font(23));
         titleLabel.setStyle("-fx-font-weight: bold;");
      
-        //creating ScrollPane 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setFitToWidth(true);
         scrollPane.setPrefSize(391.0, 247.0);
 
         //vbox contain lots of hbox
-        VBox vBox = new VBox();
-        VBox.setVgrow(vBox, javafx.scene.layout.Priority.ALWAYS); 
+        VBox bigvBox = new VBox();
+        VBox.setVgrow(bigvBox, javafx.scene.layout.Priority.ALWAYS); 
         HBox headerBox = new HBox();
         HBox.setHgrow(headerBox, javafx.scene.layout.Priority.ALWAYS); 
 
-      
-        //display all the destination list (based on user location ---> recommendation system)
-        //BookingSystem....destinationName, disntance from the user
-      //  User user = new User();
         BookingSystem bookSys = new BookingSystem();
-        ArrayList <Destination> recommendSystem = bookSys.suggestDestinations(User.getCurrentUser().getCoordinate()) ; //return Arraylist with destination and distance
-        System.out.print(User.getCurrentUser().getCoordinate());
+        ArrayList <Destination> recommendSystem = bookSys.suggestDestinations(User.getCurrentUser().getCoordinate()) ; 
+        ArrayList <String> destinationStrg = new ArrayList<>();
         ArrayList <Double> distances = bookSys.distanceAway(User.getCurrentUser().getCoordinate()); 
         ArrayList <Integer> destinationId = new ArrayList <Integer>();
 
-        // Loop to create the boxes
         for (int i = 0; i < recommendSystem.size(); i++) {
             final int ind = i;
             HBox dataBox = new HBox();
-            dataBox.setPadding(new Insets(5)); //padding for the databox
+            dataBox.setPadding(new Insets(5));
            
             if (i % 2 == 0) {
                 dataBox.setStyle("-fx-background-color:#ADEFD1;");
@@ -78,33 +67,39 @@ public class BookingPageGUI {
                 dataBox.setStyle("-fx-background-color: #ffffff;");
             }
 
-            Label number = new Label(String.valueOf(i + 1));  //fetch the value from the db
+            Label number = new Label(String.valueOf(i + 1)); 
             number.setPadding(new Insets(5,10,5,5));
-            String destinationName = recommendSystem.get(i).toString();
-            Label destinations = new Label(destinationName);
-            destinations.setPadding(new Insets(5,10,5,5));
+
+            String destinationName = recommendSystem.get(i).getName();
+            destinationStrg.add(destinationName);
+
+            Label destinationsLabel = new Label(destinationName);
+            destinationsLabel.setPadding(new Insets(5,10,5,5));
+
             destinationId.add(bookSys.findDestinationID(destinationName));  
-            Label distance = new Label(distances.get(i).toString() + " km");
-            distance.setPadding(new Insets(5,10, 5, 5));
+
+            Label distanceLabel = new Label(distances.get(i).toString() + " km");
+            distanceLabel.setPadding(new Insets(5,10, 5, 5));
+
             Button bookingBtn = new Button("Book");
-            //go recommendSystem get the string find the string in the destinationName to get the id
 
             bookingBtn.setOnAction(event ->{  
                 Stage stage = new Stage();
                 stage.initModality(Modality.APPLICATION_MODAL);
-                stage.setScene(new Scene(AvailableTimeSlot(destinationId.get(ind), recommendSystem,bookSys), 400, 300));
+                stage.setScene(new Scene(AvailableTimeSlot(destinationId.get(ind), destinationStrg.get(ind), bookSys), 500, 400));
                 stage.setTitle("Available Time Slot");
                 stage.showAndWait();
             });
+
             Region spacer = new Region();
             HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
 
-            dataBox.getChildren().addAll(number,  destinations, distance, spacer, bookingBtn);  //adding every info into hbox for each line
+            dataBox.getChildren().addAll(number,  destinationsLabel, distanceLabel, spacer, bookingBtn); 
             
-            vBox.getChildren().add(dataBox); //continue add all the databox into vbox
+            bigvBox.getChildren().add(dataBox); //continue add all the databox into vbox
         }
 
-        scrollPane.setContent(vBox);
+        scrollPane.setContent(bigvBox);
         borderPane.setCenter(scrollPane);
 
         Pane leftPane = new Pane();
@@ -120,71 +115,56 @@ public class BookingPageGUI {
         VBox mainvbox = new VBox();
         mainvbox.setStyle("-fx-background-color: white;");
         mainvbox.getChildren().add(borderPane);
-        VBox.setVgrow(borderPane, Priority.ALWAYS); //ensure borderPane grow together with Vbox
+        VBox.setVgrow(borderPane, Priority.ALWAYS); 
 
         return mainvbox;
     }
 
-
-
-    //select part
-    public static VBox AvailableTimeSlot(int destinationId, ArrayList<Destination> recommendSystem, BookingSystem bookSys){
+    public static VBox AvailableTimeSlot(int destinationId, String destinationName, BookingSystem bookSys){
         
         BorderPane borderPane = new BorderPane();
         Label titleLabel = new Label("Available Time Slot");
         borderPane.setTop(titleLabel);
         titleLabel.setAlignment(Pos.TOP_LEFT);
         titleLabel.setPadding(new Insets(10));
-        titleLabel.setFont(new Font(20));
+        titleLabel.setFont(new Font(15));
         titleLabel.setStyle("-fx-font-weight: bold;");
 
-        //creating ScrollPane 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setFitToWidth(true);
         scrollPane.setPrefSize(391.0, 247.0);
         scrollPane.setStyle("-fx-border-color: white; -fx-border-width: 1px;");
 
-        //vbox contain lots of hbox
         VBox vBox = new VBox();
         VBox.setVgrow(vBox, javafx.scene.layout.Priority.ALWAYS); 
         HBox headerBox = new HBox();
         HBox.setHgrow(headerBox, javafx.scene.layout.Priority.ALWAYS); 
 
-        //method to be used
-        //getTimeSlot  && checkDate
-        Date currentDate = new Date();
+        ArrayList<Integer> childrenId =  getChildren(Lantern.getConn());
+        ArrayList<Integer> eventIds = geteventId(Lantern.getConn(), childrenId);
+        ArrayList <Date> availableDate = bookSys.getAvailableDates(User.getCurrentUser(),destinationId);
+        ArrayList <Date> registeredEventDate = getDateForEventRegistered(Lantern.getConn(), eventIds);
+        ArrayList <String> finalDate = getFinalAvailableDates(availableDate, registeredEventDate) ;
+      
+        for(String finaldate: finalDate){
+            System.out.print(finaldate + " ");
+        }
 
-        // get the date from the event table by referring to eventRegistered
-        //go the eventRegistered, select event_id based on main_id
-        //based on event_id in eventRegistered, go to get the eventTitle (not in db based on the code)
-        //based on the eventTitle, select the Date in event table in database
 
-        //public ArrayList<String> getTimeSlots(destinationId.get(i), currentDate, User.getCurrentUser()) 
-        //public static boolean checkDate(Lantern.getConn(),User.getCurrentUser().getUsername(),String date)
+        for (int i = 0; i <finalDate.size() ; i++) {
+            
+            HBox dataBox = new HBox();
+            dataBox.setPadding(new Insets(5));      
+            dataBox.setStyle("-fx-background-color: #C9DFC9;-fx-border-color:white; -fx-border-width: 1px;");
+            Label num = new Label(String.valueOf(i + 1)); 
+            num.setPadding(new Insets(5,10,5,5));
+            Label availableTimeLabel = new Label(finalDate.get(i)); 
+            availableTimeLabel.setPadding(new Insets(5,10,5,5));
+            BookingData bd = new BookingData (destinationName, finalDate.get(i));
 
-        // Loop to create the boxes  //destination.size???
-        for (int i = 0; i < bookSys.getAvailableDates(User.getCurrentUser(),destinationId).size(); i++) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String dateString = dateFormat.format(bookSys.getAvailableDates(User.getCurrentUser(),destinationId).get(i)); //convert Date to String
-
-            //get the date
-            boolean check = Booking.checkDate(Lantern.getConn(),User.getCurrentUser().getUsername(),dateString);  //should be the date tht you registered for the event
-            if(check){ //mean occupied by others event
-
-            }else{ //if still available then show datebox with date 
-                HBox dataBox = new HBox();
-                dataBox.setPadding(new Insets(5)); //padding for the databox      
-                dataBox.setStyle("-fx-background-color: #C9DFC9;-fx-border-color:white; -fx-border-width: 1px;");
-                Label number2 = new Label(String.valueOf(i + 1));  //fetch the value from the db
-                number2.setPadding(new Insets(5,10,5,5));
-                Label availableTimeLabel = new Label(dateString); 
-                availableTimeLabel.setPadding(new Insets(5,10,5,5));
-                BookingData bd = new BookingData (recommendSystem.get(i).toString(), dateString);
-                
-
-                Button selectBtn = new Button("Select");  //saved
+            Button selectBtn = new Button("Select"); 
                 selectBtn.setOnAction(event ->{
-                    Booking.bookingTour(Lantern.getConn(), bd,User.getCurrentUser().getUsername());
+                    Booking.bookingTour(Lantern.getConn(), bd,User.getCurrentUser().getUsername()); //make booking
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Success");
                     alert.setContentText("Your booking has been confirmed.");
@@ -194,15 +174,13 @@ public class BookingPageGUI {
                     stage.close();
                 });
 
-                Region spacer = new Region();
-                HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
-    
-                dataBox.getChildren().addAll(number2, availableTimeLabel , spacer, selectBtn);  //adding every info into hbox for each line
+            Region spacer = new Region();
+            HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+            dataBox.getChildren().addAll(num, availableTimeLabel , spacer, selectBtn);  
+            vBox.getChildren().add(dataBox); 
                 
-                vBox.getChildren().add(dataBox); 
-                
-            }
         }
+        
         scrollPane.setContent(vBox);
         borderPane.setCenter(scrollPane);
 
@@ -213,6 +191,111 @@ public class BookingPageGUI {
 
         return mainvbox;
     }
+
+    public static ArrayList<Integer> getChildren(Connection conn) {
+        ArrayList<Integer> childrenList = new ArrayList<>();
+        String username = User.getCurrentUser().getUsername(); 
+        String query = "SELECT main_id FROM children WHERE parent = ?";
+        
+        try (PreparedStatement statement = conn.prepareStatement(query)) {
+            statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int mainId = resultSet.getInt("main_id");
+                childrenList.add(mainId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); 
+        }
+        
+        return childrenList;
+    }
+    
+    public static ArrayList<Integer> geteventId(Connection conn, ArrayList<Integer> childrenList) {
+        ArrayList<Integer> eventIds = new ArrayList<>();
+        String query = "SELECT event_id FROM EventRegistered WHERE main_id = ?";
+        
+        try (PreparedStatement statement = conn.prepareStatement(query)) {
+            for (Integer childId : childrenList) {
+                statement.setInt(1, childId);
+                ResultSet resultSet = statement.executeQuery();
+                boolean found = false;
+                while (resultSet.next()) {
+                    int eventId = resultSet.getInt("event_id");
+                    eventIds.add(eventId);
+                    found = true;
+                }
+                if (!found) {
+                    System.out.println("No events found for child with ID: " + childId);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); 
+            return null; 
+        }
+        
+        return eventIds.isEmpty() ? null : eventIds;
+    }
+  
+
+    public static ArrayList<Date> getDateForEventRegistered(Connection conn, ArrayList<Integer> eventIds) {
+    ArrayList<Date> registeredEventDates = new ArrayList<>();
+    String query = "SELECT Date FROM event WHERE id = ?";
+
+    try (PreparedStatement statement = conn.prepareStatement(query)) {
+        for (Integer eventId : eventIds) {
+            statement.setInt(1, eventId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                String eventDateString = resultSet.getString("Date");
+                System.out.println("Retrieved Date String: " + eventDateString);
+
+                // Parse the date string into Date object
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+                    Date eventDate = dateFormat.parse(eventDateString);
+                    registeredEventDates.add(eventDate);
+                } catch (ParseException e) {
+                    // Handle parsing exception
+                    e.printStackTrace();
+                }
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return null;
+    }
+
+    return registeredEventDates.isEmpty() ? null : registeredEventDates;
+}
+
+
+
+    public static ArrayList<String> getFinalAvailableDates(ArrayList<Date> availableTimeSlots, ArrayList<Date> registeredEventList) {
+        ArrayList<String> finalAvailableDate = new ArrayList<>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        ArrayList<String> registeredEvent = new ArrayList<>();
+
+        for (Date registered : registeredEventList) {
+            String dateString = dateFormat.format(registered);
+            if (!registeredEvent.contains(dateString)) {
+                registeredEvent.add(dateString);
+            }
+        }
+    
+        for (Date available : availableTimeSlots) {
+            String availableDateString = dateFormat.format(available);
+            if (!registeredEvent.contains(availableDateString)) {
+                finalAvailableDate.add(availableDateString);
+            }
+        }
+    
+        return finalAvailableDate.isEmpty() ? null : finalAvailableDate;
+    }
+    
+    
+     
+
 
  }
 

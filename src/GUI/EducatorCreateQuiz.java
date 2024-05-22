@@ -54,39 +54,6 @@ public class EducatorCreateQuiz {
 
         User user = User.getCurrentUser();
 
-        saveBtn.setOnAction(e -> {
-            if (quizTitleTF.getText().isEmpty() || quizDescriptionTA.getText().isEmpty() ||
-                    themeComboBox.getValue() == null || quizContentTF.getText().isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.WARNING, "Please fill in all fields before saving.", ButtonType.OK);
-                alert.showAndWait();
-            } else {
-                String QTitle = quizTitleTF.getText();
-                String Qdescription = quizDescriptionTA.getText();
-                String Qtheme = themeComboBox.getValue();
-                String Qcontent = quizContentTF.getText();
-                boolean savedSuccessfully = Quiz.createQuiz(Lantern.getConn(), QTitle, Qdescription, Qtheme, Qcontent, user.getUsername());
-                QuizData qd = new QuizData(QTitle, Qdescription, Qtheme, Qcontent);
-                if (savedSuccessfully) {
-                    //update columns in QuizAttempt 
-                    Quiz.updateLatestQuiz(Lantern.getConn(),qd);   
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Success");
-                    alert.setContentText("Quiz saved successfully!");
-                    alert.showAndWait();
-                    
-                    quizTitleTF.clear();
-                    quizDescriptionTA.clear();
-                    themeComboBox.getSelectionModel().clearSelection();
-                    quizContentTF.clear();
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setContentText("Failed to save quiz.");
-                    alert.showAndWait();
-                }
-            }
-        });
-
         GridPane gridPane = new GridPane();
         gridPane.setMinSize(400, 200);
         gridPane.setPadding(new Insets(10, 10, 10, 10));
@@ -119,6 +86,40 @@ public class EducatorCreateQuiz {
 
         gridPane.add(saveBtn, 0, 5);
         gridPane.add(cancelBtn, 0, 6);
+       
+        saveBtn.setOnAction(e -> {
+            if (quizTitleTF.getText().isEmpty() || quizDescriptionTA.getText().isEmpty() ||
+                    themeComboBox.getValue() == null || quizContentTF.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Please fill in all fields before saving.", ButtonType.OK);
+                alert.showAndWait();
+            } else {
+                String QTitle = quizTitleTF.getText();
+                String Qdescription = quizDescriptionTA.getText();
+                String Qtheme = themeComboBox.getValue();
+                String Qcontent = quizContentTF.getText();
+                boolean savedSuccessfully = Quiz.createQuiz(Lantern.getConn(), QTitle, Qdescription, Qtheme, Qcontent, user.getUsername());
+                QuizData qd = new QuizData(QTitle, Qdescription, Qtheme, Qcontent);
+                if (savedSuccessfully) {
+                    //update columns in QuizAttempt 
+                    Quiz.updateLatestQuiz(Lantern.getConn(),qd);   
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Success");
+                    alert.setContentText("Quiz saved successfully!");
+                    alert.showAndWait();
+                    EducatorCheckQuizCreated.refreshQuizChanges();
+                    quizTitleTF.clear();
+                    quizDescriptionTA.clear();
+                    themeComboBox.getSelectionModel().clearSelection();
+                    quizContentTF.clear();
+                   
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setContentText("Failed to save quiz.");
+                    alert.showAndWait();
+                }
+            }
+        });
 
         VBox mainvBox = new VBox();
         mainvBox.getChildren().addAll(title, gridPane);
