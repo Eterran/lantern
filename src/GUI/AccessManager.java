@@ -108,9 +108,19 @@ public class AccessManager {
                 Sidebar.selectTab(5);
             }, Sidebar.getBookingsIcon())
         ));
+        buttonAccessRules2.put(UserRole.PARENT, List.of(
+            createButton("View Bookings", () -> {
+                Sidebar.selectTab(6);
+            }, Sidebar.getBookingsIcon())
+        ));
         retractedButtonAccessRules1.put(UserRole.PARENT, List.of(
             createdRetractedButton(Sidebar.getRBookingsIcon(), () -> {
                 Sidebar.selectTab(5);
+            })
+        ));
+        retractedButtonAccessRules2.put(UserRole.PARENT, List.of(
+            createdRetractedButton(Sidebar.getRBookingsIcon(), () -> {
+                Sidebar.selectTab(6);
             })
         ));
         publicProfileAccessRules.put(UserRole.PARENT, List.of(
@@ -123,7 +133,7 @@ public class AccessManager {
             this::createParentSidebar1
         ));
         sidebarAccessRules2.put(UserRole.PARENT, List.of(
-            this::createParentSidebar1
+            this::createParentSidebar2
         ));
     }
 
@@ -251,6 +261,14 @@ public class AccessManager {
     private VBox createParentSidebar1() {
         VBox vBox = BookingPageGUI.BookingTabPage();
         //VBox vBox = viewBookingTab.vboxput();
+<<<<<<< HEAD
+=======
+        return vBox;
+    }
+    private VBox createParentSidebar2() {
+        //VBox vBox = BookingPageGUI.BookingTabPage();
+        VBox vBox = viewBookingTab.vboxput();
+>>>>>>> e99fce1bfc1ac9712dc4528996202169cd90a390
         return vBox;
     }
     public static enum UserRole {

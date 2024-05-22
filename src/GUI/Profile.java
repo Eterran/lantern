@@ -24,7 +24,9 @@ import javafx.scene.layout.StackPane;
 public class Profile {
     private final static AccessManager accessManager = Sidebar.getAccessManager();
     private final static Connection conn = Lantern.getConn();
-
+    public static void refreshProfile(){
+        Sidebar.setBox1(loadProfileTab());
+    }
     public static VBox loadProfileTab(){
         try {
             if(!Database.usernameExists(Database.connectionDatabase(), User.getCurrentUser().getUsername())){
@@ -216,6 +218,7 @@ public class Profile {
             declineButton.setOnAction(e -> {
                 ParentChildren.declineRequest(conn, User.getCurrentUser().getUsername(), pendingRequest);
                 pendingRequestsVBox.getChildren().remove(pendingRequestHBox);
+                refreshProfile();
             });
             pendingRequestHBox.getChildren().addAll(pendingRequestLabel, Lantern.createSpacer(), acceptButton, declineButton);
             pendingRequestsVBox.getChildren().add(pendingRequestHBox);
