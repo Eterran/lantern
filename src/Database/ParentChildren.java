@@ -167,7 +167,7 @@ public class ParentChildren {
          
     }
     
-    public ArrayList<String> showParent(Connection connection,String childrenName){
+    public static ArrayList<String> showParent(Connection connection,String childrenName){
         Login_Register lr=new Login_Register();
         int main_id=lr.getID(childrenName, connection);
         ArrayList <String>list=new ArrayList<>();
