@@ -122,6 +122,19 @@ public class RegisterEvent {
     return check;
     }
     
+    public static boolean checkClashEventDate(Connection connection,String childrenName,EventData event){
+        boolean check=false;
+        Login_Register lg=new Login_Register();
+
+    ArrayList<EventData>list=getAllEventRegistered(connection,childrenName);
+        for(EventData hold:list){
+            if(hold.date.equalsIgnoreCase(event.date))
+                check=true;
+        }
+    return check;
+    }
+    
+
     //pass the event that want to check
     public static boolean checkEventRegistered(Connection connection,String username,EventData event){
     ArrayList<EventData>list=getAllEventRegistered(connection,username);

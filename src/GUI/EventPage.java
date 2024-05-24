@@ -1,4 +1,8 @@
 package GUI;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import Database.Database;
 import Database.Event;
@@ -29,10 +33,10 @@ public class EventPage {
     private static VBox displayLiveEventVBox = new VBox();
     private static VBox displayClosestEventVBox = new VBox();
 
-
     public static void updatePointsVbox(){
         displayPointsBox.getChildren().clear();
         updatePoints();
+
         Label pointsLabel = new Label("Points: "+ pointLabel);
         pointsLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         displayPointsBox.getChildren().add(pointsLabel);
@@ -43,7 +47,6 @@ public class EventPage {
     }
 
     public static void updateLiveEvent(){
-        //refreshLiveEvent and refresh refresh3closestUpcoming
         displayLiveEventVBox.getChildren().clear();
         //live event box 
         HBox content1 = new HBox();
@@ -84,9 +87,8 @@ public class EventPage {
         scrollPane2.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         displayClosestEventVBox.getChildren().add(scrollPane2);
-
-
     }
+
     public static VBox viewEventTab() {
         VBox vbox1 = new VBox();
         vbox1.setStyle("-fx-background-color:lightyellow");
@@ -197,35 +199,47 @@ public class EventPage {
 
         Login_Register lr = new Login_Register();
         GlobalLeaderBoard glb= new GlobalLeaderBoard();
-        //Database db = new Database();
+        Database db = new Database();
+    
+        LocalTime now = LocalTime.now();
+        LocalTime eventTime = LocalTime.parse(thisevent.getTime(), DateTimeFormatter.ofPattern("HH:mm"));
 
-        //if clash (show alert, Event clashed) --> but button still availble   ,
-            //if (event shown in the getAllregisteredList) --> disable button
-        //else if(not clash) --> button available
-        //
+        if (eventTime.isBefore(now)) { // Event time has passed
+            toggleButton.setText("Event passed");
+            toggleButton.setSelected(true); // Set button as toggled
+            toggleButton.setDisable(true); // Disable the button
+
+        }else if(RegisterEvent.checkClashDate(Lantern.getConn(), User.getCurrentUser().getUsername(),thisevent)){ //clash parents' booking
+            toggleButton.setOnAction(event ->{
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Fail");
+                alert.setHeaderText(null);
+                alert.setContentText("Fail to register because has clashed with your parents' bookings.");
+                alert.showAndWait();
+                toggleButton.setDisable(false);
+                updateLiveEvent();
+        });
+       }else if (RegisterEvent.checkClashEventDate(Lantern.getConn(),User.getCurrentUser().getUsername(),thisevent)){ //check clash with same date event, can be same event or different event
         
-        if(RegisterEvent.checkClashDate(Lantern.getConn(), User.getCurrentUser().getUsername(),thisevent)){ //clash parents' booking
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Fail");
-            alert.setHeaderText(null);
-            alert.setContentText("Fail to register because has clashed with your parents' bookings.");
-            alert.showAndWait();
-            toggleButton.setDisable(false);
-            /////////////////////////////////////////
-            updateLiveEvent();
-            //register ui();
-
-            if(RegisterEvent.checkEventRegistered (Lantern.getConn(),User.getCurrentUser().getUsername(),thisevent)){  //clash with previous booking page
+            if(RegisterEvent.checkEventRegistered (Lantern.getConn(),User.getCurrentUser().getUsername(),thisevent)){  //check with totally same event
+                toggleButton.setSelected(true);
                 toggleButton.setDisable(true);
             }else{
-                ;
-            }
-
+                toggleButton.setOnAction(event ->{
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Fail");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Fail to register because this event has clashed with others registered event."); //
+                    alert.showAndWait();
+                    toggleButton.setDisable(true);
+                    updateLiveEvent();
+                });
+            } 
         }else{ //does not clash with parents' booking and events registered
-            toggleButton.setDisable(false);
             toggleButton.setOnAction(event->{
                 RegisterEvent.registerEvent(Lantern.getConn(), thisevent,User.getCurrentUser().getUsername()) ;
                 toggleButton.setDisable(true);
+                updateLiveEvent();   
                
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Success");
@@ -233,11 +247,18 @@ public class EventPage {
                 alert.setContentText("Events registered successfully!");
                 alert.showAndWait();
 
-                User.getCurrentUser().setPoints(pointLabel +5);
+                //update point in glb 
+                double updatedpoint = User.getCurrentUser().getPoints() + 5;  
+                User.getCurrentUser().setPoints(updatedpoint);
                 glb.updateXpState(Lantern.getConn(), lr.getId()); 
+                try {
+                    db.updatePoint(Lantern.getConn(), lr.getId(), updatedpoint);
+                    updatePointsVbox();
+                } catch (SQLException ex) {
+                        ex.printStackTrace();
+                }   
                 updatePointsVbox();   
-                ///////////////////////////
-                updateLiveEvent();         
+                     
              });
 
        }  
@@ -288,46 +309,64 @@ public class EventPage {
 
         Login_Register lr = new Login_Register();
         GlobalLeaderBoard glb= new GlobalLeaderBoard();
-        //Database db = new Database();
+        Database db = new Database();
 
-        //if clash (show alert, Event clashed) --> but button still availble   ,
-            //if (event shown in the getAllregisteredList) --> disable button
-        //else if(not clash) --> button available
-        //
-        
-        if(RegisterEvent.checkClashDate(Lantern.getConn(), User.getCurrentUser().getUsername(),thisevent)){ //clash parents' booking
+        if(RegisterEvent.checkClashDate(Lantern.getConn(), User.getCurrentUser().getUsername(),thisevent)){
+            toggleButton.setDisable(false);
+           //clash parents' booking
+           toggleButton.setOnAction(event ->{
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Fail");
             alert.setHeaderText(null);
             alert.setContentText("Fail to register because has clashed with your parents' bookings.");
             alert.showAndWait();
-            toggleButton.setDisable(false);
-            updateUpcomingEvent();
+           });
+           
+            //updateUpcomingEvent();
             //register ui();
 
-            if(RegisterEvent.checkEventRegistered (Lantern.getConn(),User.getCurrentUser().getUsername(),thisevent)){  //clash with previous booking page
+        }else if (RegisterEvent.checkClashEventDate(Lantern.getConn(),User.getCurrentUser().getUsername(),thisevent)){ //check clash with same date event, can be same event or different event
+        
+            if(RegisterEvent.checkEventRegistered (Lantern.getConn(),User.getCurrentUser().getUsername(),thisevent)){  //check with totally same event
+                toggleButton.setSelected(true);
                 toggleButton.setDisable(true);
             }else{
-                ;
-            }
-
+                toggleButton.setOnAction(event ->{
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Fail");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Fail to register because this event has clashed with others registered event."); //
+                    alert.showAndWait();
+                    toggleButton.setDisable(true);
+                    updateLiveEvent();
+                });
+            } 
         }else{ //does not clash with parents' booking and events registered
-            toggleButton.setDisable(false);
+         //   toggleButton.setDisable(false);
             toggleButton.setOnAction(event->{
-                RegisterEvent.registerEvent(Lantern.getConn(), thisevent,User.getCurrentUser().getUsername()) ;
                 toggleButton.setDisable(true);
-               
+                RegisterEvent.registerEvent(Lantern.getConn(), thisevent,User.getCurrentUser().getUsername()) ;
+                
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Success");
                 alert.setHeaderText(null);
                 alert.setContentText("Events registered successfully!");
                 alert.showAndWait();
 
-                User.getCurrentUser().setPoints(pointLabel +5);
+                //update in glb
+                double updatedpoint = User.getCurrentUser().getPoints() + 5;  
+                User.getCurrentUser().setPoints(updatedpoint);
                 glb.updateXpState(Lantern.getConn(), lr.getId()); 
+                try {
+                    db.updatePoint(Lantern.getConn(), lr.getId(), updatedpoint);
+                    updatePointsVbox();
+                } catch (SQLException ex) {
+                        ex.printStackTrace();
+                } 
                 updatePointsVbox();   
-                ///////////////////////////
-                updateUpcomingEvent();       
+                updateUpcomingEvent();     
+                       
+
              });
 
        }  

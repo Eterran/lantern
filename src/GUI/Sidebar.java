@@ -388,6 +388,8 @@ public class Sidebar {
             selectTab(1);
         });
         tab2.setOnAction(e -> {
+            EventPage.updateLiveEvent();
+            EventPage.updateUpcomingEvent();
             selectTab(2);
         });
         tab3.setOnAction(e -> {
@@ -401,6 +403,8 @@ public class Sidebar {
             selectTab(1);
         });
         rtab2.setOnAction(e -> {
+            EventPage.updateLiveEvent();
+            EventPage.updateUpcomingEvent();
             selectTab(2);
         });
         rtab3.setOnAction(e -> {
