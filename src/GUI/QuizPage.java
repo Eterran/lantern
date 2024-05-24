@@ -117,13 +117,11 @@ public class QuizPage {
         hbox2.getChildren().addAll(checkBox, checkBox2, checkBox3, checkBox4);
         hbox2.setSpacing(10);
 
-        // Initially, set all checkboxes as selected
         checkBox.setSelected(true);
         checkBox2.setSelected(true);
         checkBox3.setSelected(true);
         checkBox4.setSelected(true);
 
-        // Add all checkboxes to the selectedThemes list
         selectedThemes.add("Science");
         selectedThemes.add("Technology");
         selectedThemes.add("Engineering");
