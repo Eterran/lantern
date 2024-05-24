@@ -260,11 +260,9 @@ public class AccessManager {
     }
     private VBox createParentSidebar1() {
         VBox vBox = BookingPageGUI.BookingTabPage();
-        //VBox vBox = viewBookingTab.vboxput();
         return vBox;
     }
     private VBox createParentSidebar2() {
-        //VBox vBox = BookingPageGUI.BookingTabPage();
         VBox vBox = viewBookingTab.vboxput();
         return vBox;
     }

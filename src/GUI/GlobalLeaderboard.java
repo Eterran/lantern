@@ -19,43 +19,82 @@ import Student.GlobalLeaderBoard;
 import javafx.geometry.Insets;
 
 public class GlobalLeaderboard {
+    private static VBox refreshGLBtab =  new VBox();
 
-    // @Override
-    // public void start(Stage primaryStage) {
+    public static void refreshUIGLB() {
+        refreshGLBtab.getChildren().clear();
 
-    //     Scene scene = new Scene(globalLeaderBoardTab());
-    //     primaryStage.setScene(scene);
-    //     primaryStage.setTitle("Global Leaderboard");
-    //     primaryStage.show();
-    // }
+        VBox temp = new VBox();
+        VBox.setVgrow(temp, javafx.scene.layout.Priority.ALWAYS);
+        GlobalLeaderBoard glb = new GlobalLeaderBoard();
+        Login_Register user = new Login_Register();
+        glb.updateXpState(Lantern.getConn(), user.getId());
+        try {
+            glb.loadGlobal(Lantern.getConn());
+        } catch (IOException e) {
+            e.printStackTrace(); 
+            return;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return;
+        }
 
-    // public static void main(String[] args) {
-    //     launch(args);
-    // }
 
+        String [] username = glb.getUsername();
+        double[] points = glb.getXp();
+        for (int i = 0; i < username.length; i++) {
+            System.out.println("Check glb here: " +username.length); //cannot find
+            HBox dataBox = new HBox();
+            dataBox.setPadding(new Insets(5)); 
+            if (i % 2 == 0) {
+                dataBox.setStyle("-fx-background-color: #ADEFD1;");
+            } else {
+                dataBox.setStyle("-fx-background-color: #ffffff;");
+            }       
+            Label rankData = new Label(String.valueOf(i + 1));  
+            rankData.setPadding(new Insets(5,10,5,5));
+            Label usernameData = new Label(username[i]);
+            System.out.print(username[i] + " "); //not printed out
+            usernameData.setPadding(new Insets(5,10,5,5));
+            Label pointData = new Label(String.valueOf(points[i]));
+            System.out.print(points[i]); //not printed out
+            pointData.setPadding(new Insets(5,10,5,5));
+            Region spacer3 = new Region();
+            HBox.setHgrow(spacer3, javafx.scene.layout.Priority.ALWAYS);
+            Region spacer4 = new Region();
+            HBox.setHgrow(spacer4, javafx.scene.layout.Priority.ALWAYS);
 
-    public static VBox globalLeaderBoardTab(){
-        //
+            dataBox.getChildren().addAll(rankData, spacer3, usernameData, spacer4, pointData);  //adding every info into hbox for each line
+            
+            temp.getChildren().add(dataBox); //continue add all the databox into vbox
+        }
+
+      
+       // temp.getChildren().add(scrollPane);
+        refreshGLBtab.getChildren().add(temp);
+    }
+
+    public static VBox globalLeaderBoardTab() {
+
         BorderPane borderPane = new BorderPane();
+
+        //title
         Label titleLabel = new Label("Global Leaderboard");
-        borderPane.setTop(titleLabel);
         titleLabel.setAlignment(Pos.CENTER);
         BorderPane.setAlignment(titleLabel, Pos.CENTER);
         titleLabel.setFont(new Font(23));
         titleLabel.setStyle("-fx-font-weight: bold;");
+
      
-        //creating ScrollPane 
+         //creating ScrollPane 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setFitToWidth(true);
         scrollPane.setPrefSize(391.0, 247.0);
 
-        //vbox contain lots of hbox
-        VBox vBox = new VBox();
-        VBox.setVgrow(vBox, javafx.scene.layout.Priority.ALWAYS); 
+        //header to store rank, username, point label
         HBox headerBox = new HBox();
         HBox.setHgrow(headerBox, javafx.scene.layout.Priority.ALWAYS); 
         headerBox.setStyle("-fx-background-color:#004b3a;");
-        //730099
         
         Label rankLabel = new Label("Rank");
         rankLabel.setPadding(new Insets(5));
@@ -74,52 +113,16 @@ public class GlobalLeaderboard {
         headerBox.setPadding(new Insets(5));
         headerBox.getChildren().addAll(rankLabel,spacer1, usernameLabel, spacer2, pointLabel);
 
-        vBox.getChildren().add(headerBox);
 
-        // int numberOfBoxes = 4; //based on total number of students (totalrowsinquizAttempt)
-        GlobalLeaderBoard glb = new GlobalLeaderBoard();
-        Login_Register user = new Login_Register();
-        glb.insertXpState(Lantern.getConn(), user.getId());
-        glb.updateXpState(Lantern.getConn(), user.getId());
-        try {
-                glb.loadGlobal(Lantern.getConn());
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        String [] username = glb.getUsername();
-        System.out.println(username.length);
-        double[] points = glb.getXp();
-        for (int i = 0; i < username.length; i++) {
-            HBox dataBox = new HBox();
-            dataBox.setPadding(new Insets(5)); 
-            if (i % 2 == 0) {
-                dataBox.setStyle("-fx-background-color: #ADEFD1;");
-            } else {
-                dataBox.setStyle("-fx-background-color: #ffffff;");
-            }
-           
-            
-            Label rankData = new Label(String.valueOf(i + 1));  //fetch the value from the db
-            rankData.setPadding(new Insets(5,10,5,5));
-            Label usernameData = new Label(username[i]);
-            usernameData.setPadding(new Insets(5,10,5,5));
-            Label pointData = new Label(String.valueOf(points[i]));
-            pointData.setPadding(new Insets(5,10,5,5));
-            Region spacer3 = new Region();
-            HBox.setHgrow(spacer3, javafx.scene.layout.Priority.ALWAYS);
-            Region spacer4 = new Region();
-            HBox.setHgrow(spacer4, javafx.scene.layout.Priority.ALWAYS);
+        borderPane.setTop(titleLabel);
+        //vbox contain lots of hbox
+        VBox vBox = new VBox();
+        VBox.setVgrow(vBox, javafx.scene.layout.Priority.ALWAYS); 
+        refreshUIGLB();
 
-            dataBox.getChildren().addAll(rankData, spacer3, usernameData, spacer4, pointData);  //adding every info into hbox for each line
-            
-            vBox.getChildren().add(dataBox); //continue add all the databox into vbox
-        }
-
+        vBox.getChildren().addAll(headerBox, refreshGLBtab);
         scrollPane.setContent(vBox);
+        
         borderPane.setCenter(scrollPane);
 
         Pane leftPane = new Pane();
@@ -135,6 +138,7 @@ public class GlobalLeaderboard {
         VBox mainvbox = new VBox();
         // mainvbox.setStyle("-fx-background-color:white;");
         mainvbox.getChildren().add(borderPane);
+       // mainvbox.getChildren().addAll(titleLabel, headerBox, refreshGLBtab);
         VBox.setVgrow(borderPane, Priority.ALWAYS); //ensure borderPane grow together with Vbox
         mainvbox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         return mainvbox;

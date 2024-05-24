@@ -1,19 +1,15 @@
 package GUI;
-import java.sql.Connection;
 import java.util.ArrayList;
-
 import Database.Database;
 import Database.Event;
 import Database.EventData;
 import Database.Login_Register;
-import Database.QuizData;
 import Database.RegisterEvent;
 import Database.User;
 import Student.GlobalLeaderBoard;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
