@@ -394,6 +394,7 @@ public class Sidebar {
             selectTab(3);
         });
         tab4.setOnAction(e -> {
+            GlobalLeaderboard.refreshUIGLB();
             selectTab(4);
         });
         rtab1.setOnAction(e -> {
@@ -406,6 +407,7 @@ public class Sidebar {
             selectTab(3);
         });
         rtab4.setOnAction(e -> {
+            GlobalLeaderboard.refreshUIGLB();
             selectTab(4);
         });
     }
