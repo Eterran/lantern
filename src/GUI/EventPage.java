@@ -26,6 +26,9 @@ import javafx.scene.text.FontWeight;
 public class EventPage {
     private static VBox displayPointsBox = new VBox();
     private static Double pointLabel = User.getCurrentUser().getPoints();//fetch from the user db
+    private static VBox displayLiveEventVBox = new VBox();
+    private static VBox displayClosestEventVBox = new VBox();
+
 
     public static void updatePointsVbox(){
         displayPointsBox.getChildren().clear();
@@ -39,7 +42,51 @@ public class EventPage {
         pointLabel = User.getCurrentUser().getPoints();
     }
 
+    public static void updateLiveEvent(){
+        //refreshLiveEvent and refresh refresh3closestUpcoming
+        displayLiveEventVBox.getChildren().clear();
+        //live event box 
+        HBox content1 = new HBox();
+        content1.setStyle("-fx-background-color: lightblue");
+        content1.setSpacing(20);
+      
+        ArrayList<EventData> liveEventList = Event.getLiveEvents(Lantern.getConn());
+        for (int i = 0; i <liveEventList.size(); i++) {
+            BorderPane borderPane = BPForAllLiveEvents(liveEventList.get(i));
+            content1.getChildren().addAll(borderPane);
+        }
 
+        ScrollPane scrollPane1 = new ScrollPane(content1);
+        scrollPane1.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS); 
+        scrollPane1.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        displayLiveEventVBox.getChildren().add(scrollPane1);
+
+
+    }
+    public static void updateUpcomingEvent(){
+        displayClosestEventVBox.getChildren().clear();
+        //upcoming event list
+        HBox content2 = new HBox();
+        content2.setStyle("-fx-background-color: lightblue");
+        content2.setSpacing(20); // Set spacing between items
+      
+        ArrayList<EventData> closestUpcoming = Event.getLatestEvent(Lantern.getConn());
+        for (int i = 0; i <closestUpcoming.size(); i++) {
+            BorderPane borderPane2 = BPForAllClosestUpcomingEvent(closestUpcoming.get(i));
+
+            content2.getChildren().addAll(borderPane2);
+        }
+
+        //creating scrollpane2
+        ScrollPane scrollPane2 = new ScrollPane(content2);
+        scrollPane2.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS); // Always show horizontal scrollbar
+        scrollPane2.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        displayClosestEventVBox.getChildren().add(scrollPane2);
+
+
+    }
     public static VBox viewEventTab() {
         VBox vbox1 = new VBox();
         vbox1.setStyle("-fx-background-color:lightyellow");
@@ -55,26 +102,13 @@ public class EventPage {
         tophbox.getChildren().addAll(label1 ,spacer1, displayPointsBox);
         vbox1.getChildren().add(tophbox);
 
-        HBox content1 = new HBox();
-        content1.setStyle("-fx-background-color: lightblue");
-        content1.setSpacing(20);
-
-       
-        ArrayList<EventData> liveEventList = Event.getLiveEvents(Lantern.getConn());
-        for (int i = 0; i <liveEventList.size(); i++) {
-            BorderPane borderPane = BPForAllEvents(liveEventList.get(i));
-            content1.getChildren().addAll(borderPane);
-        }
-
-        ScrollPane scrollPane1 = new ScrollPane(content1);
-        scrollPane1.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS); 
-        scrollPane1.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-
+        //live events part (structure)
+        updateLiveEvent();
         BorderPane bp = new BorderPane();
         VBox vbox2 = new VBox();
         vbox2.setStyle("-fx-background-color: lightblue");
         vbox2.setPrefSize(600, 200);
-        vbox2.getChildren().add(scrollPane1);
+        vbox2.getChildren().add(displayLiveEventVBox); //add liveEvent VBox
         bp.setCenter(vbox2);
         Pane topPane = new Pane();
         topPane.setPrefSize(400,30);
@@ -92,7 +126,7 @@ public class EventPage {
         leftPane.setStyle("-fx-background-color: lightblue;");
         rightPane.setStyle("-fx-background-color: lightblue;");
         bottomPane.setStyle("-fx-background-color: lightblue;");
-
+       
         //Closest 3 upcoming events section
 
         //title for upcoming events
@@ -105,28 +139,14 @@ public class EventPage {
         vbox3.getChildren().add(label3);
 
         //content in vbox3
-        HBox content2 = new HBox();
-        content2.setStyle("-fx-background-color: lightblue");
-        content2.setSpacing(20); // Set spacing between items
-      
-        ArrayList<EventData> closestUpcoming = Event.getLatestEvent(Lantern.getConn());
-        for (int i = 0; i <closestUpcoming.size(); i++) {
-            BorderPane borderPane2 = BPForAllEvents(closestUpcoming.get(i));
-
-            content2.getChildren().addAll(borderPane2);
-        }
-
-        //creating scrollpane2
-        ScrollPane scrollPane2 = new ScrollPane(content2);
-        scrollPane2.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS); // Always show horizontal scrollbar
-        scrollPane2.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-
+        
         //vbox4 in bp2
+        updateUpcomingEvent();
         BorderPane bp2 = new BorderPane();
         VBox vbox4 = new VBox();
         vbox4.setStyle("-fx-background-color: lightblue");
         vbox4.setPrefSize(600, 200);
-        vbox4.getChildren().add(scrollPane2);
+        vbox4.getChildren().add(displayClosestEventVBox);
         bp2.setCenter(vbox4);
         Pane topPane2 = new Pane();
         topPane2.setPrefSize(400,30);
@@ -152,7 +172,7 @@ public class EventPage {
     }
 
     
-    public static BorderPane BPForAllEvents(EventData thisevent) {
+    public static BorderPane BPForAllLiveEvents(EventData thisevent) {
         BorderPane borderPane = new BorderPane();
         borderPane.setPrefWidth(300);
         borderPane.setPrefHeight(180);
@@ -177,11 +197,31 @@ public class EventPage {
 
         Login_Register lr = new Login_Register();
         GlobalLeaderBoard glb= new GlobalLeaderBoard();
-        Database db = new Database();
+        //Database db = new Database();
 
-        if(RegisterEvent.checkClashDate(Lantern.getConn(), User.getCurrentUser().getUsername(),thisevent) || RegisterEvent.checkEventRegistered (Lantern.getConn(),User.getCurrentUser().getUsername(),thisevent)){
+        //if clash (show alert, Event clashed) --> but button still availble   ,
+            //if (event shown in the getAllregisteredList) --> disable button
+        //else if(not clash) --> button available
+        //
+        
+        if(RegisterEvent.checkClashDate(Lantern.getConn(), User.getCurrentUser().getUsername(),thisevent)){ //clash parents' booking
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Fail");
+            alert.setHeaderText(null);
+            alert.setContentText("Fail to register because has clashed with your parents' bookings.");
+            alert.showAndWait();
+            toggleButton.setDisable(false);
+            /////////////////////////////////////////
+            updateLiveEvent();
+            //register ui();
+
+            if(RegisterEvent.checkEventRegistered (Lantern.getConn(),User.getCurrentUser().getUsername(),thisevent)){  //clash with previous booking page
                 toggleButton.setDisable(true);
-        }else{        
+            }else{
+                ;
+            }
+
+        }else{ //does not clash with parents' booking and events registered
             toggleButton.setDisable(false);
             toggleButton.setOnAction(event->{
                 RegisterEvent.registerEvent(Lantern.getConn(), thisevent,User.getCurrentUser().getUsername()) ;
@@ -195,14 +235,102 @@ public class EventPage {
 
                 User.getCurrentUser().setPoints(pointLabel +5);
                 glb.updateXpState(Lantern.getConn(), lr.getId()); 
-                updatePointsVbox();
-
-              
+                updatePointsVbox();   
+                ///////////////////////////
+                updateLiveEvent();         
              });
 
-       }
-       
+       }  
+        BorderPane.setAlignment(label1, Pos.TOP_LEFT);
+        BorderPane.setAlignment(label2, Pos.TOP_LEFT);
+        BorderPane.setAlignment(label3, Pos.CENTER_LEFT);
+        BorderPane.setAlignment(label4, Pos.CENTER_LEFT);
+        BorderPane.setAlignment(label5, Pos.BOTTOM_CENTER);
+        BorderPane.setAlignment(toggleButton, Pos.BOTTOM_RIGHT);
+
+        Region spacer= new Region();
+        VBox topBox = new VBox(label1);
+        topBox.setPrefHeight(40);
+        VBox middleBox = new VBox(label2,label3, label4); 
+        HBox bottomBox = new HBox(label5, spacer, toggleButton);
+        HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
         
+        // Set nodes to the BorderPane
+        borderPane.setTop(topBox);
+        borderPane.setCenter(middleBox);
+        borderPane.setBottom(bottomBox);
+
+        return borderPane;
+    }
+
+    public static BorderPane BPForAllClosestUpcomingEvent(EventData thisevent) {
+        BorderPane borderPane = new BorderPane();
+        borderPane.setPrefWidth(300);
+        borderPane.setPrefHeight(180);
+        borderPane.setStyle("-fx-background-color: #226c94;");
+        borderPane.setPadding(new Insets(15));
+  
+        Label label1 = new Label(thisevent.getEventTitle());
+        label1.setTextFill(Color.WHITE); 
+        label1.setFont(Font.font("Arial", FontWeight.BOLD, 25));
+        Label label2 = new Label(thisevent.getDescription());
+        label2.setTextFill(Color.WHITE); 
+        Label label3 = new Label(thisevent.getVenue());
+        label3.setTextFill(Color.WHITE); 
+        Label label4 = new Label(thisevent.getDate());
+        label4.setTextFill(Color.WHITE); 
+        Label label5 = new Label(thisevent.getTime());
+        label5.setTextFill(Color.WHITE); 
+
+        label1.setFont(Font.font("Arial", FontWeight.BOLD, 15));
+        ToggleButton toggleButton= new ToggleButton("Register");
+        toggleButton.setAlignment(Pos.BOTTOM_RIGHT);
+
+        Login_Register lr = new Login_Register();
+        GlobalLeaderBoard glb= new GlobalLeaderBoard();
+        //Database db = new Database();
+
+        //if clash (show alert, Event clashed) --> but button still availble   ,
+            //if (event shown in the getAllregisteredList) --> disable button
+        //else if(not clash) --> button available
+        //
+        
+        if(RegisterEvent.checkClashDate(Lantern.getConn(), User.getCurrentUser().getUsername(),thisevent)){ //clash parents' booking
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Fail");
+            alert.setHeaderText(null);
+            alert.setContentText("Fail to register because has clashed with your parents' bookings.");
+            alert.showAndWait();
+            toggleButton.setDisable(false);
+            updateUpcomingEvent();
+            //register ui();
+
+            if(RegisterEvent.checkEventRegistered (Lantern.getConn(),User.getCurrentUser().getUsername(),thisevent)){  //clash with previous booking page
+                toggleButton.setDisable(true);
+            }else{
+                ;
+            }
+
+        }else{ //does not clash with parents' booking and events registered
+            toggleButton.setDisable(false);
+            toggleButton.setOnAction(event->{
+                RegisterEvent.registerEvent(Lantern.getConn(), thisevent,User.getCurrentUser().getUsername()) ;
+                toggleButton.setDisable(true);
+               
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Success");
+                alert.setHeaderText(null);
+                alert.setContentText("Events registered successfully!");
+                alert.showAndWait();
+
+                User.getCurrentUser().setPoints(pointLabel +5);
+                glb.updateXpState(Lantern.getConn(), lr.getId()); 
+                updatePointsVbox();   
+                ///////////////////////////
+                updateUpcomingEvent();       
+             });
+
+       }  
         BorderPane.setAlignment(label1, Pos.TOP_LEFT);
         BorderPane.setAlignment(label2, Pos.TOP_LEFT);
         BorderPane.setAlignment(label3, Pos.CENTER_LEFT);

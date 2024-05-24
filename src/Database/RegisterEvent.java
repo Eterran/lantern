@@ -114,11 +114,11 @@ public class RegisterEvent {
                 check=true;
          }
          
-    ArrayList<EventData>list=getAllEventRegistered(connection,childrenName);
-        for(EventData hold:list){
-            if(hold.date.equalsIgnoreCase(event.date))
-                check=true;
-        }
+    // ArrayList<EventData>list=getAllEventRegistered(connection,childrenName);
+    //     for(EventData hold:list){
+    //         if(hold.date.equalsIgnoreCase(event.date))
+    //             check=true;
+    //     }
     return check;
     }
     
