@@ -338,7 +338,7 @@ public class EventPage {
                     alert.setContentText("Fail to register because this event has clashed with others registered event."); //
                     alert.showAndWait();
                     toggleButton.setDisable(true);
-                    updateLiveEvent();
+                    updateUpcomingEvent();
                 });
             } 
         }else{ //does not clash with parents' booking and events registered
