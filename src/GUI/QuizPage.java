@@ -208,6 +208,7 @@ public class QuizPage {
    
         if(Quiz.checkAttempted(Lantern.getConn(),qtitle,User.getCurrentUser().getUsername())){
             toggleBtn.setDisable(true);
+            toggleBtn.setText("Completed");
         }else{
             toggleBtn.setDisable(false);
             toggleBtn.setOnAction(event->{
@@ -215,7 +216,7 @@ public class QuizPage {
                     toggleBtn.setDisable(true);
                     QuizData qd= new QuizData(qtitle, qdescrip, qtheme, qContent);
                     Stage stage = new Stage();
-                    stage.setScene(new Scene(showQuiz(qContent, stage, qd), 400, 200));
+                    stage.setScene(new Scene(showQuiz(qContent, stage, qd, toggleBtn), 400, 200));
                     stage.setTitle("Quiz Description");
                     stage.show();
 
@@ -238,7 +239,7 @@ public class QuizPage {
     }
 
     //show quiz description and finish attempt button
-    public static BorderPane showQuiz(String quizContent,Stage stage, QuizData qd){
+    public static BorderPane showQuiz(String quizContent,Stage stage, QuizData qd, ToggleButton toggleBtn){
         BorderPane borderPane= new BorderPane();
         
         Label quizC = new Label (quizContent);
@@ -260,7 +261,7 @@ public class QuizPage {
             double updatedpoint = User.getCurrentUser().getPoints() + 2;  
             glb.updateXpState(Lantern.getConn(), lr.getId()); 
             User.getCurrentUser().setPoints(updatedpoint);
-            
+            toggleBtn.setText("Completed");
             try {
                 db.updatePoint(Lantern.getConn(), lr.getId(), updatedpoint);
                 updatePointsVbox();
