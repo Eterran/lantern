@@ -2,11 +2,14 @@ package GUI;
 import java.sql.Connection;
 import java.util.ArrayList;
 
+import Database.Database;
 import Database.Event;
 import Database.EventData;
+import Database.Login_Register;
 import Database.QuizData;
 import Database.RegisterEvent;
 import Database.User;
+import Student.GlobalLeaderBoard;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
@@ -25,6 +28,21 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class EventPage {
+    private static VBox displayPointsBox = new VBox();
+    private static Double pointLabel = User.getCurrentUser().getPoints();//fetch from the user db
+
+    public static void updatePointsVbox(){
+        displayPointsBox.getChildren().clear();
+        updatePoints();
+        Label pointsLabel = new Label("Points: "+ pointLabel);
+        pointsLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        displayPointsBox.getChildren().add(pointsLabel);
+    }
+
+    public static void updatePoints(){
+        pointLabel = User.getCurrentUser().getPoints();
+    }
+
 
     public static VBox viewEventTab() {
         VBox vbox1 = new VBox();
@@ -32,8 +50,14 @@ public class EventPage {
         vbox1.setPrefSize(600, 80); 
         Label label1 = new Label("Live Event");
         label1.setStyle("-fx-font-weight: bold; -fx-font-size: 16");
-        label1.setPadding(new Insets(10));
-        vbox1.getChildren().add(label1);
+        vbox1.setPadding(new Insets(10));
+
+        Region spacer1 = new Region();
+        HBox.setHgrow(spacer1, javafx.scene.layout.Priority.ALWAYS); 
+        HBox tophbox= new HBox();
+        updatePointsVbox();
+        tophbox.getChildren().addAll(label1 ,spacer1, displayPointsBox);
+        vbox1.getChildren().add(tophbox);
 
         HBox content1 = new HBox();
         content1.setStyle("-fx-background-color: lightblue");
@@ -52,7 +76,7 @@ public class EventPage {
 
         BorderPane bp = new BorderPane();
         VBox vbox2 = new VBox();
-       vbox2.setStyle("-fx-background-color: lightblue");
+        vbox2.setStyle("-fx-background-color: lightblue");
         vbox2.setPrefSize(600, 200);
         vbox2.getChildren().add(scrollPane1);
         bp.setCenter(vbox2);
@@ -155,26 +179,29 @@ public class EventPage {
         ToggleButton toggleButton= new ToggleButton("Register");
         toggleButton.setAlignment(Pos.BOTTOM_RIGHT);
 
-        //check, if the event registered already OR clash with booking date
-        //check, if yes, clash
-        //return true, toggleButton.setDisable(true)
+        Login_Register lr = new Login_Register();
+        GlobalLeaderBoard glb= new GlobalLeaderBoard();
+        Database db = new Database();
 
-        //else register successfully, save into database, toggle the button to become disable
-        //everytime display button check for these three rules
-
-        //checkClashDate (event clash with parents' booking or registered event)
         if(RegisterEvent.checkClashDate(Lantern.getConn(), User.getCurrentUser().getUsername(),thisevent) || RegisterEvent.checkEventRegistered (Lantern.getConn(),User.getCurrentUser().getUsername(),thisevent)){
                 toggleButton.setDisable(true);
         }else{        
+            toggleButton.setDisable(false);
             toggleButton.setOnAction(event->{
-            RegisterEvent.registerEvent(Lantern.getConn(), thisevent,User.getCurrentUser().getUsername()) ;
-            toggleButton.setDisable(true);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Success");
-            alert.setHeaderText(null);
-            alert.setContentText("Events registered successfully!");
-            alert.showAndWait();
-    
+                RegisterEvent.registerEvent(Lantern.getConn(), thisevent,User.getCurrentUser().getUsername()) ;
+                toggleButton.setDisable(true);
+               
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Success");
+                alert.setHeaderText(null);
+                alert.setContentText("Events registered successfully!");
+                alert.showAndWait();
+
+                User.getCurrentUser().setPoints(pointLabel +5);
+                glb.updateXpState(Lantern.getConn(), lr.getId()); 
+                updatePointsVbox();
+
+              
              });
 
        }

@@ -96,7 +96,7 @@ public class Login_Register {
         }
 
         id = getID(username, connection);
-        // glb.insertXpState(connection, id);
+        glb.insertXpState(connection, id);
         insertParent(connection, id, parent);
         insertChildren(connection, id, children);
         Quiz.updateLatestQuizRow(connection);

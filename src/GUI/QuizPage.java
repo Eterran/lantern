@@ -27,12 +27,21 @@ import Database.QuizData;
 public class QuizPage {
     private static Double pointLabel = User.getCurrentUser().getPoints();//fetch from the user db
     private static VBox displayQuizBox = new VBox();
+    private static VBox displayPointsBox = new VBox();
     private static VBox column1 = new VBox();
     private static VBox column2 = new VBox();
     private static ArrayList<String> selectedThemes = new ArrayList<>();
 
+    public static void updatePointsVbox(){
+        displayPointsBox.getChildren().clear();
+        updatePoints();
+        Label pointsLabel = new Label("Points: "+ pointLabel);
+        pointsLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        displayPointsBox.getChildren().add(pointsLabel);
+    }
+
     public static void updatePoints(){
-        pointLabel = User.getCurrentUser().getPoints() + 2;
+        pointLabel = User.getCurrentUser().getPoints();
     }
 
     public static void refreshQuizBasedOnThemes(ArrayList<String> themes) {
@@ -91,14 +100,13 @@ public class QuizPage {
         VBox topvbox = new VBox(); 
         Label titleLabel = new Label("Quiz"); 
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 25));
-        updatePoints();
-        Label pointsLabel = new Label("Points:"+ pointLabel);
-        pointsLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        updatePointsVbox();
+       
 
         Region spacer1 = new Region();
         HBox.setHgrow(spacer1, javafx.scene.layout.Priority.ALWAYS); 
         HBox hbox= new HBox();
-        hbox.getChildren().addAll(titleLabel,spacer1, pointsLabel);
+        hbox.getChildren().addAll(titleLabel,spacer1, displayPointsBox);
        
         HBox hbox2 = new HBox();
         hbox2.setPadding(new Insets (10));
@@ -190,13 +198,11 @@ public class QuizPage {
         if(Quiz.checkAttempted(Lantern.getConn(),qtitle,User.getCurrentUser().getUsername())){
             toggleBtn.setDisable(true);
         }else{
+            toggleBtn.setDisable(false);
             toggleBtn.setOnAction(event->{
                 if(toggleBtn.isSelected()){
                     toggleBtn.setDisable(true);
-                    Quiz.initializeRow(Lantern.getConn(), User.getCurrentUser().getUsername());
                     QuizData qd= new QuizData(qtitle, qdescrip, qtheme, qContent);
-                    Quiz.attemptQuiz(Lantern.getConn(), qd, User.getCurrentUser().getUsername());
-        
                     Stage stage = new Stage();
                     stage.setScene(new Scene(showQuiz(qContent, stage, qd), 400, 200));
                     stage.setTitle("Quiz Description");
@@ -239,14 +245,15 @@ public class QuizPage {
         Database db = new Database();
        
         finishAttemptBtn.setOnAction(e ->{
-            Quiz.attemptQuiz(Lantern.getConn(), qd, User.getCurrentUser().getUsername());
-           // double updatedpoint = User.getCurrentUser().getPoints() + 2; 
-            //glb.insertXpState(Lantern.getConn(),lr.getId());  
-            glb.updateXpState(Lantern.getConn(), lr.getId());
-            updatePoints();
-            User.getCurrentUser().setPoints(pointLabel);
+            Quiz.attemptQuiz(Lantern.getConn(), qd, User.getCurrentUser().getUsername());  
+            double updatedpoint = User.getCurrentUser().getPoints() + 2;  
+            glb.updateXpState(Lantern.getConn(), lr.getId()); 
+            User.getCurrentUser().setPoints(updatedpoint);
+            
             try {
-                db.updatePoint(Lantern.getConn(), lr.getId(), pointLabel);
+                db.updatePoint(Lantern.getConn(), lr.getId(), updatedpoint);
+                updatePointsVbox();
+                
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
