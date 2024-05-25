@@ -9,6 +9,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -49,6 +50,9 @@ public class QuizPage {
         VBox temp = new VBox();
         
         ScrollPane scrollPane1 = new ScrollPane();
+        Pane paneForScrollPane1 = new Pane();
+        paneForScrollPane1.setStyle("-fx-background-color: lightyellow");
+    
         scrollPane1.setFitToWidth(true);
         scrollPane1.setFitToHeight(true);
         scrollPane1.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); 
@@ -61,7 +65,13 @@ public class QuizPage {
         VBox column2 = new VBox();
         column2.setPadding(new Insets(10));
         row.getChildren().addAll(column1, column2);
-        scrollPane1.setContent(row);
+
+        row.prefWidthProperty().bind(paneForScrollPane1.widthProperty());
+        row.prefHeightProperty().bind(paneForScrollPane1.heightProperty());
+
+       // HBox.setHgrow(paneForScrollPane1, Priority.ALWAYS);
+        paneForScrollPane1.getChildren().add(row); ///row
+        scrollPane1.setContent(paneForScrollPane1);
        
         HBox.setHgrow(column1, Priority.ALWAYS);
         HBox.setHgrow(column2, Priority.ALWAYS);
@@ -99,7 +109,9 @@ public class QuizPage {
     public static VBox quizPageTab(){    
         VBox topvbox = new VBox(); 
         Label titleLabel = new Label("Quiz"); 
-        titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 25));
+        titleLabel.setPadding(new Insets(10,0,10,15));
+        titleLabel.getStyleClass().add("title");
+      //  titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 25));
         updatePointsVbox();
        
 
@@ -115,6 +127,11 @@ public class QuizPage {
         CheckBox checkBox3 = new CheckBox("Engineering");
         CheckBox checkBox4 = new CheckBox("Mathematics");
         hbox2.getChildren().addAll(checkBox, checkBox2, checkBox3, checkBox4);
+        checkBox.getStyleClass().add("Checkbox");
+        checkBox2.getStyleClass().add("Checkbox");
+        checkBox3.getStyleClass().add("Checkbox");
+        checkBox4.getStyleClass().add("Checkbox");
+       
         hbox2.setSpacing(10);
 
         checkBox.setSelected(true);
@@ -191,18 +208,21 @@ public class QuizPage {
         BorderPane borderPane = new BorderPane();
         borderPane.setPrefWidth(180);
         borderPane.setPrefHeight(120);
-        borderPane.setStyle("-fx-background-color: #226c94;");
+        borderPane.setStyle("-fx-background-color: #CDFCBE; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 10px;");
         borderPane.setPadding(new Insets(10));
 
         Label label1 = new Label(qtitle);
         label1.setTextFill(Color.WHITE); 
-        label1.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        label1.getStyleClass().add("QuizTitle");
+       // label1.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         Label label2 = new Label(qtheme);
-        label2.setTextFill(Color.WHITE); 
-        label2.setFont(Font.font("Arial", 10));
+        label2.getStyleClass().add("QuizTheme");
+        // label2.setTextFill(Color.WHITE); 
+        // label2.setFont(Font.font("Arial", 10));
         Label label3 = new Label(qdescrip);
-        label3.setTextFill(Color.WHITE); 
-        label3.setFont(Font.font("Arial", 10));
+        label3.getStyleClass().add("QuizDescription");
+        // label3.setTextFill(Color.WHITE); 
+        // label3.setFont(Font.font("Arial", 10));
         ToggleButton toggleBtn = new ToggleButton("Start Attempt");
         toggleBtn.setAlignment(Pos.BOTTOM_RIGHT);
    
@@ -241,11 +261,19 @@ public class QuizPage {
     //show quiz description and finish attempt button
     public static BorderPane showQuiz(String quizContent,Stage stage, QuizData qd, ToggleButton toggleBtn){
         BorderPane borderPane= new BorderPane();
+        borderPane.setStyle("-fx-background-color: lightyellow");
         
+        VBox quizCVbox = new VBox();
+        Label quizCLabel = new Label("Quiz Content");
+        quizCLabel.setPadding(new Insets(10));
+        quizCLabel.setStyle("-fx-font-size: 23px; -fx-font-weight: bold;");
         Label quizC = new Label (quizContent);
+        quizC.setPadding(new Insets(10,10,10,15));
+        quizC.setStyle("fx-font-size: 20px");
+        quizCVbox.getChildren().addAll(quizCLabel,quizC);
         Button finishAttemptBtn = new Button("Finish Attempt");
        
-        borderPane.setTop(quizC);
+        borderPane.setCenter(quizCVbox);
         borderPane.setBottom(finishAttemptBtn);
         BorderPane.setAlignment(finishAttemptBtn,Pos.BOTTOM_RIGHT);
 

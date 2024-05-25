@@ -91,9 +91,9 @@ import java.time.format.DateTimeFormatter;
             time2[i]=time;
         }
         
-        for(int i=0;i<count;i++){
-            System.out.println(username2[i]+" "+xpLastUpdated2[i]+" "+XP2[i]);
-        }
+        // for(int i=0;i<count;i++){
+        //     System.out.println(username2[i]+" "+xpLastUpdated2[i]+" "+XP2[i]);
+        // }
         
            for(int i=1; i<count; i++){
             for(int j=0; j<count-1;j++){

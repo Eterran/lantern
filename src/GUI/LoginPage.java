@@ -50,6 +50,8 @@ public class LoginPage {
         pw_icon.setFitHeight(40);
         usernameTF.getStyleClass().add("text_field_with_icon");
         passwordTF.getStyleClass().add("text_field_with_icon");
+        usernameTF.setStyle("-fx-border-color: black; -fx-border-width: 2px;");
+        passwordTF.setStyle("-fx-border-color: black; -fx-border-width: 2px;");
         HBox username_hbox = new HBox();
         HBox password_hbox = new HBox();
         username_hbox.getChildren().addAll(user_icon, Lantern.createVerticalSeparator(4), usernameTF);

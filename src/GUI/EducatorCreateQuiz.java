@@ -25,7 +25,7 @@ public class EducatorCreateQuiz {
     public static VBox tabCreateQuiz() {
         Label title = new Label("Create Quiz");
         title.setPadding(new Insets(10, 0, 0, 10));
-        title.setTextFill(Color.BLACK);
+        // title.setTextFill(Color.BLACK);
         title.setStyle("-fx-font-size: 20px;-fx-font-weight: bold");
 
         Label quizTitle = new Label("Quiz Title:");
@@ -48,10 +48,10 @@ public class EducatorCreateQuiz {
         quizDescriptionTA.setPromptText("Enter description");
         quizContentTF.setPromptText("Enter content");
 
-        Button saveBtn = new Button("Save");
-        Button cancelBtn = new Button("Cancel");
-        saveBtn.setStyle("-fx-background-color: #9068be; -fx-text-fill: white");
-        cancelBtn.setStyle("-fx-background-color:#9068be; -fx-text-fill: white");
+        Button saveBtn = new Button("SAVE");
+        Button cancelBtn = new Button("CANCEL");
+        saveBtn.setStyle("-fx-background-color:#27561E; -fx-text-fill: white");
+        cancelBtn.setStyle("-fx-background-color:#27561E; -fx-text-fill: white");
 
         User user = User.getCurrentUser();
 
@@ -126,7 +126,7 @@ public class EducatorCreateQuiz {
 
         VBox mainvBox = new VBox();
         mainvBox.getChildren().addAll(title, gridPane);
-        mainvBox.setStyle("-fx-background-color: #e1e8f0; -fx-font-weight: bold;");
+        mainvBox.setStyle("-fx-background-color: lightyellow; -fx-font-weight: bold;");
         VBox.setVgrow(mainvBox, Priority.ALWAYS);
 
         return mainvBox;

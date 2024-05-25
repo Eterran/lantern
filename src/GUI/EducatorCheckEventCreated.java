@@ -27,9 +27,7 @@ public class EducatorCheckEventCreated {
     private static VBox eventCheckBox = new VBox(); 
     
     public static void refreshUI() {
-        System.out.println("Refresh UI is being executed");
         eventCreated = Event.getEventOfUser(Lantern.getConn(), User.getCurrentUser().getUsername());
-        //System.out.println("Event created size: " + eventCreated.size());
         eventCheckBox.getChildren().clear();
         VBox temp = new VBox();
 
@@ -38,8 +36,8 @@ public class EducatorCheckEventCreated {
         column1.setPadding(new Insets(10));
         row.getChildren().addAll(column1);
         HBox.setHgrow(column1, Priority.ALWAYS);
-
-        column1.setStyle("-fx-background-color: lightblue");
+        
+        column1.setStyle("-fx-background-color: lightyellow");
         column1.setSpacing(20); // Set spacing between items
         column1.getChildren().add(AddBorderPane());
 
@@ -51,9 +49,7 @@ public class EducatorCheckEventCreated {
             String labelText5 = data.getTime();
             BorderPane borderPane = BPForAllEvents(labelText1, labelText2, labelText3, labelText4, labelText5);
 
-            // odd then first column
             column1.getChildren().addAll(borderPane);
-        
         }
         ScrollPane scrollPane1 = new ScrollPane(row);
         scrollPane1.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); //Never show horizontal scrollbar
@@ -66,7 +62,6 @@ public class EducatorCheckEventCreated {
 
         temp.getChildren().add(borderPane2);
         eventCheckBox.getChildren().add(temp);
-        System.out.println("Display updated UI");
     }
 
 
@@ -75,7 +70,8 @@ public class EducatorCheckEventCreated {
         VBox vbox1 = new VBox();
         vbox1.setStyle("-fx-background-color: lightyellow");
         Label label1 = new Label("Event Created");
-        label1.setStyle("-fx-font-weight: bold; -fx-font-size: 16");
+        label1.getStyleClass().add("title");
+        // label1.setStyle("-fx-font-weight: bold; -fx-font-size: 16");
         label1.setPadding(new Insets(10));
         vbox1.getChildren().add(label1);
 
@@ -89,30 +85,29 @@ public class EducatorCheckEventCreated {
 
     public static BorderPane BPForAllEvents(String labelText1, String labelText2, String labelText3, String labelText4, String labelText5) {
         BorderPane borderPane = new BorderPane();
-        borderPane.setStyle("-fx-background-color: #226c94");
+        borderPane.setStyle("-fx-background-color:#C7F1FA; -fx-border-color:#475558; -fx-border-width: 2px; -fx-border-radius: 10px;");
         borderPane.setPadding(new Insets(15));
 
         Label label1 = new Label(labelText1);
-        label1.setTextFill(Color.WHITE);
+        // label1.setTextFill(Color.WHITE);
         label1.setFont(Font.font("Arial", FontWeight.BOLD, 25));
         Label label2 = new Label(labelText2);
-        label2.setTextFill(Color.WHITE);
+        // label2.setTextFill(Color.WHITE);
         Label label3 = new Label(labelText3);
-        label3.setTextFill(Color.WHITE);
+        // label3.setTextFill(Color.WHITE);
         Label label4 = new Label(labelText4);
-        label4.setTextFill(Color.WHITE);
+        // label4.setTextFill(Color.WHITE);
         Label label5 = new Label(labelText5);
-        label5.setTextFill(Color.WHITE);
+        // label5.setTextFill(Color.WHITE);
         MenuButton menubutton = new MenuButton();
         menubutton.setText("Settings");
+        menubutton.setStyle("-fx-background-color:white");
         MenuItem editItem = new MenuItem("Edit");
         MenuItem deleteItem = new MenuItem("Delete");
         menubutton.getItems().addAll(editItem, deleteItem);
         menubutton.setAlignment(Pos.TOP_RIGHT);
 
         editItem.setOnAction(event -> {
-            //method to display the form (which all textfield contains the info in db)
-            //--> then update the latest row into db
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(showEditPage(labelText1,labelText2,labelText3,labelText4,labelText5), 400, 300));
@@ -122,15 +117,12 @@ public class EducatorCheckEventCreated {
         });
 
         deleteItem.setOnAction(event ->{
-            Event.deleteEvent(Lantern.getConn(),labelText4);  ///delete based on the date???? Logically incorrect........
+            Event.deleteEvent(Lantern.getConn(),labelText4);  
             if (borderPane.getParent() instanceof VBox) {
                 VBox parentVBox = (VBox) borderPane.getParent();
                 parentVBox.getChildren().remove(borderPane);
             } 
         });
-
-
-
         BorderPane.setAlignment(label1, Pos.TOP_LEFT);
         BorderPane.setAlignment(label2, Pos.TOP_LEFT);
         BorderPane.setAlignment(label3, Pos.CENTER_LEFT);
@@ -155,10 +147,11 @@ public class EducatorCheckEventCreated {
 
     public static BorderPane AddBorderPane() {
         BorderPane borderPane = new BorderPane();
-        borderPane.setStyle("-fx-background-color:lightyellow");
+        borderPane.setStyle("-fx-background-color:#475558");
         borderPane.setPadding(new Insets(15));
        
         Button addButton = new Button("Add Event");    
+        addButton.setStyle("-fx-background-color:white");
         borderPane.setCenter(addButton);
 
         addButton.setOnAction(event -> {
@@ -208,10 +201,10 @@ public class EducatorCheckEventCreated {
         eventDateTF.setPromptText("yyyy-MM-dd");
         eventTimeComboBox.setPromptText("Select time");
 
-        Button saveBtn = new Button("Save");
-        Button cancelBtn = new Button("Cancel");
-        saveBtn.setStyle("-fx-background-color: #000000; -fx-text-fill: white");
-        cancelBtn.setStyle("-fx-background-color:#000000; -fx-text-fill: white");
+        Button saveBtn = new Button("SAVE");
+        Button cancelBtn = new Button("CANCEL"); //back button fucntion
+        saveBtn.setStyle("-fx-background-color: #475558; -fx-text-fill: white");
+        cancelBtn.setStyle("-fx-background-color:#475558; -fx-text-fill: white");
 
         GridPane gridPane = new GridPane();
         gridPane.setPadding(new Insets(10, 10, 10, 10));
@@ -247,7 +240,7 @@ public class EducatorCheckEventCreated {
 
         VBox mainvBox = new VBox();
         mainvBox.getChildren().addAll(Etitle, gridPane);
-        mainvBox.setStyle("-fx-background-color: #e1e8f0; -fx-font-weight: bold;");
+        mainvBox.setStyle("-fx-background-color: #CFE1E5; -fx-font-weight: bold;");
         VBox.setVgrow(mainvBox, Priority.ALWAYS);
 
         saveBtn.setOnAction(e -> {
@@ -274,9 +267,9 @@ public class EducatorCheckEventCreated {
                     alert.setTitle("Success");
                     alert.setContentText("Event updated successfully!");
                     alert.show();
-                    //refreshEducatorCheckEvent();
-                    //how to straight away update in the ui 
                     refreshUI();
+                    Stage stage = (Stage) saveBtn.getScene().getWindow();
+                    stage.close();
                 } else {
                     Alert alert = new Alert(AlertType.ERROR);
                     alert.setTitle("Error");

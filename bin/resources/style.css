@@ -381,3 +381,36 @@
     -fx-border-radius: 5;
     -fx-background-radius: 5;
 }
+
+/*Quiz Page*/
+.Checkbox{
+    /* -fx-background-color: #ffffff;  */
+    /* -fx-border-color: #336699;  */
+    -fx-font-size:16px;
+    -fx-border-width: 2px; 
+    /* -fx-shape: null; 
+    -fx-scale-x: 1.5; 
+    -fx-scale-y: 1.5; */
+}
+.QuizTitle{
+    -fx-font-family: 'Nunito SemiBold';
+    -fx-font-size: 20;
+    -fx-text-fill:  rgb(0, 0, 0);
+}
+.QuizTheme{
+    -fx-font-family: 'sans-serif';
+    -fx-font-size: 17;
+    -fx-text-fill: rgb(0, 0, 0);
+}
+.QuizDescription{
+    -fx-font-family: 'sans-serif';
+    -fx-font-size: 15;
+    -fx-text-fill: rgb(0, 0, 0);
+}
+
+/* Event Page */
+.event_title{
+    -fx-font-family: 'Nunito Bold';
+    -fx-font-size: 30;
+    -fx-text-fill: black;
+}

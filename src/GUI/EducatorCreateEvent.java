@@ -16,10 +16,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
-import java.sql.Connection;
 import Database.Event;
-import Database.Database;
 import Database.EventData;
 import Database.User;
 
@@ -57,10 +54,10 @@ public class EducatorCreateEvent  {
         eventDateTF.setPromptText("yyyy-MM-dd");
         eventTimeComboBox.setPromptText("Select time");
 
-        Button saveBtn = new Button("Save");
-        Button cancelBtn = new Button("Cancel");
-        saveBtn.setStyle("-fx-background-color: #9068be; -fx-text-fill: white");
-        cancelBtn.setStyle("-fx-background-color:#9068be; -fx-text-fill: white");
+        Button saveBtn = new Button("SAVE");
+        Button cancelBtn = new Button("CANCEL");
+        saveBtn.setStyle("-fx-background-color: #475558; -fx-text-fill: white");
+        cancelBtn.setStyle("-fx-background-color:#475558; -fx-text-fill: white");
 
         GridPane gridPane = new GridPane();
         gridPane.setPadding(new Insets(10, 10, 10, 10));
@@ -96,7 +93,7 @@ public class EducatorCreateEvent  {
 
         VBox mainvBox = new VBox();
         mainvBox.getChildren().addAll(title, gridPane);
-        mainvBox.setStyle("-fx-background-color: #e1e8f0; -fx-font-weight: bold;");
+        mainvBox.setStyle("-fx-background-color: #CFE1E5; -fx-font-weight: bold;");
         VBox.setVgrow(mainvBox, Priority.ALWAYS);
 
         User user = User.getCurrentUser();
