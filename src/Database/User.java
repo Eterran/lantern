@@ -105,7 +105,6 @@ public class User {
     }
     public Double getX() {
         return X;
-
     }
 
     public Double getY() {
