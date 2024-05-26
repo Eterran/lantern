@@ -34,8 +34,8 @@ public class Login_Register {
         id = getID(name_email, connection);
         user.userData(id);
         boolean comfirmPw = passwordEncoder.matches(pw, user.getPassword());
-        if ((name_email.equalsIgnoreCase(user.getUsername()) && comfirmPw)
-                || (name_email.equalsIgnoreCase(user.getEmail()) && comfirmPw)) {
+        if ((name_email.equals(user.getUsername()) && comfirmPw)
+                || (name_email.equals(user.getEmail()) && comfirmPw)) {
             // glb.updateXpState(connection, id);
             User.setCurrentUser(user);
             return true;
