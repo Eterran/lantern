@@ -16,8 +16,13 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
+import Student.friend;
 
 public class FriendGraph {
     private static Connection conn = Lantern.getConn();
@@ -27,6 +32,7 @@ public class FriendGraph {
     private static final double REPULSION_CONSTANT = 50000;
     private static final double ATTRACTION_CONSTANT = 0.01;
     private static final double DAMPING = 0.5;
+    private static Map<String, Set<String>> connections = new HashMap<>();
 
     public static VBox createFriendGraph() {
         VBox graphContainer = new VBox();
@@ -45,6 +51,8 @@ public class FriendGraph {
 
                 if (!userNodes.containsKey(mainUser)) totalNodes[0]++;
                 if (!userNodes.containsKey(completeUser)) totalNodes[0]++;
+                connections.computeIfAbsent(mainUser, k -> new HashSet<>()).add(completeUser);
+                connections.computeIfAbsent(completeUser, k -> new HashSet<>()).add(mainUser);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -58,7 +66,6 @@ public class FriendGraph {
                 String completeUser = rs.getString("complete");
 
                 Circle mainUserNode = userNodes.computeIfAbsent(mainUser, k -> createUserNode(k, graphPane, userLabels, index[0]++, totalNodes[0]));
-
                 Circle completeUserNode = userNodes.computeIfAbsent(completeUser, k -> createUserNode(k, graphPane, userLabels, index[0]++, totalNodes[0]));
 
                 Line line = new Line();
@@ -78,12 +85,12 @@ public class FriendGraph {
         graphPane.setLayoutY((graphContainer.getHeight() - graphPane.getPrefHeight()) / 2);
     
         addZoomAndPan(graphPane);
-    
+        graphContainer.getStylesheets().add("resources/style.css");
         return graphContainer;
     }
 
     private static Circle createUserNode(String username, Pane graphPane, Map<String, StackPane> userLabels, int index, int totalNodes) {
-        Circle circle = new Circle(NODE_RADIUS, Color.BLUE);
+        Circle circle = new Circle(NODE_RADIUS);
     
         double angle = 2 * Math.PI * index / totalNodes;
         double centerX = WIDTH / 2 + 200 * Math.cos(angle);
@@ -99,7 +106,8 @@ public class FriendGraph {
     
         userLabels.put(username, stackPane);
         graphPane.getChildren().add(stackPane);
-    
+
+        circle.getStyleClass().add("user_node");
         return circle;
     }
 
@@ -109,7 +117,7 @@ public class FriendGraph {
                 Circle circle = entry.getValue();
                 double forceX = 0;
                 double forceY = 0;
-
+    
                 for (Map.Entry<String, Circle> otherEntry : userNodes.entrySet()) {
                     if (entry == otherEntry) continue;
                     Circle otherCircle = otherEntry.getValue();
@@ -118,19 +126,21 @@ public class FriendGraph {
                     double distance = Math.sqrt(dx * dx + dy * dy);
                     if (distance == 0) continue; // Avoid division by zero
                     double repulsion = REPULSION_CONSTANT / (distance * distance);
-
+    
                     forceX += repulsion * dx / distance;
                     forceY += repulsion * dy / distance;
+    
+                    // Attraction force for connected nodes
+                    if (areConnected(entry.getKey(), otherEntry.getKey())) {
+                        double attraction = ATTRACTION_CONSTANT * distance;
+                        forceX -= attraction * dx / distance;
+                        forceY -= attraction * dy / distance;
+                    }
                 }
-
-                double centerX = WIDTH / 2 - circle.getCenterX();
-                double centerY = HEIGHT / 2 - circle.getCenterY();
-                forceX += centerX * ATTRACTION_CONSTANT;
-                forceY += centerY * ATTRACTION_CONSTANT;
-
+    
                 circle.setCenterX(circle.getCenterX() + forceX * DAMPING);
                 circle.setCenterY(circle.getCenterY() + forceY * DAMPING);
-
+    
                 StackPane label = userLabels.get(entry.getKey());
                 label.setLayoutX(circle.getCenterX() - NODE_RADIUS);
                 label.setLayoutY(circle.getCenterY() - NODE_RADIUS);
@@ -176,5 +186,8 @@ public class FriendGraph {
         ResultSet rs = stmt.executeQuery(sql);
         rs.next();
         return rs.getString("username");
+    }
+    private static boolean areConnected(String user1, String user2) {
+        return connections.getOrDefault(user1, Collections.emptySet()).contains(user2);
     }
 }

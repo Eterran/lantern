@@ -414,3 +414,16 @@
     -fx-font-size: 30;
     -fx-text-fill: black;
 }
+
+
+/* Friend Graph */
+.user_node {
+    -fx-stroke: black;
+    -fx-stroke-width: 2;
+    -fx-fill: #FFAB40;
+}
+
+.user_node Text {
+    -fx-fill: white;
+    -fx-font-size: 14px;
+}
