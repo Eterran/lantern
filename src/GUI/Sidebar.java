@@ -164,8 +164,18 @@ public class Sidebar {
         
         scene1.getStylesheets().add("resources/style.css");
         stg.setScene(scene1);
-    }
 
+        createNewWindow();
+    }
+    public static void createNewWindow() {
+        Stage newWindow = new Stage();
+        VBox vbox = FriendGraph.createFriendGraph();
+    
+        Scene scene = new Scene(vbox, 600, 600);
+        newWindow.setScene(scene);
+    
+        newWindow.show();
+    }
 
     // sidebar navigation functions
     private static void setOneVisible(int index){
