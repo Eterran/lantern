@@ -1,7 +1,6 @@
 package GUI;
 
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
@@ -22,7 +21,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import Student.friend;
+import Database.Login_Register;
 
 public class FriendGraph {
     private static Connection conn = Lantern.getConn();
@@ -91,6 +90,10 @@ public class FriendGraph {
 
     private static Circle createUserNode(String username, Pane graphPane, Map<String, StackPane> userLabels, int index, int totalNodes) {
         Circle circle = new Circle(NODE_RADIUS);
+
+        circle.setOnMouseClicked(event -> {
+            Sidebar.setBox7(Profile.loadOthersProfileTab(Login_Register.getUser(username, conn)));
+        });
     
         double angle = 2 * Math.PI * index / totalNodes;
         double centerX = WIDTH / 2 + 200 * Math.cos(angle);
