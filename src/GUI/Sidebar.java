@@ -398,6 +398,7 @@ public class Sidebar {
             selectTab(1);
         });
         tab2.setOnAction(e -> {
+            EventPage.updatePointsVbox();
             EventPage.updateLiveEvent();
             EventPage.updateUpcomingEvent();
             selectTab(2);
@@ -413,6 +414,7 @@ public class Sidebar {
             selectTab(1);
         });
         rtab2.setOnAction(e -> {
+            EventPage.updatePointsVbox();
             EventPage.updateLiveEvent();
             EventPage.updateUpcomingEvent();
             selectTab(2);
