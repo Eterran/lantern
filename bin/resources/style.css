@@ -250,7 +250,33 @@
 .decline_button:hover {
     -fx-effect: dropshadow(gaussian, rgb(255, 25, 25), 3, 0, 0, 0);
 }
-
+.edit_button {
+    -fx-font-family: 'Nunito Bold';
+    -fx-font-size: 20;
+    -fx-text-fill: white;
+    -fx-background-color: #525252;
+}
+.edit_button:hover {
+    -fx-background-color: #676767;
+}
+.save_button {
+    -fx-font-family: 'Nunito Bold';
+    -fx-font-size: 20;
+    -fx-text-fill: white;
+    -fx-background-color: #FFAB40;
+}
+.save_button:hover {
+    -fx-background-color: #ffc375;
+}
+.cancel_button {
+    -fx-font-family: 'Nunito Bold';
+    -fx-font-size: 20;
+    -fx-text-fill: white;
+    -fx-background-color: #FF7043;
+}
+.cancel_button:hover {
+    -fx-background-color: #FF8A65;
+}
 
 /*Separator*/
 .separator {

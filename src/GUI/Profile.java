@@ -12,6 +12,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -107,20 +108,93 @@ public class Profile {
         VBox emailBox = Lantern.createInfoVBox("EMAIL: ", User.getCurrentUser().getEmail(), padding);
         VBox locationCoordinateBox = Lantern.createInfoVBox("LOCATION: ", "("+User.getCurrentUser().getX()+", "+ User.getCurrentUser().getY()+")", padding);
 
-        //TODO parent child
-
         VBox profileContents = new VBox();
         profileContents.getChildren().addAll(usernameBox, roleBox, emailBox, locationCoordinateBox);
         profileContents.getStyleClass().add("content_box_background");
         profileContents.maxWidthProperty().bind(profileTab.widthProperty().multiply(0.9));
         profileContents.setPadding(new Insets(30, 10, 30, 10));
 
+        VBox aboutVBox = new VBox();
+        String about[] = {"Tell us about yourself!"};
+        try {
+            about[0] = AboutDatabase.getAbout(User.getCurrentUser().getUsername());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Button editAboutButton = new Button("Edit");
+        HBox aboutHBox = new HBox();
+        VBox aboutContents = Lantern.createInfoVBox("ABOUT: ", about[0], padding);
+        aboutHBox.getChildren().addAll(aboutContents, Lantern.createSpacer(), editAboutButton);
+        editAboutButton.getStyleClass().add("edit_button");
+        editAboutButton.setOnAction(e -> {
+            VBox overlay = new VBox();
+            VBox editAboutVBox = new VBox();
+            Text editAboutLabel = new Text("Edit About");
+            editAboutLabel.getStyleClass().add("title");
+            editAboutVBox.getChildren().add(editAboutLabel);
+            editAboutVBox.getChildren().add(Lantern.createHorizontalSeparator(2));
+            TextArea aboutTextArea = new TextArea();
+            aboutTextArea.getStyleClass().add("text_area");
+            aboutTextArea.setText(about[0]);
+            aboutTextArea.setWrapText(true);
+            aboutTextArea.setPadding(new Insets(10, 10, 10, 10));
+            Button saveButton = new Button("Save");
+            saveButton.getStyleClass().add("save_button");
+            saveButton.setOnAction(event -> {
+                AboutDatabase.addOrUpdateAbout(User.getCurrentUser().getUsername(), aboutTextArea.getText());
+                about[0] = aboutTextArea.getText();
+                aboutContents.getChildren().clear();
+                aboutContents.getChildren().add(Lantern.createInfoVBox("ABOUT: ", about[0], padding));
+                stackpane.getChildren().remove(editAboutVBox);
+            });
+            Button cancelButton = new Button("Cancel");
+            cancelButton.getStyleClass().add("cancel_button");
+            cancelButton.setOnAction(event -> stackpane.getChildren().remove(overlay));
+            HBox buttonBox = new HBox();
+            buttonBox.getChildren().addAll(saveButton, cancelButton);
+            buttonBox.setSpacing(10);
+            buttonBox.setPadding(new Insets(10, 10, 10, 10));
+            buttonBox.setAlignment(Pos.CENTER);
+            editAboutVBox.getChildren().add(aboutTextArea);
+            editAboutVBox.getChildren().add(buttonBox);
+            editAboutVBox.setAlignment(Pos.CENTER);
+            editAboutVBox.setPadding(new Insets(30, 10, 30, 10));
+            editAboutVBox.getStyleClass().add("content_box_background");
+            
+            overlay.getChildren().add(editAboutVBox);
+
+            overlay.getStyleClass().add("background_transparent");
+            overlay.minHeightProperty().bind(stackpane.heightProperty().multiply(0.85));
+            overlay.minWidthProperty().bind(stackpane.widthProperty().multiply(0.75));
+            overlay.maxHeightProperty().bind(stackpane.heightProperty().multiply(0.85));
+            overlay.maxWidthProperty().bind(stackpane.widthProperty().multiply(0.75));
+
+            VBox backgroundBlocker = new VBox();
+            backgroundBlocker.getStyleClass().add("background_transparent");
+            backgroundBlocker.minHeightProperty().bind(stackpane.heightProperty());
+            backgroundBlocker.minWidthProperty().bind(stackpane.widthProperty());
+            backgroundBlocker.maxHeightProperty().bind(stackpane.heightProperty());
+            backgroundBlocker.maxWidthProperty().bind(stackpane.widthProperty());
+            backgroundBlocker.setOnMouseClicked(event -> {
+                stackpane.getChildren().remove(overlay);
+                stackpane.getChildren().remove(backgroundBlocker);
+            });
+            stackpane.getStyleClass().add("background_transparent");
+            stackpane.getChildren().add(backgroundBlocker);
+            stackpane.getChildren().add(overlay);
+        });
+        
+        aboutVBox.getChildren().addAll(aboutHBox);
+        aboutVBox.getStyleClass().add("content_box_background");
+        aboutVBox.maxWidthProperty().bind(profileTab.widthProperty().multiply(0.9));
+        aboutVBox.setPadding(new Insets(10, 10, 30, 10));
+
         accessManager.getAccessiblePrivateProfile(accessManager.getUserRole(User.getCurrentUser())).forEach(
                     vBoxSupplier -> profileContents.getChildren().add(vBoxSupplier.get()));
         accessManager.getAccessiblePublicProfile(accessManager.getUserRole(User.getCurrentUser())).forEach(
                     vBoxSupplier -> profileContents.getChildren().add(vBoxSupplier.get()));
 
-        profileTab.getChildren().addAll(profileContents);
+        profileTab.getChildren().addAll(profileContents, aboutVBox);
         profileTab.setAlignment(javafx.geometry.Pos.TOP_CENTER);
         stackpane.getChildren().add(profileTab);
         profileRootBox.getChildren().add(stackpane);
@@ -231,4 +305,5 @@ public class Profile {
         }
         return pendingRequestsVBox;
     }
+
 }
