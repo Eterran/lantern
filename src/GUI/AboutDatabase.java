@@ -36,12 +36,15 @@ public class AboutDatabase {
     }
 
     public static String getAbout(String username) throws SQLException {
-        String sql = "SELECT about FROM About WHERE username=" + username;
-        Statement stmt = conn.createStatement();
-        StringBuilder builder = new StringBuilder();
-        ResultSet rs = stmt.executeQuery(sql);
-        rs.next();
-        builder.append(rs.getString("about")).append("\n");
-        return builder.toString();
+        String sql = "SELECT about FROM About WHERE username = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("about");
+            } else {
+                return "";
+            }
+        }
     }
 }
