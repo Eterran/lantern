@@ -166,7 +166,7 @@ public class FriendList {
         Label friendRequestsLabel = new Label("Friend Requests");
         friendRequestsLabel.getStyleClass().add("title");
         friendRequestsLabel.setPadding(new Insets(12, 0, 12, 12));
-        friendRequestsVBox.getChildren().add(friendRequestsLabel);
+        friendRequestsVBox.getChildren().addAll(friendRequestsLabel, Lantern.createHorizontalSeparator(2));
         
         for (String friendRequest : friendRequests) {
             HBox friendRequestHBox = new HBox();
@@ -192,7 +192,8 @@ public class FriendList {
         }
         if(friendRequests.isEmpty()){
             Label noFriendRequestsLabel = new Label("No friend requests");
-            noFriendRequestsLabel.getStyleClass().add("friend_request_label");
+            noFriendRequestsLabel.getStyleClass().add("text_black");
+            noFriendRequestsLabel.setPadding(new Insets(12, 0, 12, 12));
             friendRequestsVBox.getChildren().add(noFriendRequestsLabel);
         }
         return friendRequestsVBox;
