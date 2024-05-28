@@ -111,7 +111,7 @@ public class friend {
 
     }
 
-    public static ArrayList<String> showPendingReceived(Connection connection, String username) {
+    public static ArrayList<String> showPendingSent(Connection connection, String username) {
         Login_Register lr = new Login_Register();
         int main_id = lr.getID(username, connection);
         ArrayList <String> list = new ArrayList<>();
@@ -135,8 +135,8 @@ public class friend {
         return list;
 
     }
-     //usernaem of send 
-     public static ArrayList<String> showPendingSend (Connection connection,String username){
+     //usernaem of received
+     public static ArrayList<String> showPendingReceived (Connection connection,String username){
         Login_Register lr=new Login_Register();
         int main_id=lr.getID(username, connection);
         ArrayList <Integer>listID=new ArrayList<>();
