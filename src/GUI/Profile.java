@@ -126,6 +126,7 @@ public class Profile {
         profileTab.getChildren().addAll(profileContents, aboutVBox);
         profileTab.setAlignment(javafx.geometry.Pos.TOP_CENTER);
         stackpane.getChildren().add(profileTab);
+        stackpane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         profileRootBox.getChildren().add(stackpane);
         profileRootBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
