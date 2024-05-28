@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import Database.User;
 import Student.friend;
 import Database.Database;
+import Database.Login_Register;
 import Database.ParentChildren;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -237,13 +238,14 @@ public class Profile {
     }
     private static VBox createAboutVBox(StackPane stackpane, String username){
         VBox aboutVBox = new VBox();
-        String about[] = {"A mysterious"};
+        String about[] = {"What a mysterious person..."};
         try {
             about[0] = AboutDatabase.getAbout(username);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        if(about[0] == "") about[0] = "Tell us about yourself!";
+        if(about[0] == "" && username == User.getCurrentUser().getUsername()) about[0] = "Tell us about yourself!";
+        else if(about[0] == "") about[0] = "What a mysterious person...";
         
         Button editAboutButton = new Button("Edit");
         HBox aboutHBox = new HBox();
