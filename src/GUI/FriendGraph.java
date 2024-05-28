@@ -127,7 +127,7 @@ public class FriendGraph {
                     double dx = circle.getCenterX() - otherCircle.getCenterX();
                     double dy = circle.getCenterY() - otherCircle.getCenterY();
                     double distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance == 0) continue; // Avoid division by zero
+                    if (distance == 0) continue;
                     double repulsion = REPULSION_CONSTANT / (distance * distance);
     
                     forceX += repulsion * dx / distance;

@@ -200,7 +200,7 @@ public class Profile {
         Label pendingRequestsLabel = new Label("Pending Requests");
         pendingRequestsLabel.getStyleClass().add("title");
         pendingRequestsLabel.setPadding(new Insets(12, 0, 12, 12));
-        pendingRequestsVBox.getChildren().add(pendingRequestsLabel);
+        pendingRequestsVBox.getChildren().addAll(pendingRequestsLabel, Lantern.createHorizontalSeparator(2));
         for (String pendingRequest : pendingRequests) {
             HBox pendingRequestHBox = new HBox();
             Label pendingRequestLabel = new Label(pendingRequest);
@@ -225,7 +225,8 @@ public class Profile {
         }
         if(pendingRequests.isEmpty()){
             Label noFriendRequestsLabel = new Label("No pending requests");
-            noFriendRequestsLabel.getStyleClass().add("friend_request_label");
+            noFriendRequestsLabel.getStyleClass().add("text_black");
+            noFriendRequestsLabel.setPadding(new Insets(12, 0, 12, 12));
             pendingRequestsVBox.getChildren().add(noFriendRequestsLabel);
         }
         return pendingRequestsVBox;
