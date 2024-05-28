@@ -101,6 +101,7 @@ public class Lantern extends Application {
     public static Region createSpacer(){
         Region spacer = new Region();
         HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+        VBox.setVgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
         return spacer;
     }
     public static VBox createHorizontalSeparator(int spacing){

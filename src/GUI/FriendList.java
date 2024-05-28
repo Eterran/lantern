@@ -54,6 +54,7 @@ public class FriendList {
         Sidebar.selectTab(6);
     }
     public static VBox loadFriendList() {
+        friendListBox.getChildren().clear();
         StackPane stackpane = new StackPane();
         ImageView searchFriendImageView = new ImageView(new Image("resources/assets/search_friends_icon.png"));
         searchFriendImageView.setFitWidth(40);

@@ -55,13 +55,15 @@ public class Sidebar {
     private final static AccessManager accessManager = new AccessManager();
 
     private static StackPane stackPane = new StackPane();
-    private static VBox profileBox = Profile.loadProfileTab();
-    private static VBox eventBox = EventPage.viewEventTab();
-    private static VBox discussionBox = DiscussionPage.createDiscussionPage();
-    private static VBox leaderboardBox = GlobalLeaderboard.globalLeaderBoardTab();
+    private static VBox profileBox = new VBox(10);
+    private static VBox eventBox = new VBox();
+    private static VBox discussionBox = new VBox();
+    private static VBox leaderboardBox = new VBox();
     private static VBox box5 = new VBox(10);
     private static VBox box6 = new VBox(10);
     private static VBox box7 = new VBox(10);
+
+    private static Scene sidebarScene = null;
 
     public static void showHomeScene(Stage stg){
         Lantern.Clear_History();
@@ -112,6 +114,7 @@ public class Sidebar {
         HBox.setHgrow(stackPane, Priority.ALWAYS);
         VBox.setVgrow(stackPane, Priority.ALWAYS);
         stackPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        stackPane.getChildren().clear();
         stackPane.getChildren().addAll(profileBox, eventBox, discussionBox, leaderboardBox, box5, box6, box7);
         
         Button backButton = createBackButton();
@@ -119,6 +122,8 @@ public class Sidebar {
         HBox.setHgrow(backButton, Priority.ALWAYS);
         backButton.setMaxWidth(Double.MAX_VALUE);
 
+        sidebar.getChildren().clear();
+        retractedVBox.getChildren().clear();
         sidebar.getChildren().addAll(backAndRetract, Lantern.createHorizontalSeparator(8), searcHBox, Lantern.createHorizontalSeparator(6), tab1, Lantern.createHorizontalSeparator(6), tab2, Lantern.createHorizontalSeparator(6), tab3, Lantern.createHorizontalSeparator(6), tab4);
         retractedVBox.getChildren().addAll(retractedRetractButton, rtab1, Lantern.createHorizontalSeparator(6), rtab2, Lantern.createHorizontalSeparator(6), rtab3, Lantern.createHorizontalSeparator(6), rtab4);
         
@@ -150,7 +155,7 @@ public class Sidebar {
                     rtab6 = buttonSupplier.get();
                     retractedVBox.getChildren().add(rtab6);
                 });
-        
+        sidebar.getChildren().addAll(Lantern.createSpacer(), createLogoutButton(stg));
         initialiseArrays();
 
         Platform.runLater(() -> {
@@ -160,10 +165,12 @@ public class Sidebar {
         
         root.setCenter(layout1);
         root.setLeft(sidebar);
-        Scene scene1 = new Scene(root, 1200, 700);
-        
-        scene1.getStylesheets().add("resources/style.css");
-        stg.setScene(scene1);
+        if(sidebarScene == null){
+            sidebarScene = new Scene(root, 1200, 700);
+            sidebarScene.getStylesheets().add("resources/style.css");
+        }
+
+        stg.setScene(sidebarScene);
 
         createNewWindow();
     }
@@ -313,9 +320,26 @@ public class Sidebar {
         });
         return backButton;
     }
+    private static Button createLogoutButton(Stage stg){
+        Button logoutButton = new Button("Logout");
+        logoutButton.getStyleClass().add("logout_button");
+        logoutButton.setOnAction(e -> {
+            User.setCurrentUser(null);
+            sidebarHistory.clear();
+            LoginPage.showLoginScene(stg);
+        });
+        return logoutButton;
+    }
 
     // Initialisation
     private static void initialseVBoxes(){
+        profileBox = Profile.loadProfileTab();
+        eventBox = EventPage.viewEventTab();
+        discussionBox = DiscussionPage.createDiscussionPage();
+        leaderboardBox = GlobalLeaderboard.globalLeaderBoardTab();
+        box5 = new VBox(10);
+        box6 = new VBox(10);
+        box7 = new VBox(10);
         profileBox.prefWidthProperty().bind(stackPane.widthProperty());
         eventBox.prefWidthProperty().bind(stackPane.widthProperty());
         discussionBox.prefWidthProperty().bind(stackPane.widthProperty());

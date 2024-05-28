@@ -32,6 +32,7 @@ public class Profile {
         Sidebar.setBox1(loadProfileTab());
     }
     public static VBox loadProfileTab(){
+        profileTab.getChildren().clear();
         try {
             if(!Database.usernameExists(Database.connectionDatabase(), User.getCurrentUser().getUsername())){
                 VBox errorBox = new VBox();
