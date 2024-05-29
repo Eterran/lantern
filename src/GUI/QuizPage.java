@@ -7,6 +7,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -211,9 +213,20 @@ public class QuizPage {
         borderPane.setStyle("-fx-background-color: #CDFCBE; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 10px;");
         borderPane.setPadding(new Insets(10));
 
+        Image quizImage = new Image("resources/assets/online-quiz.png");
+        ImageView quizImageView = new ImageView(quizImage);
+        quizImageView.setFitHeight(60);
+        quizImageView.setFitWidth(60);
+        //borderPane.setGraphic(quizImageView);
+
         Label label1 = new Label(qtitle);
         label1.setTextFill(Color.WHITE); 
         label1.getStyleClass().add("QuizTitle");
+
+        HBox tophbox = new HBox();
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        tophbox.getChildren().addAll(label1, spacer, quizImageView);
        // label1.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         Label label2 = new Label(qtheme);
         label2.getStyleClass().add("QuizTheme");
@@ -245,13 +258,13 @@ public class QuizPage {
             
         }
  
-        BorderPane.setAlignment(label1, Pos.TOP_LEFT);
+        //BorderPane.setAlignment(label1, Pos.TOP_LEFT);
         VBox storelabel23 = new VBox();
         storelabel23.getChildren().addAll(label2, label3);
         BorderPane.setAlignment(storelabel23, Pos.CENTER);
         BorderPane.setAlignment(toggleBtn, Pos.BOTTOM_RIGHT);
 
-        borderPane.setTop(label1);
+        borderPane.setTop(tophbox);
         borderPane.setLeft(storelabel23);
         borderPane.setBottom(toggleBtn);
 

@@ -16,6 +16,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -278,15 +280,25 @@ public class EventPage {
         BorderPane.setAlignment(label5, Pos.BOTTOM_CENTER);
         BorderPane.setAlignment(toggleButton, Pos.BOTTOM_RIGHT);
 
+        Image liveEventImg = new Image("resources/assets/liveEvent1.png");
+        ImageView liveEventImgView = new ImageView(liveEventImg);
+        liveEventImgView.setFitHeight(60);
+        liveEventImgView.setFitWidth(60);
+
+        HBox tophbox = new HBox();
+        Region spacer2 = new Region();
+        HBox.setHgrow(spacer2, Priority.ALWAYS);
+        tophbox.getChildren().addAll(label1, spacer2, liveEventImgView);
+
         Region spacer= new Region();
-        VBox topBox = new VBox(label1);
-        topBox.setPrefHeight(40);
+        // VBox topBox = new VBox(label1);
+        //topBox.setPrefHeight(40);
         VBox middleBox = new VBox(label2,label3, label4); 
         HBox bottomBox = new HBox(label5, spacer, toggleButton);
         HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
         
         // Set nodes to the BorderPane
-        borderPane.setTop(topBox);
+        borderPane.setTop(tophbox);
         borderPane.setCenter(middleBox);
         borderPane.setBottom(bottomBox);
 
@@ -383,15 +395,27 @@ public class EventPage {
         BorderPane.setAlignment(label5, Pos.BOTTOM_CENTER);
         BorderPane.setAlignment(toggleButton, Pos.BOTTOM_RIGHT);
 
+
+        Image upcomingEventImg = new Image("resources/assets/upcomingEvent3.png");
+        ImageView upcomingEventView = new ImageView(upcomingEventImg);
+        upcomingEventView.setFitHeight(60);
+        upcomingEventView.setFitWidth(60);
+
+        HBox tophbox = new HBox();
+        Region spacer3 = new Region();
+        HBox.setHgrow(spacer3, Priority.ALWAYS);
+        tophbox.getChildren().addAll(label1, spacer3, upcomingEventView);
+
+    
         Region spacer= new Region();
-        VBox topBox = new VBox(label1);
-        topBox.setPrefHeight(40);
+        // VBox topBox = new VBox(label1);
+        // topBox.setPrefHeight(40);
         VBox middleBox = new VBox(label2,label3, label4); 
         HBox bottomBox = new HBox(label5, spacer, toggleButton);
         HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
         
         // Set nodes to the BorderPane
-        borderPane.setTop(topBox);
+        borderPane.setTop(tophbox);
         borderPane.setCenter(middleBox);
         borderPane.setBottom(bottomBox);
 
