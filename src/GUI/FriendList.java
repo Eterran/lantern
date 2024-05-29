@@ -33,7 +33,7 @@ public class FriendList {
             Button profileButton = new Button(friend);
             profileButton.getStyleClass().add("profile_button");
             profileButton.setOnAction(e -> {
-                Sidebar.setBox7(Profile.loadOthersProfileTab(Login_Register.getUser(friend, conn)));
+                Sidebar.setBox7(Profile.loadProfileTab(Login_Register.getUser(friend, conn)));
             });
             temp.getChildren().add(profileButton);
         }
@@ -83,7 +83,7 @@ public class FriendList {
                     Button profileButton = new Button(friend);
                     profileButton.getStyleClass().add("profile_button");
                     profileButton.setOnAction(ev -> {
-                        Sidebar.setBox7(Profile.loadOthersProfileTab(Login_Register.getUser(friend, conn)));
+                        Sidebar.setBox7(Profile.loadProfileTab(Login_Register.getUser(friend, conn)));
                     });
                     friendListBox.getChildren().add(profileButton);
                 }

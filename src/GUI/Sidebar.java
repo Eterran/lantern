@@ -1,6 +1,5 @@
 package GUI;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Stack;
@@ -290,7 +289,7 @@ public class Sidebar {
                 try {
                     if(Database.usernameExists(conn, search)){
                         box7.getChildren().clear();
-                        box7.getChildren().add(Profile.loadOthersProfileTab(Login_Register.getUser(search, conn)));
+                        box7.getChildren().add(Profile.loadProfileTab(Login_Register.getUser(search, conn)));
                         pages[7] = box7;
                         setOneVisible(7);
                     } else {
@@ -333,7 +332,7 @@ public class Sidebar {
 
     // Initialisation
     private static void initialseVBoxes(){
-        profileBox = Profile.loadProfileTab();
+        profileBox = Profile.loadProfileTab(User.getCurrentUser());
         eventBox = EventPage.viewEventTab();
         discussionBox = DiscussionPage.createDiscussionPage();
         leaderboardBox = GlobalLeaderboard.globalLeaderBoardTab();
@@ -604,7 +603,9 @@ public class Sidebar {
     }
     public static void setBox7(VBox box){
         box7.getChildren().clear();
-        box7.getChildren().add(box);
+        VBox temp = new VBox();
+        temp.getChildren().add(box);
+        box7.getChildren().add(temp);
         setOneVisible(7);
     }
     public static void setBox1(VBox box){

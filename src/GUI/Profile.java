@@ -29,9 +29,10 @@ public class Profile {
     private final static Insets padding = new Insets(8, 10, 8, 15);
     private static VBox profileTab = new VBox(10);
     public static void refreshProfile(){
-        Sidebar.setBox1(loadProfileTab());
+        Sidebar.setBox1(loadProfileTab(User.getCurrentUser()));
     }
-    public static VBox loadProfileTab(){
+    public static VBox loadProfileTab(User user){
+        if(!user.getUsername().equals(User.getCurrentUser().getUsername())) return loadOthersProfileTab(user);
         profileTab.getChildren().clear();
         try {
             if(!Database.usernameExists(Database.connectionDatabase(), User.getCurrentUser().getUsername())){
@@ -134,7 +135,7 @@ public class Profile {
         return profileRootBox;
     }
 
-    public static VBox loadOthersProfileTab(User user){
+    private static VBox loadOthersProfileTab(User user){
         try {
             if(!Database.usernameExists(Database.connectionDatabase(), user.getUsername())){
                 VBox errorBox = new VBox();

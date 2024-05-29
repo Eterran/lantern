@@ -121,9 +121,9 @@ public class Login_Register {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 Id = resultSet.getInt("id");
-                System.out.println("ID found: " + Id);
+                //System.out.println("ID found: " + Id);
             } else {
-                System.out.println("No ID found for the given name and email.");
+                //System.out.println("No ID found for the given name and email.");
             }
         } catch (SQLException e) {
             e.printStackTrace();

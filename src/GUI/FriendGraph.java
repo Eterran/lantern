@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Set;
 
 import Database.Login_Register;
+import Database.User;
 
 public class FriendGraph {
     private static Connection conn = Lantern.getConn();
@@ -91,10 +92,10 @@ public class FriendGraph {
     private static Circle createUserNode(String username, Pane graphPane, Map<String, StackPane> userLabels, int index, int totalNodes) {
         Circle circle = new Circle(NODE_RADIUS);
 
-        circle.setOnMouseClicked(event -> {
-            Sidebar.setBox7(Profile.loadOthersProfileTab(Login_Register.getUser(username, conn)));
-        });
-    
+        // circle.setOnMouseClicked(event -> {
+        //     Sidebar.setBox7(Profile.loadProfileTab(Login_Register.getUser(username, conn)));
+        // });
+
         double angle = 2 * Math.PI * index / totalNodes;
         double centerX = WIDTH / 2 + 200 * Math.cos(angle);
         double centerY = HEIGHT / 2 + 200 * Math.sin(angle);
@@ -109,6 +110,11 @@ public class FriendGraph {
     
         userLabels.put(username, stackPane);
         graphPane.getChildren().add(stackPane);
+
+        stackPane.setOnMouseClicked(event -> {
+            Sidebar.setBox7(Profile.loadProfileTab(Login_Register.getUser(username, conn)));
+            System.out.println("Current user:" + User.getCurrentUser().getUsername() + " clicked on " + username + "'s profile.");
+        });
 
         circle.getStyleClass().add("user_node");
         return circle;
@@ -140,7 +146,6 @@ public class FriendGraph {
                         forceY -= attraction * dy / distance;
                     }
                 }
-    
                 circle.setCenterX(circle.getCenterX() + forceX * DAMPING);
                 circle.setCenterY(circle.getCenterY() + forceY * DAMPING);
     
