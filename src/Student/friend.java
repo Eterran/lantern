@@ -15,26 +15,46 @@ import Database.Database;
 import Database.Login_Register;
 
 public class friend {
-    public static boolean checkExistingFriend(Connection connection, String Friendname, String username) {
-        Login_Register lg = new Login_Register();
-        boolean check = false;
-        int id = lg.getID(username, connection);
-        try {
-
-            String query = "SELECT id FROM friends WHERE (pending = ? OR complete=?)AND main_id=?";
+    
+    public boolean checkExistingFriend(Connection connection ,String Friendname,String username ){
+        Login_Register lg=new Login_Register();
+        boolean check=false;
+        int id =lg.getID(username, connection);
+     try{
+         
+       String query = "SELECT id FROM friends WHERE (pending = ? OR complete=?)AND main_id=?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, Friendname);
             preparedStatement.setString(2, Friendname);
             preparedStatement.setInt(3, id);
-            ResultSet result = preparedStatement.executeQuery();
-            if (result.next())
-                check = true;
-        } catch (SQLException e) {
+            ResultSet result=preparedStatement.executeQuery();
+            if(result.next())
+                check=true;
+        }
+     
+        catch(SQLException e){
             e.printStackTrace();
         }
-
-        return check;
-    }
+     
+        int friendId =lg.getID(Friendname, connection);
+        try{
+         
+            String query = "SELECT id FROM friends WHERE (pending = ? OR complete=?)AND main_id=?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, username);
+            preparedStatement.setInt(3, friendId);
+            ResultSet result=preparedStatement.executeQuery();
+            if(result.next())
+                check=true;
+        }
+     
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+     
+     return check;
+     }
 
     public static void friendRequest(Connection connection, String friendName, String username) {
         Login_Register lg = new Login_Register();
@@ -178,28 +198,64 @@ public class friend {
 
          return name;
     }
-    public static ArrayList<String> showFriend(Connection connection, String username) {
-        Login_Register lr = new Login_Register();
-        int main_id = lr.getID(username, connection);
-        ArrayList<String> list = new ArrayList<>();
-        try {
-            String query = "SELECT complete FROM friends WHERE main_id=?";
+    public ArrayList<String> showFriend(Connection connection,String username){
+        Login_Register lr=new Login_Register();
+        int main_id=lr.getID(username, connection);
+        ArrayList <Integer>listID=new ArrayList<>();
+        ArrayList <String>list=new ArrayList<>();
+         try{
+       String query = "SELECT complete FROM friends WHERE main_id=?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, main_id);
-            ResultSet result = preparedStatement.executeQuery();
-            while (result.next()) {
-                String hold = result.getString("complete");
-                if (hold == null || list.contains(hold))
+            ResultSet result=preparedStatement.executeQuery();
+            while(result.next()){
+              String hold=result.getString("complete");
+                if(hold==null||list.contains(hold))
+                    continue;
+               list.add(hold);}
+        }
+     
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+         
+         try{
+             String query = "SELECT main_id FROM friends WHERE complete=?";
+             PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1,username);
+            ResultSet result=preparedStatement.executeQuery();
+            while(result.next()){
+                int hold=result.getInt("main_id");
+                listID.add(hold);
+            }
+        }
+     
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+          
+           try{
+            String query2 = "SELECT username FROM user WHERE id=?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query2);
+            for(int id :listID){
+            preparedStatement.setInt(1,id);
+            ResultSet result=preparedStatement.executeQuery();
+            if(result.next()){
+                String hold=result.getString("username");
+                if(hold==null||list.contains(hold))
                     continue;
                 list.add(hold);
             }
+            }
+            
         }
-
-        catch (SQLException e) {
+     
+        catch(SQLException e){
             e.printStackTrace();
         }
-
-        return list;
-    }
+    
+    
+         return list;
+     }
 
 }
