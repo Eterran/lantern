@@ -76,8 +76,7 @@ public class FriendList {
 
         searchFriendButton.setOnAction(e -> {
             String friendUsername = searchFriendTF.getText();
-            friendListBox.getChildren().add(label);
-            
+            friendListBox.getChildren().clear();
             for (String friend : friendList) {
                 if (friend.toLowerCase().contains(friendUsername.toLowerCase())) {
                     Button profileButton = new Button(friend);
