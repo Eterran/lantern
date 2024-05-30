@@ -441,6 +441,19 @@
     -fx-text-fill: black;
 }
 
+/* Friend Page */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+.vbox, .hbox {
+    -fx-background-color: transparent;
+}
+
 
 /* Friend Graph */
 .user_node {

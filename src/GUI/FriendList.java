@@ -1,11 +1,16 @@
 package GUI;
 
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -25,6 +30,8 @@ public class FriendList {
     private static User user = User.getCurrentUser();
     private static ArrayList<String> friendList = friend.showFriend(conn, user.getUsername());
     private static VBox friendListBox = new VBox();
+    private static ScrollPane friendScrollPane = new ScrollPane();
+
     public static void refreshFriendList(){
         friendList = friend.showFriend(conn, user.getUsername());
         friendListBox.getChildren().clear();
@@ -51,8 +58,16 @@ public class FriendList {
             temp.getChildren().add(noFriendsVBox);
         }
         friendListBox.getChildren().add(temp);
+        friendScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        friendScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        friendScrollPane.setFitToWidth(true);
+        friendScrollPane.setFitToHeight(true);
+        friendScrollPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
+        friendScrollPane.setContent(friendListBox);
+        VBox.setVgrow(friendScrollPane, javafx.scene.layout.Priority.ALWAYS);  // Ensure the ScrollPane grows vertically
         Sidebar.selectTab(6);
     }
+
     public static VBox loadFriendList() {
         friendListBox.getChildren().clear();
         StackPane stackpane = new StackPane();
@@ -88,6 +103,7 @@ public class FriendList {
                 }
             }
         });
+
         HBox searchFriendHBox = new HBox();
         Button showFriendRequestsButton = new Button();
         ImageView showFriendRequestsImageView = new ImageView(new Image("resources/assets/add_friends_icon.png"));
@@ -140,13 +156,21 @@ public class FriendList {
         baseVBox.getChildren().addAll(label, searchFriendHBox);
 
         refreshFriendList();
-        
-        baseVBox.getChildren().add(friendListBox);
+
+        friendScrollPane.getStyleClass().add("scroll-pane");
+        VBox.setVgrow(friendScrollPane, javafx.scene.layout.Priority.ALWAYS);
+        baseVBox.getChildren().add(friendScrollPane);
+        baseVBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         stackpane.getChildren().add(baseVBox);
         stackpane.prefHeightProperty().bind(friendVBox.heightProperty().multiply(1));
         stackpane.prefWidthProperty().bind(friendVBox.widthProperty().multiply(1));
+        stackpane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         friendVBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        baseVBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         VBox.setVgrow(friendVBox, javafx.scene.layout.Priority.ALWAYS);
+        VBox.setVgrow(stackpane, javafx.scene.layout.Priority.ALWAYS);
+        VBox.setVgrow(baseVBox, javafx.scene.layout.Priority.ALWAYS);
+
         return friendVBox;
     }
     public static ArrayList<String> findCommonFriends(String username1, String username2){
