@@ -136,12 +136,7 @@ public class Sidebar {
             tab6 = buttonSupplier.get();
             sidebar.getChildren().add(tab6);
         });
-        accessManager.getAccessibleSidebar1(accessManager.getUserRole(User.getCurrentUser())).forEach(
-                sidebarSupplier -> 
-                    box5.getChildren().add(sidebarSupplier.get()));
-        accessManager.getAccessibleSidebar2(accessManager.getUserRole(User.getCurrentUser())).forEach(
-                sidebarSupplier -> 
-                    box6.getChildren().add(sidebarSupplier.get()));
+        
         accessManager.getAccessibleRetractedButtons1(accessManager.getUserRole(User.getCurrentUser())).forEach(
                 buttonSupplier -> {
                     retractedVBox.getChildren().add(Lantern.createHorizontalSeparator(6));
@@ -336,9 +331,19 @@ public class Sidebar {
         eventBox = EventPage.viewEventTab();
         discussionBox = DiscussionPage.createDiscussionPage();
         leaderboardBox = GlobalLeaderboard.globalLeaderBoardTab();
-        box5 = new VBox(10);
-        box6 = new VBox(10);
-        box7 = new VBox(10);
+        box5 = new VBox();
+        box6 = new VBox();
+        box7 = new VBox();
+        box5.getChildren().clear();
+        box6.getChildren().clear();
+        box7.getChildren().clear();
+        accessManager.getAccessibleSidebar1(accessManager.getUserRole(User.getCurrentUser())).forEach(
+                sidebarSupplier -> 
+                    box5.getChildren().add(sidebarSupplier.get()));
+        accessManager.getAccessibleSidebar2(accessManager.getUserRole(User.getCurrentUser())).forEach(
+                sidebarSupplier -> 
+                    box6.getChildren().add(sidebarSupplier.get()));
+
         profileBox.prefWidthProperty().bind(stackPane.widthProperty());
         eventBox.prefWidthProperty().bind(stackPane.widthProperty());
         discussionBox.prefWidthProperty().bind(stackPane.widthProperty());
