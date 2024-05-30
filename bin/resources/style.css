@@ -73,7 +73,7 @@
     -fx-background-color: rgba(165, 106, 106, 0.5);
 }
 .background_white {
-    -fx-background-color: white;
+    -fx-background-color: rgb(255, 255, 255);
 }
 .content_box_background {
     -fx-background-color: rgb(255, 252, 241);
@@ -90,7 +90,7 @@
 /*Login*/
 .back_button {
     -fx-background-color: radial-gradient(center 50% 50%, radius 100%, #424242, #FFAB40 );
-    -fx-text-fill: white;
+    -fx-text-fill: rgb(255, 255, 255);
     -fx-font-size: 20;
     -fx-font-weight: bold;
     -fx-border-color: #FFAB40;
@@ -99,7 +99,7 @@
 }
 .back_button:hover {
     -fx-background-color: radial-gradient(center 50% 50%, radius 100%, #676767, #ffc375);
-    -fx-text-fill: white;
+    -fx-text-fill: rgb(255, 255, 255);
     -fx-font-size: 20;
     -fx-font-weight: bold;
     -fx-border-color: #9E9E9E ;
@@ -108,7 +108,7 @@
 }
 .back_button:pressed {
     -fx-background-color: radial-gradient(center 50% 50%, radius 100%, #4e0000, rgb(224, 48, 48));
-    -fx-text-fill: white;
+    -fx-text-fill: rgb(255, 255, 255);
     -fx-font-size: 20;
     -fx-font-weight: bold;
     -fx-border-color: rgb(224, 48, 48);
@@ -117,7 +117,7 @@
 }
 .login_button{
     -fx-background-color: #FFAB40;
-    -fx-text-fill: white; 
+    -fx-text-fill: rgb(255, 255, 255); 
     -fx-font-family: 'Nunito Bold';
     -fx-font-size: 22px;
     -fx-border-color: black; 
@@ -127,7 +127,7 @@
 }
 .login_button:pressed{
     -fx-background-color: #ffc74e;
-    -fx-text-fill: white; 
+    -fx-text-fill: rgb(255, 255, 255); 
     -fx-font-family: 'Nunito Bold';
     -fx-font-size: 22px;
     -fx-border-color: black; 
@@ -146,9 +146,16 @@
     -fx-effect: dropshadow(gaussian, rgba(255, 169, 89, 1), 30, 0, 0, 0);
     -fx-background-image: url('./assets/lit_lantern.gif');
 }
+.logout_button{
+    -fx-background-color: transparent;
+    -fx-text-fill: transparent;
+    -fx-border-color: transparent;
+    -fx-background-image: url('./assets/logout_icon.png');
+    -fx-background-size: contain;
+}
 /* .extend_sidebar_button{
     -fx-background-color: radial-gradient(center 50% 50%, radius 100%, #8B0000, rgb(224, 48, 48));
-    -fx-text-fill: white;
+    -fx-text-fill: rgb(255, 255, 255);
     -fx-font-size: 20;
     -fx-font-weight: bold;
     -fx-border-color: rgb(224, 48, 48);
@@ -163,14 +170,14 @@
 .register_text {
     -fx-font-family: 'Nunito Regular';
     -fx-font-size: 16;
-    -fx-text-fill: white;
+    -fx-text-fill: rgb(255, 255, 255);
 }
 
 
 /*Sidebar*/
 .sidebar_button {
     -fx-background-color: transparent ;
-    -fx-text-fill: white;
+    -fx-text-fill: rgb(255, 255, 255);
     -fx-font-size: 20;
     -fx-font-family: 'Nunito Bold';
     -fx-max-height: 30px;
@@ -178,12 +185,12 @@
 }
 .sidebar_button:hover {
     -fx-background-color: rgb(175, 0, 0);
-    -fx-text-fill: white;
+    -fx-text-fill: rgb(255, 255, 255);
     -fx-font-size: 20;
 }
 /* .sidebar_button:pressed {
     -fx-background-color: #4e0000;
-    -fx-text-fill: white;
+    -fx-text-fill: rgb(255, 255, 255);
     -fx-font-size: 20;
 } */
 .sidebar_button_selected {
@@ -197,13 +204,13 @@
 }
 .separator .line {
     -fx-border-width: 0;
-    -fx-background-color: white;
+    -fx-background-color: rgb(255, 255, 255);
 }
 
 
 /*Button*/
 .search_button {
-    -fx-background-color: white;
+    -fx-background-color: rgb(255, 255, 255);
 }
 .search_button:hover {
     -fx-background-color: #ddd;
@@ -213,20 +220,20 @@
 }
 .profile_button {
     -fx-background-color: transparent;
-    -fx-text-fill: blue;
+    -fx-text-fill: #0000ff;
     -fx-font-size: 20;
     -fx-underline: true;
 }
 .add_friend_button{
     -fx-background-color: #FF8F00;
-    -fx-text-fill: white;
+    -fx-text-fill: rgb(255, 255, 255);
     -fx-font-size: 20;
     -fx-font-family: 'Nunito Bold';
     -fx-font-weight: bold;
 }
 .add_friend_button:pressed{
     -fx-background-color: #ffa44e;
-    -fx-text-fill: white;
+    -fx-text-fill: rgb(255, 255, 255);
     -fx-font-size: 20;
     -fx-font-weight: bold;
 }
@@ -253,7 +260,7 @@
 .edit_button {
     -fx-font-family: 'Nunito Bold';
     -fx-font-size: 20;
-    -fx-text-fill: white;
+    -fx-text-fill: rgb(255, 255, 255);
     -fx-background-color: #525252;
 }
 .edit_button:hover {
@@ -262,7 +269,7 @@
 .save_button {
     -fx-font-family: 'Nunito Bold';
     -fx-font-size: 20;
-    -fx-text-fill: white;
+    -fx-text-fill: rgb(255, 255, 255);
     -fx-background-color: #FFAB40;
 }
 .save_button:hover {
@@ -271,7 +278,7 @@
 .cancel_button {
     -fx-font-family: 'Nunito Bold';
     -fx-font-size: 20;
-    -fx-text-fill: white;
+    -fx-text-fill: rgb(255, 255, 255);
     -fx-background-color: #FF7043;
 }
 .cancel_button:hover {
@@ -281,7 +288,7 @@
 /*Separator*/
 .separator {
     -fx-alignment: center;
-    -fx-background-color: linear-gradient(to right, transparent, white, transparent);
+    -fx-background-color: linear-gradient(to right, transparent, rgb(255, 255, 255), transparent);
     -fx-border-width: 0;
     -fx-max-height: 1;
     -fx-border-color: transparent;
@@ -289,7 +296,7 @@
 .separator_vertical {
     -fx-alignment: center;
     -fx-orientation: vertical;
-    -fx-background-color: linear-gradient(to bottom, transparent, white, transparent);
+    -fx-background-color: linear-gradient(to bottom, transparent, rgb(255, 255, 255), transparent);
     -fx-border-width: 0;
     -fx-max-height: 550;
     -fx-pref-width: 1;
@@ -306,7 +313,7 @@
 .text_bold {
     -fx-font-family: 'Nunito Bold';
     -fx-font-size: 20;
-    -fx-text-fill: white;
+    -fx-text-fill: rgb(255, 255, 255);
 }
 .text_label {
     -fx-font-family: 'Nunito SemiBold';
@@ -316,7 +323,7 @@
 .text_content {
     -fx-font-family: 'Nunito Medium';
     -fx-font-size: 18;
-    -fx-text-fill: white;
+    -fx-text-fill: rgb(255, 255, 255);
 }
 .text_content_black {
     -fx-font-family: 'Nunito Regular';
@@ -363,7 +370,7 @@
     -fx-prompt-text-fill: #aaa;
 }
 .text_field_with_icon {
-    -fx-background-color: white;
+    -fx-background-color: rgb(255, 255, 255);
     -fx-border-color: transparent;
     -fx-border-radius: 5px;
     -fx-padding: 10px;
@@ -387,7 +394,7 @@
 /*Overlay*/
 .overlay{
     -fx-background-color: rgb(255, 251, 184);
-    -fx-border-color: white;
+    -fx-border-color: rgb(255, 255, 255);
     -fx-border-width: 8;
     -fx-border-radius: 6;
 }
@@ -463,6 +470,6 @@
 }
 
 .user_node Text {
-    -fx-fill: white;
+    -fx-fill: rgb(255, 255, 255);
     -fx-font-size: 14px;
 }

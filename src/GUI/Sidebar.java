@@ -315,7 +315,9 @@ public class Sidebar {
         return backButton;
     }
     private static Button createLogoutButton(Stage stg){
-        Button logoutButton = new Button("Logout");
+        Button logoutButton = new Button();
+        logoutButton.setPrefSize(50, 50);
+        logoutButton.setPadding(new Insets(10, 10, 10, 10));
         logoutButton.getStyleClass().add("logout_button");
         logoutButton.setOnAction(e -> {
             User.setCurrentUser(null);

@@ -64,7 +64,7 @@ public class FriendList {
         friendScrollPane.setFitToHeight(true);
         friendScrollPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
         friendScrollPane.setContent(friendListBox);
-        VBox.setVgrow(friendScrollPane, javafx.scene.layout.Priority.ALWAYS);  // Ensure the ScrollPane grows vertically
+        VBox.setVgrow(friendScrollPane, javafx.scene.layout.Priority.ALWAYS);
         Sidebar.selectTab(6);
     }
 
@@ -173,6 +173,7 @@ public class FriendList {
 
         return friendVBox;
     }
+
     public static ArrayList<String> findCommonFriends(String username1, String username2){
         ArrayList<String> friendList1 = friend.showFriend(conn, username1);
         ArrayList<String> friendList2 = friend.showFriend(conn, username2);
@@ -184,6 +185,7 @@ public class FriendList {
         
         return new ArrayList<>(set1);
     }
+
     private static VBox createFriendRequestsVBox(){
         ArrayList<String> friendRequests = friend.showPendingReceived(conn, User.getCurrentUser().getUsername());
         VBox friendRequestsVBox = new VBox();
