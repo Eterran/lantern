@@ -177,7 +177,7 @@
     -fx-padding: 4 10 4 10;
 }
 .sidebar_button:hover {
-    -fx-background-color: #676767;
+    -fx-background-color: rgb(175, 0, 0);
     -fx-text-fill: white;
     -fx-font-size: 20;
 }

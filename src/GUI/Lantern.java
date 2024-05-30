@@ -114,6 +114,15 @@ public class Lantern extends Application {
         sepBox.setAlignment(Pos.CENTER);
         return sepBox;
     }
+    public static VBox createHorizontalSeparator(Insets padding){
+        Separator separator = new Separator();
+        separator.setOrientation(Orientation.HORIZONTAL);
+        VBox sepBox = new VBox();
+        sepBox.setPadding(padding);
+        sepBox.getChildren().add(separator);
+        sepBox.setAlignment(Pos.CENTER);
+        return sepBox;
+    }
     public static VBox createVerticalSeparator(int spacing){
         Separator separator = new Separator();
         separator.setOrientation(Orientation.VERTICAL);

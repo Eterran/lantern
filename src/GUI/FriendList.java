@@ -35,7 +35,7 @@ public class FriendList {
             profileButton.setOnAction(e -> {
                 Sidebar.setBox7(Profile.loadProfileTab(Login_Register.getUser(friend, conn)));
             });
-            temp.getChildren().add(profileButton);
+            temp.getChildren().addAll(Lantern.createHorizontalSeparator(new Insets(3, 14, 3, 14)), profileButton);
         }
         if(friendList.isEmpty()){
             VBox noFriendsVBox = new VBox();
@@ -84,7 +84,7 @@ public class FriendList {
                     profileButton.setOnAction(ev -> {
                         Sidebar.setBox7(Profile.loadProfileTab(Login_Register.getUser(friend, conn)));
                     });
-                    friendListBox.getChildren().add(profileButton);
+                    friendListBox.getChildren().addAll(Lantern.createHorizontalSeparator(new Insets(3, 14, 3, 14)), profileButton);
                 }
             }
         });
