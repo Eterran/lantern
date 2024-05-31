@@ -103,7 +103,11 @@ public class DiscussionPage {
                     Button commentButton = new Button("Comment");
                     VBox commentsSection = new VBox(5);
                     loadComments(postId, commentsSection);
-                    commentButton.setOnAction(e -> addComment(postId, commentsSection, commentField.getText()));
+                  //  commentButton.setOnAction(e -> addComment(postId, commentsSection, commentField.getText()));
+                    commentButton.setOnAction(e -> {
+                        addComment(postId, commentsSection, commentField.getText());
+                        commentField.clear(); 
+                    });
 
                     VBox commentBox = new VBox(5, commentField, commentButton, commentsSection);
                     commentBox.setPadding(new Insets(10, 0, 0, 0));

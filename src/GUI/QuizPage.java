@@ -213,7 +213,7 @@ public class QuizPage {
         borderPane.setStyle("-fx-background-color: #CDFCBE; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 10px;");
         borderPane.setPadding(new Insets(10));
 
-        Image quizImage = new Image("resources/assets/online-quiz.png");
+        Image quizImage = new Image("resources/assets/online-quiz (1).png");
         ImageView quizImageView = new ImageView(quizImage);
         quizImageView.setFitHeight(60);
         quizImageView.setFitWidth(60);
