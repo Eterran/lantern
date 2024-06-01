@@ -195,6 +195,8 @@ public class Profile {
             parentButton.getStyleClass().add("add_friend_button");
             parentButton.setOnAction(e -> {
                 ParentChildren.request(conn, user.getUsername(), User.getCurrentUser().getUsername());
+                parentButton.setText("Request Sent");
+                parentButton.setDisable(true);
             });
             profileContents.getChildren().add(parentButton);
         }
