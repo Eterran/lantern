@@ -102,7 +102,7 @@ public class friend {
             String query = "UPDATE friends SET complete=?,pending=? WHERE id=?";
             // String query2="UPDATE friends SET pending = ? WHERE id= ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, friendName);
+            preparedStatement.setString(1, username);
             preparedStatement.setString(2, null);
             preparedStatement.setInt(3, id);
             preparedStatement.executeUpdate();
