@@ -116,7 +116,11 @@ public class BookingPageGUI {
         VBox mainvbox = new VBox();
         mainvbox.setStyle("-fx-background-color: white;");
         mainvbox.getChildren().add(borderPane);
+
+        mainvbox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         VBox.setVgrow(borderPane, Priority.ALWAYS);
+        VBox.setVgrow(mainvbox, Priority.ALWAYS);
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
       
         ArrayList<Integer> childrenId =  getChildren(Lantern.getConn(), User.getCurrentUser().getUsername());
         if(childrenId.isEmpty()){

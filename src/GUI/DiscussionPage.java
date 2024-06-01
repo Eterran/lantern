@@ -4,7 +4,6 @@ import javafx.animation.FadeTransition;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 import java.time.LocalDateTime;
@@ -35,9 +34,9 @@ public class DiscussionPage {
         postTitle.setPromptText("Post Title");
         TextArea postDescription = new TextArea();
         postDescription.setPromptText("Post Description");
-        Button addPostButton = new Button("Add Post");
-        addPostButton.setOnAction(e -> addPost(feedContent, postTitle.getText(), postDescription.getText()));
 
+        Button addPostButton = new Button("Add Post");
+        
         VBox newPostSection = new VBox(2, postTitle, postDescription, addPostButton);
         newPostSection.setPadding(new Insets(2));
         newPostSection.getStyleClass().add("new_post");
@@ -45,7 +44,15 @@ public class DiscussionPage {
         newPostSection.setVisible(false);
 
         Button togglePostSectionButton = new Button("New Post");
+        togglePostSectionButton.getStyleClass().add("new_post");
         togglePostSectionButton.setOnAction(e -> togglePostSection(newPostSection));
+
+        addPostButton.setOnAction(e -> {
+            addPost(feedContent, postTitle.getText(), postDescription.getText());
+            postTitle.clear();
+            postDescription.clear();
+            togglePostSection(newPostSection);
+        });
 
         VBox.setVgrow(feed, Priority.ALWAYS);
         discussionPage.getChildren().addAll(discussionLabel, togglePostSectionButton, newPostSection, feed);

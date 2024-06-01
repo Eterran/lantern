@@ -19,7 +19,7 @@ public class DiscussionDatabase {
     }
 
     public static ResultSet getPosts() throws SQLException {
-        String sql = "SELECT * FROM Posts ORDER BY datetime DESC";
+        String sql = "SELECT * FROM Posts ORDER BY id DESC";
         Statement stmt = conn.createStatement();
         return stmt.executeQuery(sql);
     }
