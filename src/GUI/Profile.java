@@ -223,6 +223,7 @@ public class Profile {
             acceptButton.setOnAction(e -> {
                 ParentChildren.acceptRequest(conn, User.getCurrentUser().getUsername(), pendingRequest);
                 pendingRequestsVBox.getChildren().remove(pendingRequestHBox);
+                refreshProfile();
             });
             Button declineButton = new Button();
             declineButton.setPrefSize(30, 30);
