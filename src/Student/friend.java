@@ -97,8 +97,7 @@ public class friend {
 
     public static void acceptFriend(Connection connection, String friendName, String username) {
         int id = getFriendId(connection, friendName, username);
-        Login_Register lr = new Login_Register();
-        int main_id = lr.getID(username, connection);
+        
         try {
             String query = "UPDATE friends SET complete=?,pending=? WHERE id=?";
             // String query2="UPDATE friends SET pending = ? WHERE id= ?";
