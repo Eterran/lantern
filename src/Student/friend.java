@@ -74,12 +74,12 @@ public class friend {
     public static int getFriendId(Connection connection, String friendName, String username) {
 
         Login_Register lg = new Login_Register();
-        int id = lg.getID(username, connection);
+        int id = lg.getID(friendName, connection);
         int userId = 0;
         try {
             String query = "SELECT id FROM friends WHERE pending = ? AND main_id=?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, friendName);
+            preparedStatement.setString(1, username);
             preparedStatement.setInt(2, id);
             ResultSet result = preparedStatement.executeQuery();
             if (result.next()) {
@@ -93,6 +93,7 @@ public class friend {
 
         return userId;
     }
+
 
     public static void acceptFriend(Connection connection, String friendName, String username) {
         int id = getFriendId(connection, friendName, username);
