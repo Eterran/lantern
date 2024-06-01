@@ -237,6 +237,18 @@
     -fx-font-size: 20;
     -fx-font-weight: bold;
 }
+.add_friend_button:hover{
+    -fx-background-color: #FFAB40;
+    -fx-text-fill: rgb(255, 255, 255);
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+}
+.add_friend_button:disabled{
+    -fx-background-color: #aaaaaa;
+    -fx-text-fill: rgb(255, 255, 255);
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+}
 .accept_button{
     -fx-background-color: transparent;
     -fx-text-fill: transparent;

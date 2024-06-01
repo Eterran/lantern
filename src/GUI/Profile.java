@@ -185,6 +185,8 @@ public class Profile {
             addFriendButton.getStyleClass().add("add_friend_button");
             addFriendButton.setOnAction(e -> {
                 friend.friendRequest(conn, user.getUsername(), User.getCurrentUser().getUsername());
+                addFriendButton.setText("Friend Request Sent");
+                addFriendButton.setDisable(true);
             });
             profileContents.getChildren().add(addFriendButton);
         }
