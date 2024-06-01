@@ -24,7 +24,6 @@ public class DiscussionPage {
 
         Label discussionLabel = new Label("Discussion");
         discussionLabel.getStyleClass().add("title");
-        discussionLabel.setPadding(new Insets(12, 0, 12, 12));
 
         ScrollPane feed = new ScrollPane();
         feed.setFitToWidth(true);

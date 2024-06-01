@@ -125,6 +125,16 @@
     -fx-background-radius: 10px; 
     -fx-border-radius: 10px;
 }
+.login_button:hover {
+    -fx-background-color: #FFC107;
+    -fx-text-fill: rgb(255, 255, 255); 
+    -fx-font-family: 'Nunito Bold';
+    -fx-font-size: 22px;
+    -fx-border-color: black; 
+    -fx-border-width: 2px;
+    -fx-background-radius: 10px; 
+    -fx-border-radius: 10px;
+}
 .login_button:pressed{
     -fx-background-color: #ffc74e;
     -fx-text-fill: rgb(255, 255, 255); 
@@ -152,6 +162,9 @@
     -fx-border-color: transparent;
     -fx-background-image: url('./assets/logout_icon.png');
     -fx-background-size: contain;
+}
+.logout_button:hover {
+    -fx-effect: dropshadow(gaussian, rgba(255, 169, 89, 1), 30, 0, 0, 0);
 }
 /* .extend_sidebar_button{
     -fx-background-color: radial-gradient(center 50% 50%, radius 100%, #8B0000, rgb(224, 48, 48));
@@ -223,6 +236,9 @@
     -fx-text-fill: #0000ff;
     -fx-font-size: 20;
     -fx-underline: true;
+}
+.profile_button:hover {
+    -fx-text-fill: #0000cc;
 }
 .add_friend_button{
     -fx-background-color: #FF8F00;
@@ -321,6 +337,7 @@
 .title {
     -fx-font-family: 'Nunito ExtraBold';
     -fx-font-size: 40;
+    -fx-padding: 12 0 12 16;
 }
 .text_bold {
     -fx-font-family: 'Nunito Bold';
@@ -461,12 +478,12 @@
 }
 
 /* Friend Page */
-.scroll-pane {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0;
-    -fx-padding: 0;
+.friendlist-scroll-pane {
+    -fx-background-color: #fff7d8, linear-gradient(to bottom, #ffeb9d 0%, #ffeb9d 75%, transparent 100%);
+    -fx-background-insets: 0, 6;
+    -fx-padding: 6 14 0 14;
 }
-.scroll-pane .viewport {
+.friendlist-scroll-pane .viewport {
     -fx-background-color: transparent;
 }
 .vbox, .hbox {

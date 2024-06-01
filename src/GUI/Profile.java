@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import Database.User;
 import Student.friend;
 import Database.Database;
-import Database.Login_Register;
 import Database.ParentChildren;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -50,7 +49,6 @@ public class Profile {
         Label profileLabel = new Label("My Profile");
         profileLabel.getStyleClass().add("title");
         HBox profileLabelBox = new HBox();
-        profileLabelBox.setPadding(new Insets(12, 0, 12, 12));
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         profileLabelBox.getChildren().addAll(profileLabel, spacer);
@@ -98,6 +96,7 @@ public class Profile {
 
                 stackpane.getChildren().add(backgroundBlocker);
                 stackpane.getChildren().add(overlay);
+                Lantern.playTransition(overlay, 1.0);
             });
             profileLabelBox.getChildren().add(pendingRequestsButton);
         }
@@ -105,7 +104,6 @@ public class Profile {
         profileTab.setStyle("-fx-background-color: " + color.BACKGROUND.getCode() + ";");
         profileTab.getChildren().add(profileLabelBox);
         profileTab.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-
         
         VBox usernameBox = Lantern.createInfoVBox("USERNAME: ", User.getCurrentUser().getUsername(), padding);
         VBox roleBox = Lantern.createInfoVBox("ROLE: ", User.getCurrentUser().getRole(), padding);
@@ -132,6 +130,9 @@ public class Profile {
         profileRootBox.getChildren().add(stackpane);
         profileRootBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
+        Lantern.playTransition(profileContents, 1.3);
+        Lantern.playTransition(aboutVBox, 1.3);
+
         return profileRootBox;
     }
 
@@ -152,7 +153,6 @@ public class Profile {
         profileLabel.getStyleClass().add("title");
         HBox profileLabelBox = new HBox();
         profileLabelBox.getChildren().add(profileLabel);
-        profileLabelBox.setPadding(new Insets(12, 0, 12, 12));
 
         profileTab.setStyle("-fx-background-color: " + color.BACKGROUND.getCode() + ";");
         profileTab.getChildren().add(profileLabelBox);
@@ -204,6 +204,10 @@ public class Profile {
         VBox aboutVBox = createAboutVBox(stackpane, user.getUsername());
 
         profileTab.getChildren().addAll(profileContents, aboutVBox);
+
+        Lantern.playTransition(profileContents, 1.3);
+        Lantern.playTransition(aboutVBox, 1.3);
+
         return profileTab;
     }
     private static VBox createPendingRequestsVBox(){
@@ -211,7 +215,6 @@ public class Profile {
         ArrayList<String> pendingRequests = ParentChildren.showRequestParent(conn, User.getCurrentUser().getUsername());
         Label pendingRequestsLabel = new Label("Pending Requests");
         pendingRequestsLabel.getStyleClass().add("title");
-        pendingRequestsLabel.setPadding(new Insets(12, 0, 12, 12));
         pendingRequestsVBox.getChildren().addAll(pendingRequestsLabel, Lantern.createHorizontalSeparator(2));
         for (String pendingRequest : pendingRequests) {
             HBox pendingRequestHBox = new HBox();
@@ -242,6 +245,7 @@ public class Profile {
             noFriendRequestsLabel.setPadding(new Insets(12, 0, 12, 12));
             pendingRequestsVBox.getChildren().add(noFriendRequestsLabel);
         }
+
         return pendingRequestsVBox;
     }
     private static VBox createAboutVBox(StackPane stackpane, String username){

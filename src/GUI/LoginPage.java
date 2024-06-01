@@ -151,6 +151,8 @@ public class LoginPage {
         rootPane.getStyleClass().add("background");
         rootPane.getChildren().add(rootBox);
 
+        Lantern.playTransition(rootBox, 2.0);
+
         Scene scene = new Scene(rootPane, 1200, 700);
         scene.getStylesheets().add("resources/style.css");
         stg.setScene(scene);

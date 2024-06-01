@@ -41,12 +41,14 @@ public class Sidebar {
     private static Button tab4 = new Button("Global Leaderboard");
     private static Button tab5 = new Button();
     private static Button tab6 = new Button();
+    private static Button tab7 = new Button();
     private static Button rtab1 = new Button();
     private static Button rtab2 = new Button();
     private static Button rtab3 = new Button();
     private static Button rtab4 = new Button();
     private static Button rtab5 = new Button();
     private static Button rtab6 = new Button();
+    private static Button rtab7 = new Button();
 
     private static TranslateTransition tt = new TranslateTransition(Duration.millis(1000), sidebar);
     private static VBox retractedVBox = new VBox();
@@ -61,6 +63,7 @@ public class Sidebar {
     private static VBox box5 = new VBox(10);
     private static VBox box6 = new VBox(10);
     private static VBox box7 = new VBox(10);
+    private static VBox othersProfile = new VBox(10);
 
     private static Scene sidebarScene = null;
 
@@ -114,7 +117,7 @@ public class Sidebar {
         VBox.setVgrow(stackPane, Priority.ALWAYS);
         stackPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         stackPane.getChildren().clear();
-        stackPane.getChildren().addAll(profileBox, eventBox, discussionBox, leaderboardBox, box5, box6, box7);
+        stackPane.getChildren().addAll(profileBox, eventBox, discussionBox, leaderboardBox, box5, box6, box7, othersProfile);
         
         Button backButton = createBackButton();
         backAndRetract.getChildren().addAll(backButton, retractButton);
@@ -136,6 +139,11 @@ public class Sidebar {
             tab6 = buttonSupplier.get();
             sidebar.getChildren().add(tab6);
         });
+        accessManager.getAccessibleButtons3(accessManager.getUserRole(User.getCurrentUser())).forEach(buttonSupplier -> {
+            sidebar.getChildren().add(Lantern.createHorizontalSeparator(6));
+            tab7 = buttonSupplier.get();
+            sidebar.getChildren().add(tab7);
+        });
         
         accessManager.getAccessibleRetractedButtons1(accessManager.getUserRole(User.getCurrentUser())).forEach(
                 buttonSupplier -> {
@@ -148,6 +156,12 @@ public class Sidebar {
                     retractedVBox.getChildren().add(Lantern.createHorizontalSeparator(6));
                     rtab6 = buttonSupplier.get();
                     retractedVBox.getChildren().add(rtab6);
+                });
+        accessManager.getAccessibleRetractedButtons3(accessManager.getUserRole(User.getCurrentUser())).forEach(
+                buttonSupplier -> {
+                    retractedVBox.getChildren().add(Lantern.createHorizontalSeparator(6));
+                    rtab7 = buttonSupplier.get();
+                    retractedVBox.getChildren().add(rtab7);
                 });
         sidebar.getChildren().addAll(Lantern.createSpacer(), createLogoutButton(stg));
         initialiseArrays();
@@ -165,8 +179,6 @@ public class Sidebar {
         }
 
         stg.setScene(sidebarScene);
-
-        createNewWindow();
     }
     public static void createNewWindow() {
         Stage newWindow = new Stage();
@@ -180,7 +192,7 @@ public class Sidebar {
 
     // sidebar navigation functions
     private static void setOneVisible(int index){
-        for(int i = 1; i <= pages.length; i++){
+        for(int i = 0; i <= pages.length; i++){
             if(pages[i] == null)
                 break;
             if(i == index){
@@ -209,7 +221,7 @@ public class Sidebar {
             sidebarHistory.push(index);
     }
     private static void setSelectedButton(int index){
-        for(int i = 1; i <= tabs.length; i++){
+        for(int i = 0; i <= tabs.length; i++){
             if(tabs[i] == null)
                 break;
             if(i == index){
@@ -283,9 +295,9 @@ public class Sidebar {
             if(search != null && !search.isEmpty()){
                 try {
                     if(Database.usernameExists(conn, search)){
-                        box7.getChildren().clear();
-                        box7.getChildren().add(Profile.loadProfileTab(Login_Register.getUser(search, conn)));
-                        pages[7] = box7;
+                        othersProfile.getChildren().clear();
+                        othersProfile.getChildren().add(Profile.loadProfileTab(Login_Register.getUser(search, conn)));
+                        pages[0] = othersProfile;
                         setOneVisible(7);
                     } else {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -336,15 +348,21 @@ public class Sidebar {
         box5 = new VBox();
         box6 = new VBox();
         box7 = new VBox();
+        othersProfile = new VBox();
         box5.getChildren().clear();
         box6.getChildren().clear();
         box7.getChildren().clear();
+        othersProfile.getChildren().clear();
+
         accessManager.getAccessibleSidebar1(accessManager.getUserRole(User.getCurrentUser())).forEach(
                 sidebarSupplier -> 
                     box5.getChildren().add(sidebarSupplier.get()));
         accessManager.getAccessibleSidebar2(accessManager.getUserRole(User.getCurrentUser())).forEach(
                 sidebarSupplier -> 
                     box6.getChildren().add(sidebarSupplier.get()));
+        accessManager.getAccessibleSidebar3(accessManager.getUserRole(User.getCurrentUser())).forEach(
+                sidebarSupplier -> 
+                    box7.getChildren().add(sidebarSupplier.get()));
 
         profileBox.prefWidthProperty().bind(stackPane.widthProperty());
         eventBox.prefWidthProperty().bind(stackPane.widthProperty());
@@ -353,6 +371,7 @@ public class Sidebar {
         box5.prefWidthProperty().bind(stackPane.widthProperty());
         box6.prefWidthProperty().bind(stackPane.widthProperty());
         box7.prefWidthProperty().bind(stackPane.widthProperty());
+        othersProfile.prefWidthProperty().bind(stackPane.widthProperty());
         profileBox.prefHeightProperty().bind(stackPane.heightProperty());
         eventBox.prefHeightProperty().bind(stackPane.heightProperty());
         discussionBox.prefHeightProperty().bind(stackPane.heightProperty());
@@ -360,6 +379,7 @@ public class Sidebar {
         box5.prefHeightProperty().bind(stackPane.heightProperty());
         box6.prefHeightProperty().bind(stackPane.heightProperty());
         box7.prefHeightProperty().bind(stackPane.heightProperty());
+        othersProfile.prefHeightProperty().bind(stackPane.heightProperty());
         VBox.setVgrow(profileBox, Priority.ALWAYS);
         VBox.setVgrow(eventBox, Priority.ALWAYS);
         VBox.setVgrow(discussionBox, Priority.ALWAYS);
@@ -367,6 +387,7 @@ public class Sidebar {
         VBox.setVgrow(box5, Priority.ALWAYS);
         VBox.setVgrow(box6, Priority.ALWAYS);
         VBox.setVgrow(box7, Priority.ALWAYS);
+        VBox.setVgrow(othersProfile, Priority.ALWAYS);
         profileBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         eventBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         discussionBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
@@ -374,6 +395,7 @@ public class Sidebar {
         box5.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         box6.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         box7.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        othersProfile.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
     }
     private static void initialiseButtons(){
         tab1 = new Button();
@@ -465,6 +487,7 @@ public class Sidebar {
         pages[5] = box5;
         pages[6] = box6;
         pages[7] = box7;
+        pages[0] = othersProfile;
         
         tabs[1] = tab1;
         tabs[2] = tab2;
@@ -472,6 +495,7 @@ public class Sidebar {
         tabs[4] = tab4;
         tabs[5] = tab5;
         tabs[6] = tab6;
+        tabs[7] = tab7;
 
         rtabs[1] = rtab1;
         rtabs[2] = rtab2;
@@ -479,6 +503,7 @@ public class Sidebar {
         rtabs[4] = rtab4;
         rtabs[5] = rtab5;
         rtabs[6] = rtab6;
+        rtabs[7] = rtab7;
 
         setOneVisible(1);
         setSelectedButton(1);
@@ -548,6 +573,12 @@ public class Sidebar {
         friendlistIcon.setFitWidth(30);
         return friendlistIcon;
     }
+    public static ImageView getFriendGraphIcon(){
+        ImageView settingsIcon = new ImageView(new Image("resources/assets/friend_graph_icon.png"));
+        settingsIcon.setFitHeight(30);
+        settingsIcon.setFitWidth(30);
+        return settingsIcon;
+    }
     public static ImageView getRProfileIcon(){
         ImageView rprofileIcon = new ImageView(new Image("resources/assets/profile_icon.png"));
         rprofileIcon.setFitHeight(30);
@@ -608,16 +639,22 @@ public class Sidebar {
         rfriendlistIcon.setFitWidth(30);
         return rfriendlistIcon;
     }
-    public static void setBox7(VBox box){
-        box7.getChildren().clear();
+    public static ImageView getRFriendGraphIcon(){
+        ImageView rsettingsIcon = new ImageView(new Image("resources/assets/friend_graph_icon.png"));
+        rsettingsIcon.setFitHeight(30);
+        rsettingsIcon.setFitWidth(30);
+        return rsettingsIcon;
+    }
+    public static void setothersProfile(VBox box){
+        othersProfile.getChildren().clear();
         VBox temp = new VBox();
         temp.getChildren().add(box);
-        box7.getChildren().add(temp);
-        setOneVisible(7);
+        othersProfile.getChildren().add(temp);
+        setOneVisible(0);
     }
     public static void setBox1(VBox box){
-        box7.getChildren().clear();
-        box7.getChildren().add(box);
+        othersProfile.getChildren().clear();
+        othersProfile.getChildren().add(box);
         setOneVisible(1);
     }
 }

@@ -7,6 +7,7 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.control.Button;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -26,8 +27,6 @@ import Database.User;
 
 public class FriendGraph {
     private static Connection conn = Lantern.getConn();
-    private static final double WIDTH = 800;
-    private static final double HEIGHT = 600;
     private static final double NODE_RADIUS = 20;
     private static final double REPULSION_CONSTANT = 50000;
     private static final double ATTRACTION_CONSTANT = 0.01;
@@ -35,9 +34,14 @@ public class FriendGraph {
     private static Map<String, Set<String>> connections = new HashMap<>();
 
     public static VBox createFriendGraph() {
+        //System.out.println("Creating friend graph...");
         VBox graphContainer = new VBox();
+        Text title = new Text("Friend Graph");
+        title.getStyleClass().add("title");
+        graphContainer.getChildren().add(title);
         Pane graphPane = new Pane();
-        graphPane.setPrefSize(WIDTH, HEIGHT);
+        graphPane.prefWidthProperty().bind(graphContainer.widthProperty());
+        graphPane.prefHeightProperty().bind(graphContainer.heightProperty());
         graphContainer.getChildren().add(graphPane);
     
         Map<String, Circle> userNodes = new HashMap<>();
@@ -86,6 +90,20 @@ public class FriendGraph {
     
         addZoomAndPan(graphPane);
         graphContainer.getStylesheets().add("resources/style.css");
+        graphContainer.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        VBox.setVgrow(graphContainer, javafx.scene.layout.Priority.ALWAYS);
+
+        Button resetViewButton = new Button("Reset View");
+        resetViewButton.setOnAction(event -> {
+            graphPane.setScaleX(1.0);
+            graphPane.setScaleY(1.0);
+
+            graphPane.setTranslateX(0);
+            graphPane.setTranslateY(0);
+        });
+        resetViewButton.getStyleClass().add("login_button");
+        graphContainer.getChildren().add(resetViewButton);
+
         return graphContainer;
     }
 
@@ -97,8 +115,8 @@ public class FriendGraph {
         // });
 
         double angle = 2 * Math.PI * index / totalNodes;
-        double centerX = WIDTH / 2 + 200 * Math.cos(angle);
-        double centerY = HEIGHT / 2 + 200 * Math.sin(angle);
+        double centerX = graphPane.widthProperty().get() / 2 + 200 * Math.cos(angle);
+        double centerY = graphPane.heightProperty().get() / 2 + 200 * Math.sin(angle);
         circle.setCenterX(centerX);
         circle.setCenterY(centerY);
     
@@ -112,7 +130,7 @@ public class FriendGraph {
         graphPane.getChildren().add(stackPane);
 
         stackPane.setOnMouseClicked(event -> {
-            Sidebar.setBox7(Profile.loadProfileTab(Login_Register.getUser(username, conn)));
+            Sidebar.setothersProfile(Profile.loadProfileTab(Login_Register.getUser(username, conn)));
             System.out.println("Current user:" + User.getCurrentUser().getUsername() + " clicked on " + username + "'s profile.");
         });
 
@@ -139,8 +157,7 @@ public class FriendGraph {
                     forceX += repulsion * dx / distance;
                     forceY += repulsion * dy / distance;
     
-                    // Attraction force for connected nodes
-                    if (areConnected(entry.getKey(), otherEntry.getKey())) {
+                    if (areConnected(entry.getKey(), otherEntry.getKey())) { // only connected nodes are attracted
                         double attraction = ATTRACTION_CONSTANT * distance;
                         forceX -= attraction * dx / distance;
                         forceY -= attraction * dy / distance;
@@ -165,8 +182,21 @@ public class FriendGraph {
             if (deltaY < 0) {
                 zoomFactor = 0.95;
             }
-            graphPane.setScaleX(graphPane.getScaleX() * zoomFactor);
-            graphPane.setScaleY(graphPane.getScaleY() * zoomFactor);
+            double newScaleX = graphPane.getScaleX() * zoomFactor;
+            double newScaleY = graphPane.getScaleY() * zoomFactor;
+        
+            if (newScaleX > 2.0 || newScaleY > 2.0) {
+                newScaleX = 2.0;
+                newScaleY = 2.0;
+            }
+        
+            if (newScaleX < 0.5 || newScaleY < 0.5) {
+                newScaleX = 0.5;
+                newScaleY = 0.5;
+            }
+        
+            graphPane.setScaleX(newScaleX);
+            graphPane.setScaleY(newScaleY);
             event.consume();
         });
     

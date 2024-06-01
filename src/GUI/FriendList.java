@@ -1,11 +1,8 @@
 package GUI;
 
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -39,7 +36,7 @@ public class FriendList {
             Button profileButton = new Button(friend);
             profileButton.getStyleClass().add("profile_button");
             profileButton.setOnAction(e -> {
-                Sidebar.setBox7(Profile.loadProfileTab(Login_Register.getUser(friend, conn)));
+                Sidebar.setothersProfile(Profile.loadProfileTab(Login_Register.getUser(friend, conn)));
             });
             temp.getChildren().addAll(Lantern.createHorizontalSeparator(new Insets(3, 14, 3, 14)), profileButton);
         }
@@ -61,7 +58,7 @@ public class FriendList {
         friendScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         friendScrollPane.setFitToWidth(true);
         friendScrollPane.setFitToHeight(true);
-        friendScrollPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
+        //friendScrollPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
         friendScrollPane.setContent(friendListBox);
         VBox.setVgrow(friendScrollPane, javafx.scene.layout.Priority.ALWAYS);
         Sidebar.selectTab(6);
@@ -70,25 +67,23 @@ public class FriendList {
     public static VBox loadFriendList() {
         friendListBox.getChildren().clear();
         StackPane stackpane = new StackPane();
-        ImageView searchFriendImageView = new ImageView(new Image("resources/assets/search_friends_icon.png"));
-        searchFriendImageView.setFitWidth(40);
-        searchFriendImageView.setFitHeight(40);
         VBox friendVBox = new VBox();
         friendVBox.getChildren().add(stackpane);
         
         Label label = new Label("Friends");
         label.getStyleClass().add("title");
-        label.setPadding(new Insets(12, 0, 12, 12));
-        
+
         TextField searchFriendTF = new TextField();
         searchFriendTF.getStyleClass().add("text_field");
         searchFriendTF.setPromptText("Search friend");
         searchFriendTF.setPrefHeight(40);
-        Button searchFriendButton = new Button();
-        searchFriendButton.setGraphic(searchFriendImageView);
-        searchFriendButton.getStyleClass().add("add_friend_button");
 
-        searchFriendButton.setOnAction(e -> {
+        StackPane searchFriendTFstackPane = new StackPane();
+        searchFriendTFstackPane.getChildren().addAll(searchFriendTF);
+
+        StackPane.setAlignment(searchFriendTF, Pos.CENTER);
+
+        searchFriendTF.textProperty().addListener((observable, oldValue, newValue) -> {
             String friendUsername = searchFriendTF.getText();
             friendListBox.getChildren().clear();
             for (String friend : friendList) {
@@ -96,7 +91,7 @@ public class FriendList {
                     Button profileButton = new Button(friend);
                     profileButton.getStyleClass().add("profile_button");
                     profileButton.setOnAction(ev -> {
-                        Sidebar.setBox7(Profile.loadProfileTab(Login_Register.getUser(friend, conn)));
+                        Sidebar.setothersProfile(Profile.loadProfileTab(Login_Register.getUser(friend, conn)));
                     });
                     friendListBox.getChildren().addAll(Lantern.createHorizontalSeparator(new Insets(3, 14, 3, 14)), profileButton);
                 }
@@ -147,16 +142,18 @@ public class FriendList {
 
             stackpane.getChildren().add(backgroundBlocker);
             stackpane.getChildren().add(overlay);
+
+            Lantern.playTransition(overlay, 1.0);
         });
 
-        searchFriendHBox.getChildren().addAll(searchFriendTF, searchFriendButton, Lantern.createSpacer(), showFriendRequestsButton);
+        searchFriendHBox.getChildren().addAll(searchFriendTF, Lantern.createSpacer(), showFriendRequestsButton);
         searchFriendHBox.setPadding(new Insets(0, 12, 12, 10));
         VBox baseVBox = new VBox();
         baseVBox.getChildren().addAll(label, searchFriendHBox);
 
         refreshFriendList();
 
-        friendScrollPane.getStyleClass().add("scroll-pane");
+        friendScrollPane.getStyleClass().add("friendlist-scroll-pane");
         VBox.setVgrow(friendScrollPane, javafx.scene.layout.Priority.ALWAYS);
         baseVBox.getChildren().add(friendScrollPane);
         baseVBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);

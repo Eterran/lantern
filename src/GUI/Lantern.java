@@ -1,5 +1,8 @@
 package GUI;
 
+import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -11,10 +14,12 @@ import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.scene.control.Separator;
 
 import java.sql.Connection;
@@ -267,5 +272,20 @@ public class Lantern extends Application {
         infoBox.getStylesheets().add("resources/style.css");
         infoBox.getChildren().addAll(label, value);
         return infoBox;
+    }
+    public static void playTransition(Pane pane, Double duration){
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(duration), pane);
+        fadeTransition.setFromValue(0.0);
+        fadeTransition.setToValue(1.0);
+
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(duration), pane);
+        scaleTransition.setFromX(0.8);
+        scaleTransition.setFromY(0.8);
+        scaleTransition.setToX(1.0);
+        scaleTransition.setToY(1.0);
+
+        ParallelTransition parallelTransition = new ParallelTransition(fadeTransition, scaleTransition);
+
+        parallelTransition.play();
     }
 }
