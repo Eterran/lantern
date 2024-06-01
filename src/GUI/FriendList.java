@@ -27,13 +27,12 @@ import Student.friend;
 
 public class FriendList {
     private static Connection conn = Lantern.getConn();
-    private static User user = User.getCurrentUser();
-    private static ArrayList<String> friendList = friend.showFriend(conn, user.getUsername());
+    private static ArrayList<String> friendList = friend.showFriend(conn, User.getCurrentUser().getUsername());
     private static VBox friendListBox = new VBox();
     private static ScrollPane friendScrollPane = new ScrollPane();
 
     public static void refreshFriendList(){
-        friendList = friend.showFriend(conn, user.getUsername());
+        friendList = friend.showFriend(conn, User.getCurrentUser().getUsername());
         friendListBox.getChildren().clear();
         VBox temp = new VBox();
         for (String friend : friendList) {
