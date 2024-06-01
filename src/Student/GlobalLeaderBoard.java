@@ -117,7 +117,7 @@ import java.time.format.DateTimeFormatter;
         for(int i=1;i<count;i++){
             for(int j=0;j<count-1;j++){
                 if(XP2[j]==XP2[j+1]){
-                    if(xpLastUpdated2[j].compareTo(xpLastUpdated2[j+1])>0){
+                    if(xpLastUpdated2[j].compareTo(xpLastUpdated2[j+1])<0){
                         double hold = XP2[j+1];
                         XP2[j+1] = XP2[j];
                         XP2[j]=hold;
@@ -142,7 +142,7 @@ import java.time.format.DateTimeFormatter;
         for(int i=1;i<count;i++){
             for(int j=0;j<count-1;j++){
                 if(xpLastUpdated2[j].compareTo(xpLastUpdated2[j+1])==0){
-                    if(time2[j].isAfter(time2[j+1])){
+                    if(time2[j+1].isAfter(time2[j])){
                         double hold = XP2[j+1];
                         XP2[j+1] = XP2[j];
                         XP2[j]=hold;
