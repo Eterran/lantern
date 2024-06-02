@@ -298,7 +298,7 @@ public class Sidebar {
                         othersProfile.getChildren().clear();
                         othersProfile.getChildren().add(Profile.loadProfileTab(Login_Register.getUser(search, conn)));
                         pages[0] = othersProfile;
-                        setOneVisible(7);
+                        setOneVisible(0);
                     } else {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error");
