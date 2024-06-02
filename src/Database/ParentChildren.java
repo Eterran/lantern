@@ -36,6 +36,28 @@ public class ParentChildren {
      
      return check;
      }
+
+    //check parent of a child cnnr be higher than two
+    public boolean checkParentNumber(Connection connection ,String childrenName){
+        Login_Register lg=new Login_Register();
+        int count=0;
+        int id =lg.getID(childrenName, connection);
+     try{
+            String query = "SELECT id FROM children WHERE main_id=?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1,id);
+            ResultSet result=preparedStatement.executeQuery();
+            while(result.next()){
+            count++;
+            }
+        }
+     
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+      return count >= 2;
+     
+     }
     
     public boolean checkExistingParent(Connection connection ,String childrenName,String parentName ){
         Login_Register lg=new Login_Register();
