@@ -69,10 +69,30 @@ public class viewBookingTab {
         VBox mainvbox = new VBox();
         mainvbox.getChildren().addAll(vbox1, bookingCheckBox);
         VBox.setVgrow(mainvbox, Priority.ALWAYS);
-        return mainvbox;
+        if(bookingMade.isEmpty()){
+            return showNoBooking();
+        }else{
+            return mainvbox;
+        }
+        
     }
 
+    public static VBox showNoBooking(){      
+        VBox vbox = new VBox(10);
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setStyle("-fx-background-color: grey; -fx-padding: 20px; -fx-background-radius: 10;");
 
+        Label text = new Label("Oops, no booking has been made.");
+        text.setStyle("-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;");
+
+        Button okButton = new Button("OK");
+        okButton.getStyleClass().add("okbutton");
+        okButton.setOnAction(e -> (vbox.getParent()).setVisible(false));
+
+        vbox.getChildren().addAll(text, okButton);
+        
+        return vbox;
+    }
     public static BorderPane BPForAllBooking(String labelText1, String labelText2) {
         System.out.println("Label " + labelText1);
         System.out.println("Date "+ labelText2);

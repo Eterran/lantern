@@ -11,10 +11,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.Duration;
+import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -34,13 +38,12 @@ public class BookingPageGUI {
     public static VBox BookingTabPage(){
         BorderPane borderPane = new BorderPane();
         Label titleLabel = new Label("Booking Page");
+        titleLabel.getStyleClass().add("event_title");
         borderPane.setTop(titleLabel);
         titleLabel.setAlignment(Pos.CENTER);
         titleLabel.setPadding(new Insets(10));
         BorderPane.setAlignment(titleLabel, Pos.CENTER);
-        titleLabel.setFont(new Font(23));
-        titleLabel.setStyle("-fx-font-weight: bold;");
-     
+
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setFitToWidth(true);
         scrollPane.setPrefSize(391.0, 247.0);
@@ -60,34 +63,39 @@ public class BookingPageGUI {
         for (int i = 0; i < recommendSystem.size(); i++) {
             final int ind = i;
             HBox dataBox = new HBox();
-            dataBox.setPadding(new Insets(5));
-           
-            if (i % 2 == 0) {
-                dataBox.setStyle("-fx-background-color:#ADEFD1;");
-            } else {
-                dataBox.setStyle("-fx-background-color: #ffffff;");
-            }
+            dataBox.setPadding(new Insets(10));
+            dataBox.setStyle("-fx-background-color: #b5def7; -fx-border-color: white; -fx-border-width: 0 0 2 0;");
 
             Label number = new Label(String.valueOf(i + 1)); 
-            number.setPadding(new Insets(5,10,5,5));
+            number.getStyleClass().add("destination_label");
+            number.setPadding(new Insets(15));
 
             String destinationName = recommendSystem.get(i).getName();
             destinationStrg.add(destinationName);
 
+            VBox storeDesAndDis = new VBox();
+            storeDesAndDis.setPadding(new Insets(10));
+
             Label destinationsLabel = new Label(destinationName);
+            destinationsLabel.getStyleClass().add("destination_label");
             destinationsLabel.setPadding(new Insets(5,10,5,5));
 
             destinationId.add(bookSys.findDestinationID(destinationName));  
 
-            Label distanceLabel = new Label(distances.get(i).toString() + " km");
+            double distance = distances.get(i); 
+            String Distance= String.format("%.4f km", distance);
+            Label distanceLabel = new Label(Distance);
+            distanceLabel.getStyleClass().add("distance_label");
             distanceLabel.setPadding(new Insets(5,10, 5, 5));
 
-            Button bookingBtn = new Button("Book");
+            storeDesAndDis.getChildren().addAll(destinationsLabel,distanceLabel);
 
+            Button bookingBtn = new Button("Book");
+            bookingBtn.getStyleClass().add("bookingButton");
             bookingBtn.setOnAction(event ->{  
                 Stage stage = new Stage();
                 stage.initModality(Modality.APPLICATION_MODAL);
-                stage.setScene(new Scene(AvailableTimeSlot(destinationId.get(ind), destinationStrg.get(ind), bookSys), 500, 400));
+                stage.setScene(new Scene(AvailableTimeSlot(destinationId.get(ind), destinationStrg.get(ind), bookSys), 300, 300));
                 stage.setTitle("Available Time Slot");
                 stage.showAndWait();
             });
@@ -95,7 +103,7 @@ public class BookingPageGUI {
             Region spacer = new Region();
             HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
 
-            dataBox.getChildren().addAll(number,  destinationsLabel, distanceLabel, spacer, bookingBtn); 
+            dataBox.getChildren().addAll(number, storeDesAndDis, spacer, bookingBtn); 
             
             bigvBox.getChildren().add(dataBox); //continue add all the databox into vbox
         }
@@ -114,7 +122,7 @@ public class BookingPageGUI {
         borderPane.setBottom(bottomPane);
 
         VBox mainvbox = new VBox();
-        mainvbox.setStyle("-fx-background-color: white;");
+        mainvbox.setStyle("-fx-background-color: lightyellow;");
         mainvbox.getChildren().add(borderPane);
 
         mainvbox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
@@ -130,13 +138,23 @@ public class BookingPageGUI {
         }  
     }
 
-    public static VBox showNoChild(){
+    public static VBox showNoChild(){      
+        VBox vbox = new VBox(10);
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setStyle("-fx-background-color: grey; -fx-padding: 20px; -fx-background-radius: 10;");
 
-        VBox vbox = new VBox();
         Label text = new Label("Add a child before you make a booking");
-        vbox.getChildren().add(text);
+        text.setStyle("-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;");
+
+        Button okButton = new Button("OK");
+        okButton.getStyleClass().add("okbutton");
+        okButton.setOnAction(e -> (vbox.getParent()).setVisible(false));
+
+        vbox.getChildren().addAll(text, okButton);
+        
         return vbox;
     }
+
 
     public static VBox AvailableTimeSlot(int destinationId, String destinationName, BookingSystem bookSys){
         
@@ -146,7 +164,7 @@ public class BookingPageGUI {
         titleLabel.setAlignment(Pos.TOP_LEFT);
         titleLabel.setPadding(new Insets(10));
         titleLabel.setFont(new Font(15));
-        titleLabel.setStyle("-fx-font-weight: bold;");
+        titleLabel.setStyle("-fx-font-weight: bold; -fx-font-family:'sans-serif';");
 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setFitToWidth(true);
@@ -159,9 +177,9 @@ public class BookingPageGUI {
         HBox.setHgrow(headerBox, javafx.scene.layout.Priority.ALWAYS); 
 
         ArrayList<Integer> childrenId =  getChildren(Lantern.getConn(), User.getCurrentUser().getUsername());
-        for(Integer childrenid : childrenId){
-            System.out.print("Children id: " + childrenid +" ");
-        }
+        // for(Integer childrenid : childrenId){
+        //     System.out.print("Children id: " + childrenid +" ");
+        // }
         
         ArrayList<Integer> eventIds = geteventId(Lantern.getConn(), childrenId);
         ArrayList<String> finalDate = new ArrayList<>();
@@ -176,14 +194,12 @@ public class BookingPageGUI {
                 String dateString = dateFormat.format(date);
                 finalDate.add(dateString);
             }
+            System.out.println("eventIds is empty.");
         }else{
             ArrayList <Date> availableDate = bookSys.getAvailableDates(User.getCurrentUser(),destinationId);
             ArrayList <Date> registeredEventDate = getDateForEventRegistered(Lantern.getConn(), eventIds);
             finalDate = getFinalAvailableDates(availableDate, registeredEventDate) ;
-            // for(String finaldate: finalDate){
-            //     System.out.print("Final Date: " +finaldate + " ");
-                
-            // }
+
         }
         // for(Date ad : availableDate){
         //     System.out.print("Available date: "+ ad + " ");
@@ -204,6 +220,8 @@ public class BookingPageGUI {
             BookingData bd = new BookingData (destinationName, finalDate.get(i));
 
             Button selectBtn = new Button("Select"); 
+           // selectBtn.getStyleClass().add("selectButton");
+            selectBtn.setStyle("-fx-font-size: 12px; -fx-border-radius: 3px; -fx-background-radius: 5px;-fx-border-width: 0;   -fx-background-color: #ffffff;");
                 selectBtn.setOnAction(event ->{
                     Booking.bookingTour(Lantern.getConn(), bd,User.getCurrentUser().getUsername()); //make booking
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -224,7 +242,7 @@ public class BookingPageGUI {
         
         scrollPane.setContent(vBox);
         borderPane.setCenter(scrollPane);
-
+        borderPane.setStyle("-fx-background-color:white;");
         VBox mainvbox = new VBox();
         mainvbox.setStyle("-fx-background-color:white;");
         mainvbox.getChildren().add(borderPane);
@@ -255,29 +273,41 @@ public class BookingPageGUI {
     
     public static ArrayList<Integer> geteventId(Connection conn, ArrayList<Integer> childrenList) {
         ArrayList<Integer> eventIds = new ArrayList<>();
-        String query = "SELECT event_id FROM EventRegistered WHERE main_id = ?";
-        
-        try (PreparedStatement statement = conn.prepareStatement(query)) {
+        String queryEventRegistered = "SELECT event_id FROM EventRegistered WHERE main_id = ?";
+        String queryEventExists = "SELECT 1 FROM event WHERE id = ?";
+    
+        try (PreparedStatement statementEventRegistered = conn.prepareStatement(queryEventRegistered);
+             PreparedStatement statementEventExists = conn.prepareStatement(queryEventExists)) {
+            
             for (Integer childId : childrenList) {
-                statement.setInt(1, childId);
-                ResultSet resultSet = statement.executeQuery();
+                statementEventRegistered.setInt(1, childId);
+                ResultSet resultSetRegistered = statementEventRegistered.executeQuery();
                 boolean found = false;
-                while (resultSet.next()) {
-                    int eventId = resultSet.getInt("event_id");
-                    eventIds.add(eventId);
+                
+                while (resultSetRegistered.next()) {
+                    int eventId = resultSetRegistered.getInt("event_id");
+                    
+                    statementEventExists.setInt(1, eventId);
+                    ResultSet resultSetExists = statementEventExists.executeQuery();
+                    
+                    if (resultSetExists.next()) {  
+                        eventIds.add(eventId);
+                    }
+                    
                     found = true;
                 }
+                
                 if (!found) {
                     System.out.println("No events found for child with ID: " + childId);
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
         }
-        
+    
         return eventIds;
     }
-  
+    
 
     public static ArrayList<Date> getDateForEventRegistered(Connection conn, ArrayList<Integer> eventIds) {
     ArrayList<Date> registeredEventDates = new ArrayList<>();
@@ -291,13 +321,11 @@ public class BookingPageGUI {
                 String eventDateString = resultSet.getString("Date");
                 System.out.println("Retrieved Date String: " + eventDateString);
 
-                // Parse the date string into Date object
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 try {
                     Date eventDate = dateFormat.parse(eventDateString);
                     registeredEventDates.add(eventDate);
                 } catch (ParseException e) {
-                    // Handle parsing exception
                     e.printStackTrace();
                 }
             }
