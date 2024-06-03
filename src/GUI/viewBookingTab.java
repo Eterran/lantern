@@ -19,11 +19,12 @@ public class viewBookingTab {
     private static VBox bookingCheckBox = new VBox(); 
 
     public static void refreshbookingUI() {
-        System.out.println("Refresh UI is being executed");
-        System.out.println("booking made " + bookingMade.size());
+        
         bookingCheckBox.getChildren().clear();
-        VBox temp1 = new VBox();
-
+        bookingMade = Booking.viewBooking(Lantern.getConn(),User.getCurrentUser().getUsername()); //does not get the latest info
+        for(BookingData bd : bookingMade){
+            System.out.println(bd.getDestination());
+        }
         VBox column = new VBox(); 
         column.setPadding(new Insets(10));
         HBox.setHgrow(column, Priority.ALWAYS);
@@ -32,13 +33,10 @@ public class viewBookingTab {
 
         for(BookingData data: bookingMade){
             String labelText1 = data.getDestination();
-            System.out.println("Data fetch" +labelText1);
             String labelText2 = data.getDate();
-            System.out.println(labelText2);
             BorderPane bp =BPForAllBooking(labelText1, labelText2);
 
             column.getChildren().addAll(bp);
-        
         }
         
         ScrollPane scrollPane1 = new ScrollPane(column);
@@ -49,19 +47,16 @@ public class viewBookingTab {
         scrollPane1.setFitToHeight(true);
         BorderPane borderPane2 = new BorderPane();
         borderPane2.setCenter(scrollPane1);
-
-        temp1.getChildren().add(scrollPane1);
-        bookingCheckBox.getChildren().add(temp1);
-        System.out.println("Display updated UI");
+        bookingCheckBox.getChildren().add(scrollPane1);
     }
-
 
     public static VBox vboxput() {
         //title
         VBox vbox1 = new VBox();
         vbox1.setStyle("-fx-background-color: lightyellow");
-        Label label1 = new Label("BOOKINGS MADE");
-        label1.setStyle("-fx-font-weight: bold; -fx-font-size: 16");
+        Label label1 = new Label("BOOKING MADE");
+        label1.getStyleClass().add("booking_title");
+        //label1.setStyle("-fx-font-weight: bold; -fx-font-size: 16");
         label1.setPadding(new Insets(10));
         vbox1.getChildren().add(label1);
 
@@ -97,20 +92,23 @@ public class viewBookingTab {
         System.out.println("Label " + labelText1);
         System.out.println("Date "+ labelText2);
         BorderPane borderPane3 = new BorderPane();
-        borderPane3.setStyle("-fx-background-color: #226c94");
+        borderPane3.setStyle("-fx-background-color: #b5def7; fx-border-width: 1px; -fx-border-color: black; -fx-border-radius: 5px; ");
+
         borderPane3.setPadding(new Insets(15));
 
         Label label1 = new Label(labelText1);
         label1.setTextFill(Color.WHITE);
-        label1.setFont(Font.font("Arial", FontWeight.BOLD, 25));
+        label1.getStyleClass().add("destination_label");
+       // label1.setFont(Font.font("Arial", FontWeight.BOLD, 25));
         Label label2 = new Label(labelText2);
-        label2.setTextFill(Color.WHITE);
+        label2.getStyleClass().add("distance_label");
+     //   label2.setTextFill(Color.WHITE);
         MenuButton menubutton = new MenuButton();
         menubutton.setText("Settings");
         MenuItem deleteItem = new MenuItem("Delete");
         menubutton.getItems().add(deleteItem);
         menubutton.setAlignment(Pos.TOP_RIGHT);
-
+        menubutton.getStyleClass().add("bookingButton2");
         deleteItem.setOnAction(event ->{
             deleteBooking (Lantern.getConn(),User.getCurrentUser().getUsername(), labelText2);
             if (borderPane3.getParent() instanceof VBox) {
@@ -140,7 +138,7 @@ public class viewBookingTab {
 
 
 
-    public static void deleteBooking (Connection conn,String username, String date){
+    public static void deleteBooking (Connection conn,String username, String date){ //success
         Login_Register lg = new Login_Register();
         int id = lg.getID(username, conn);
         try{
@@ -148,12 +146,18 @@ public class viewBookingTab {
             PreparedStatement statement = conn.prepareStatement(query);
             statement.setString(1, date);
             statement.setInt(2, id);
-            statement.executeUpdate();
+            // statement.executeUpdate();
 
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                Booking.decreaseCount(conn, Booking.getCount(conn, username), username); //checking
+                System.out.println("Quiz deleted successfully.");
+            } else {
+                System.out.println("No quiz found matching the criteria.");
+            }
         }catch(SQLException e){
             e.printStackTrace();
         }
-        Booking.decreaseCount(conn, Booking.getCount(conn, username), username);
 
     }
 

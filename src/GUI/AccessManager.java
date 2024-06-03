@@ -141,7 +141,9 @@ public class AccessManager {
         ));
         buttonAccessRules2.put(UserRole.PARENT, List.of(
             createButton("View Bookings", () -> {
+                viewBookingTab.refreshbookingUI();
                 Sidebar.selectTab(6);
+               
             }, Sidebar.getBookingsIcon())
         ));
         buttonAccessRules3.put(UserRole.PARENT, List.of(
@@ -153,7 +155,9 @@ public class AccessManager {
         ));
         retractedButtonAccessRules2.put(UserRole.PARENT, List.of(
             createdRetractedButton(Sidebar.getRBookingsIcon(), () -> {
+                viewBookingTab.refreshbookingUI();
                 Sidebar.selectTab(6);
+              
             })
         ));
         retractedButtonAccessRules3.put(UserRole.PARENT, List.of(

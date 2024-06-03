@@ -577,3 +577,36 @@
     /* -fx-cursor: hand; Change cursor to hand on hover */
 
 /* }  */
+
+/* viewBookingTab */
+.booking_title{
+    -fx-font-family: 'Nunito Bold';
+    -fx-font-size: 28;
+    -fx-text-fill: black;
+    -fx-font-weight:bold;
+}
+.bookingButton2 {
+    -fx-padding: 12px 8px;
+    -fx-font-size: 8px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-width: 0; 
+    -fx-text-fill:#ffffff;
+    /* Add a transition effect for smooth hover transition */
+    -fx-background-insets: 0;
+    -fx-background-color: #264485;
+    -fx-effect: dropshadow( gaussian , rgba(0, 0, 0, 0.25) , 10, 0.5 , 0 , 0 );
+    -fx-cursor: hand;
+    -fx-transition: all 0.3s ease;
+    -fx-font-weight:bold;
+    
+
+}
+
+.bookingButton2:hover {
+    -fx-background-color:#03035e ; 
+    -fx-scale-x: 1.05; 
+    -fx-scale-y: 1.05; 
+    -fx-text-fill:#ffffff;
+}
+
