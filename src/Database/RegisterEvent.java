@@ -188,4 +188,24 @@ public class RegisterEvent {
             e.printStackTrace();}
     
     }*/
+
+    //check the children of a parent have event or not when making booking
+    public static boolean checkEventChildrens(Connection connection,ArrayList<String>children,String currentDate){
+        ArrayList<EventData>allList=new ArrayList<>();
+        for(int i=0;i<children.size();i++){
+            ArrayList<EventData>hold=getAllEventRegistered(connection,children.get(i)); 
+             for(int j=0;j<hold.size();j++){
+             allList.add(hold.get(j));
+             }
+        }
+   
+    
+    boolean check=false;
+    for(EventData hold:allList){
+    if(hold.date.equals(currentDate))
+        check=true;
+    }
+  return check;
+    }
+    
 }
