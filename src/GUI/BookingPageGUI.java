@@ -160,18 +160,17 @@ public class BookingPageGUI {
         VBox vbox = new VBox();
         BorderPane bp = new BorderPane();
         bp.setPadding(new Insets(20));
-        Label label1 = new Label("Which children are you booking for? \nChild Id:");
-        label1.setStyle("-fx-font-size:20px;");
+        Label label1 = new Label("Which children are you booking for? \nChildren:");
+        label1.setStyle("-fx-font-size:20px;-fx-font-weight: bold;");
         ArrayList<Integer> childrenId = getChildren(Lantern.getConn(), User.getCurrentUser().getUsername());
 
         ToggleGroup toggleGroup = new ToggleGroup();
         HBox storeradioButton = new HBox();
-        storeradioButton.setPadding(new Insets(10));
+        storeradioButton.setSpacing(10);
         for (Integer childId : childrenId) {
             RadioButton radioButton = new RadioButton(String.valueOf(childId));
             radioButton.setToggleGroup(toggleGroup);
-            storeradioButton.getChildren().add(radioButton);
-            
+            storeradioButton.getChildren().add(radioButton);    
         }
 
         String[] selectedChildId = {null};
@@ -183,7 +182,7 @@ public class BookingPageGUI {
             }
         });
        
-        Button saveBtn = new Button("Save");
+        Button saveBtn = new Button("OK");
 
         saveBtn.setOnAction(event -> {
             if (selectedChildId[0] != null) {
@@ -194,6 +193,10 @@ public class BookingPageGUI {
                     stage.setScene(new Scene(AvailableTimeSlot(destinationId, destinationName, bookSys, childId), 300, 300));
                     stage.setTitle("Available Time Slot");
                     stage.showAndWait();
+                    if (vbox.getParent() instanceof VBox) {
+                        VBox parentVBox = (VBox)vbox.getParent();
+                        parentVBox.getChildren().remove(vbox);
+                    } 
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }

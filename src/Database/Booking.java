@@ -125,13 +125,13 @@ public class Booking {
     ArrayList<BookingData> bookingList = new ArrayList<>();
     Login_Register lg = new Login_Register();
     int id = lg.getID(username, connection);
-    String query = "SELECT bookingDate,destination FROM BookingDate WHERE main_id=?";
+    String query = "SELECT bookingDate,destination, children_id FROM BookingDate WHERE main_id=?";
     try {
       PreparedStatement preparedStatement = connection.prepareStatement(query);
       preparedStatement.setInt(1, id);
       ResultSet result = preparedStatement.executeQuery();
       while (result.next()) {
-        bookingList.add(new BookingData(result.getString("destination"), result.getString("bookingDate")));
+        bookingList.add(new BookingData(result.getString("destination"), result.getString("bookingDate"), result.getInt("children_id")));
       }
     }
 
