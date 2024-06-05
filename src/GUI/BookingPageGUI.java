@@ -2,7 +2,6 @@ package GUI;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -11,14 +10,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.util.Duration;
-import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -155,7 +150,6 @@ public class BookingPageGUI {
         return vbox;
     }
 
-
     public static VBox AvailableTimeSlot(int destinationId, String destinationName, BookingSystem bookSys){
         
         BorderPane borderPane = new BorderPane();
@@ -177,16 +171,9 @@ public class BookingPageGUI {
         HBox.setHgrow(headerBox, javafx.scene.layout.Priority.ALWAYS); 
 
         ArrayList<Integer> childrenId =  getChildren(Lantern.getConn(), User.getCurrentUser().getUsername());
-        // for(Integer childrenid : childrenId){
-        //     System.out.print("Children id: " + childrenid +" ");
-        // }
-        
         ArrayList<Integer> eventIds = geteventId(Lantern.getConn(), childrenId);
         ArrayList<String> finalDate = new ArrayList<>();
 
-        // for(Integer eventid: eventIds){
-        //     System.out.print("Event id" + eventid + " ");
-        //
         if(eventIds.isEmpty()){
             ArrayList<Date> convertDateToString = bookSys.getAvailableDates(User.getCurrentUser(),destinationId);
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
@@ -194,19 +181,11 @@ public class BookingPageGUI {
                 String dateString = dateFormat.format(date);
                 finalDate.add(dateString);
             }
-            System.out.println("eventIds is empty.");
         }else{
             ArrayList <Date> availableDate = bookSys.getAvailableDates(User.getCurrentUser(),destinationId);
             ArrayList <Date> registeredEventDate = getDateForEventRegistered(Lantern.getConn(), eventIds);
             finalDate = getFinalAvailableDates(availableDate, registeredEventDate) ;
-
         }
-        // for(Date ad : availableDate){
-        //     System.out.print("Available date: "+ ad + " ");
-        // }
-        // for(Date re: registeredEventDate){
-        //     System.out.print("Registered date: "+ re + " ");
-        // }
         
         for (int i = 0; i <finalDate.size() ; i++) {
             
@@ -236,8 +215,7 @@ public class BookingPageGUI {
             Region spacer = new Region();
             HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
             dataBox.getChildren().addAll(num, availableTimeLabel , spacer, selectBtn);  
-            vBox.getChildren().add(dataBox); 
-                
+            vBox.getChildren().add(dataBox);               
         }
         
         scrollPane.setContent(vBox);
@@ -264,13 +242,10 @@ public class BookingPageGUI {
             }
         } catch (SQLException e) {
             e.printStackTrace(); 
-        }
-        
+        }     
         return childrenList;
     }
-    
-
-    
+       
     public static ArrayList<Integer> geteventId(Connection conn, ArrayList<Integer> childrenList) {
         ArrayList<Integer> eventIds = new ArrayList<>();
         String queryEventRegistered = "SELECT event_id FROM EventRegistered WHERE main_id = ?";
@@ -285,15 +260,13 @@ public class BookingPageGUI {
                 boolean found = false;
                 
                 while (resultSetRegistered.next()) {
-                    int eventId = resultSetRegistered.getInt("event_id");
-                    
+                    int eventId = resultSetRegistered.getInt("event_id");                
                     statementEventExists.setInt(1, eventId);
                     ResultSet resultSetExists = statementEventExists.executeQuery();
                     
                     if (resultSetExists.next()) {  
                         eventIds.add(eventId);
-                    }
-                    
+                    }                
                     found = true;
                 }
                 
@@ -319,8 +292,6 @@ public class BookingPageGUI {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 String eventDateString = resultSet.getString("Date");
-                System.out.println("Retrieved Date String: " + eventDateString);
-
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 try {
                     Date eventDate = dateFormat.parse(eventDateString);

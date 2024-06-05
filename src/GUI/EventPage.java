@@ -37,9 +37,7 @@ public class EventPage {
     public static void updatePointsVbox(){
         displayPointsBox.getChildren().clear();
         updatePoints();
-
         Label pointsLabel = new Label("Points: "+ pointLabel);
-        //pointsLabel.getStyleClass().add("event_title");
         pointsLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         displayPointsBox.getChildren().add(pointsLabel);
     }
@@ -50,8 +48,8 @@ public class EventPage {
 
     public static void updateLiveEvent(){
         displayLiveEventVBox.getChildren().clear();
-        //live event part
 
+        //live event part
         HBox content1 = new HBox();
         content1.setStyle("-fx-background-color: #475558");
         content1.setSpacing(20);
@@ -61,8 +59,6 @@ public class EventPage {
             BorderPane borderPane = BPForAllLiveEvents(liveEventList.get(i));
             content1.getChildren().addAll(borderPane);
         }
-
-
         ScrollPane scrollPane1 = new ScrollPane();
         scrollPane1.setContent(content1);
         scrollPane1.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS); 
@@ -82,7 +78,6 @@ public class EventPage {
         ArrayList<EventData> closestUpcoming = Event.getLatestEvent(Lantern.getConn());
         for (int i = 0; i <closestUpcoming.size(); i++) {
             BorderPane borderPane2 = BPForAllClosestUpcomingEvent(closestUpcoming.get(i));
-
             content2.getChildren().addAll(borderPane2);
         }
 
@@ -91,7 +86,6 @@ public class EventPage {
         scrollPane2.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS); // Always show horizontal scrollbar
         scrollPane2.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane2.setFitToWidth(true);
-
         displayClosestEventVBox.getChildren().add(scrollPane2);
     }
 
@@ -101,14 +95,19 @@ public class EventPage {
         vbox1.setPrefSize(600, 40); 
         Label label1 = new Label("Live Event");
         label1.getStyleClass().add("event_title");
-       // label1.setStyle("-fx-font-weight: bold; -fx-font-size: 16");
         vbox1.setPadding(new Insets(10));
 
         Region spacer1 = new Region();
         HBox.setHgrow(spacer1, javafx.scene.layout.Priority.ALWAYS); 
         HBox tophbox= new HBox();
         updatePointsVbox();
-        tophbox.getChildren().addAll(label1 ,spacer1, displayPointsBox);
+        if(User.getCurrentUser().getRole().equals("student")){
+            tophbox.getChildren().addAll(label1 ,spacer1, displayPointsBox);
+
+        }else{
+            tophbox.getChildren().addAll(label1 ,spacer1);
+
+        }
         vbox1.getChildren().add(tophbox);
 
         //live events part (structure)
@@ -137,19 +136,16 @@ public class EventPage {
         bottomPane.setStyle("-fx-background-color: #475558");
        
         //Closest 3 upcoming events section
-
         //title for upcoming events
         VBox vbox3 = new VBox();
         vbox3.setStyle("-fx-background-color: lightyellow");
         vbox3.setPrefSize(600, 40);
         Label label3 = new Label("Closest 3 Upcoming Event");
         label3.getStyleClass().add("event_title");
-       // label3.setStyle("-fx-font-weight: bold; -fx-font-size: 16");
         label3.setPadding(new Insets(10));
         vbox3.getChildren().add(label3);
 
         //content in vbox3
-        
         //vbox4 in bp2
         updateUpcomingEvent();
         BorderPane bp2 = new BorderPane();
@@ -190,16 +186,11 @@ public class EventPage {
         borderPane.setPadding(new Insets(15));
   
         Label label1 = new Label(thisevent.getEventTitle());
-        // label1.setTextFill(Color.WHITE); 
         label1.setFont(Font.font("Arial", FontWeight.BOLD, 25));
         Label label2 = new Label(thisevent.getDescription());
-        // label2.setTextFill(Color.WHITE); 
         Label label3 = new Label(thisevent.getVenue());
-        // label3.setTextFill(Color.WHITE); 
         Label label4 = new Label(thisevent.getDate());
-        // label4.setTextFill(Color.WHITE); 
         Label label5 = new Label(thisevent.getTime());
-        // label5.setTextFill(Color.WHITE); 
 
         label1.setFont(Font.font("Arial", FontWeight.BOLD, 15));
         ToggleButton toggleButton= new ToggleButton("Register");
@@ -291,17 +282,19 @@ public class EventPage {
         tophbox.getChildren().addAll(label1, spacer2, liveEventImgView);
 
         Region spacer= new Region();
-        // VBox topBox = new VBox(label1);
-        //topBox.setPrefHeight(40);
         VBox middleBox = new VBox(label2,label3, label4); 
-        HBox bottomBox = new HBox(label5, spacer, toggleButton);
+
+        if(User.getCurrentUser().getRole().equals("student")){
+            HBox bottomBox = new HBox(label5, spacer, toggleButton);
+            borderPane.setBottom(bottomBox);
+        }else{
+            HBox bottomBox = new HBox(label5, spacer);
+            borderPane.setBottom(bottomBox);
+        }
+       
         HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
-        
-        // Set nodes to the BorderPane
         borderPane.setTop(tophbox);
         borderPane.setCenter(middleBox);
-        borderPane.setBottom(bottomBox);
-
         return borderPane;
     }
 
@@ -331,8 +324,7 @@ public class EventPage {
 
         if(RegisterEvent.checkClashDate(Lantern.getConn(), User.getCurrentUser().getUsername(),thisevent)){
             toggleButton.setDisable(false);
-           //clash parents' booking
-           toggleButton.setOnAction(event ->{
+            toggleButton.setOnAction(event ->{
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Fail");
             alert.setHeaderText(null);
@@ -340,9 +332,6 @@ public class EventPage {
             alert.showAndWait();
            });
            
-            //updateUpcomingEvent();
-            //register ui();
-
         }else if (RegisterEvent.checkClashEventDate(Lantern.getConn(),User.getCurrentUser().getUsername(),thisevent)){ //check clash with same date event, can be same event or different event
         
             if(RegisterEvent.checkEventRegistered (Lantern.getConn(),User.getCurrentUser().getUsername(),thisevent)){  //check with totally same event
@@ -360,7 +349,6 @@ public class EventPage {
                 });
             } 
         }else{ //does not clash with parents' booking and events registered
-         //   toggleButton.setDisable(false);
             toggleButton.setOnAction(event->{
                 toggleButton.setDisable(true);
                 RegisterEvent.registerEvent(Lantern.getConn(), thisevent,User.getCurrentUser().getUsername()) ;
@@ -408,16 +396,20 @@ public class EventPage {
 
     
         Region spacer= new Region();
-        // VBox topBox = new VBox(label1);
-        // topBox.setPrefHeight(40);
         VBox middleBox = new VBox(label2,label3, label4); 
-        HBox bottomBox = new HBox(label5, spacer, toggleButton);
+
+        if(User.getCurrentUser().getRole().equals("student")){
+            HBox bottomBox = new HBox(label5, spacer, toggleButton);
+            borderPane.setBottom(bottomBox);
+        }else{
+            HBox bottomBox = new HBox(label5, spacer);
+            borderPane.setBottom(bottomBox);
+        }
         HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
-        
-        // Set nodes to the BorderPane
+      
         borderPane.setTop(tophbox);
         borderPane.setCenter(middleBox);
-        borderPane.setBottom(bottomBox);
+
 
         return borderPane;
     }

@@ -70,7 +70,6 @@ public class EducatorCreateEvent  {
         column2.setPercentWidth(80);
         gridPane.getColumnConstraints().addAll(column1, column2);
 
-        // Set RowConstraints
         for (int i = 0; i < 7; i++) {
             RowConstraints row = new RowConstraints();
             row.setVgrow(Priority.ALWAYS);
@@ -127,8 +126,6 @@ public class EducatorCreateEvent  {
                     eventVenueTF.clear();
                     eventDateTF.clear();
                     eventTimeComboBox.getSelectionModel().clearSelection();
-                    //EducatorCheckEventCreated.vboxput();
-                    //how to straight away update in the ui 
                     EducatorCheckEventCreated.refreshUI();
                     Stage stage = (Stage) saveBtn.getScene().getWindow();
                     stage.close();
@@ -139,6 +136,10 @@ public class EducatorCreateEvent  {
                     alert.showAndWait();
                 }
             }
+        });
+        cancelBtn.setOnAction(e->{
+            Stage stage = (Stage) saveBtn.getScene().getWindow();
+            stage.close();
         });
         
         return mainvBox;
