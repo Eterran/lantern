@@ -36,8 +36,9 @@ public class EventPage {
 
     public static void updatePointsVbox(){
         displayPointsBox.getChildren().clear();
-        updatePoints();
-        Label pointsLabel = new Label("Points: "+ pointLabel);
+        updatePoints();  
+        int intPoints = pointLabel.intValue();
+        Label pointsLabel = new Label("Points: "+ intPoints);
         pointsLabel.setFont(Font.font("Nunito Bold", FontWeight.BOLD, 25));
         displayPointsBox.getChildren().add(pointsLabel);
     }

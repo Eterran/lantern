@@ -38,7 +38,8 @@ public class QuizPage {
     public static void updatePointsVbox(){
         displayPointsBox.getChildren().clear();
         updatePoints();
-        Label pointsLabel = new Label("Points: "+ pointLabel);
+        int intPoints = pointLabel.intValue();
+        Label pointsLabel = new Label("Points: "+ intPoints);
        // pointsLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         pointsLabel.setFont(Font.font("Nunito Bold", FontWeight.BOLD, 25));
          displayPointsBox.setPadding(new Insets(10));

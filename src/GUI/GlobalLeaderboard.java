@@ -59,7 +59,7 @@ public class GlobalLeaderboard {
                     ownUsername.setPadding(new Insets(5, 10, 5, 5));
                     ownUsername.setStyle("-fx-font-weight: bold; -fx-font-size: 19px;");
 
-                    Label ownpointData = new Label(String.valueOf(points[i]));
+                    Label ownpointData = new Label(String.valueOf((int)(points[i])));
                     ownpointData.setPadding(new Insets(5, 10, 5, 5));
                     ownpointData.setStyle("-fx-font-weight: bold; -fx-font-size:19px");
 
@@ -80,7 +80,7 @@ public class GlobalLeaderboard {
                     usernameData.setStyle("-fx-font-size:18px; -fx-font-family: Arial;-fx-text-fill: black");
                     usernameData.setPadding(new Insets(5, 10, 5, 5));
 
-                    Label pointData = new Label(String.valueOf(points[i]));
+                    Label pointData = new Label(String.valueOf((int)(points[i])));
                     pointData.setStyle("-fx-font-size:18px; -fx-font-family: Arial;-fx-text-fill: black");
                     pointData.setPadding(new Insets(5, 10, 5, 5));
 
