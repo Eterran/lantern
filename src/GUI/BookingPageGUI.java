@@ -3,12 +3,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -91,14 +87,12 @@ public class BookingPageGUI {
 
             Button bookingBtn = new Button("Book");
             bookingBtn.getStyleClass().add("bookingButton");
-            bookingBtn.setOnAction(event ->{ 
-                //which children are you booking for ?
+            bookingBtn.setOnAction(event ->{  
                 Stage stage = new Stage();
                 stage.initModality(Modality.APPLICATION_MODAL);
-                stage.setScene(new Scene(chooseChildrenBox(destinationId.get(ind), destinationStrg.get(ind), bookSys), 500, 200));
+                stage.setScene(new Scene(AvailableTimeSlot(destinationId.get(ind), destinationStrg.get(ind), bookSys), 300, 300));
                 stage.setTitle("Available Time Slot");
                 stage.showAndWait();
-                    
             });
 
             Region spacer = new Region();
@@ -156,71 +150,9 @@ public class BookingPageGUI {
     }
 
 
-    public static VBox chooseChildrenBox(int destinationId, String destinationName, BookingSystem bookSys){
-        VBox vbox = new VBox();
-        BorderPane bp = new BorderPane();
-        bp.setPadding(new Insets(20));
-        Label label1 = new Label("Which children are you booking for? \nChildren:");
-        label1.setStyle("-fx-font-size:20px;-fx-font-weight: bold;");
-        ArrayList<Integer> childrenId = getChildren(Lantern.getConn(), User.getCurrentUser().getUsername());
+    
 
-        ToggleGroup toggleGroup = new ToggleGroup();
-        HBox storeradioButton = new HBox();
-        storeradioButton.setSpacing(10);
-        for (Integer childId : childrenId) {
-            RadioButton radioButton = new RadioButton(String.valueOf(childId));
-            radioButton.setToggleGroup(toggleGroup);
-            storeradioButton.getChildren().add(radioButton);    
-        }
-
-        String[] selectedChildId = {null};
-
-        toggleGroup.selectedToggleProperty().addListener((observable, oldVal, newVal) -> {
-            if (toggleGroup.getSelectedToggle() != null) {
-                RadioButton selectedRadioButton = (RadioButton) toggleGroup.getSelectedToggle();
-                selectedChildId[0] = selectedRadioButton.getText(); 
-            }
-        });
-       
-        Button saveBtn = new Button("OK");
-
-        saveBtn.setOnAction(event -> {
-            if (selectedChildId[0] != null) {
-                try {
-                    Integer childId = Integer.parseInt(selectedChildId[0]);
-                    Stage stage = new Stage();
-                    stage.initModality(Modality.APPLICATION_MODAL);
-                    stage.setScene(new Scene(AvailableTimeSlot(destinationId, destinationName, bookSys, childId), 300, 300));
-                    stage.setTitle("Available Time Slot");
-                    stage.showAndWait();
-                    if (vbox.getParent() instanceof VBox) {
-                        VBox parentVBox = (VBox)vbox.getParent();
-                        parentVBox.getChildren().remove(vbox);
-                    } 
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                Alert alert = new Alert(Alert.AlertType.WARNING, "Please choose any one of the children before.", ButtonType.OK);
-                alert.showAndWait();
-            }
-        });
-        bp.setTop(label1);
-        bp.setBottom(saveBtn);
-        bp.setCenter(storeradioButton);
-        BorderPane.setAlignment(saveBtn,Pos.BOTTOM_RIGHT);
-
-        bp.prefHeightProperty().bind(vbox.heightProperty());
-        bp.prefWidthProperty().bind(vbox.widthProperty());
-
-        vbox.getChildren().add(bp);
-        vbox.setStyle("-fx-background-color: lightpink");
-        vbox.setFillWidth(true);
-        return vbox;
-    }
-
-
-    public static VBox AvailableTimeSlot(int destinationId, String destinationName, BookingSystem bookSys, Integer childId){
+    public static VBox AvailableTimeSlot(int destinationId, String destinationName, BookingSystem bookSys){
         
         BorderPane borderPane = new BorderPane();
         Label titleLabel = new Label("Available Time Slot");
@@ -240,8 +172,8 @@ public class BookingPageGUI {
         HBox headerBox = new HBox();
         HBox.setHgrow(headerBox, javafx.scene.layout.Priority.ALWAYS); 
 
-        //ArrayList<Integer> childrenId =  getChildren(Lantern.getConn(), User.getCurrentUser().getUsername());
-        ArrayList<Integer> eventIds = geteventId(Lantern.getConn(), childId); //get the eventIds for the child
+        ArrayList<Integer> childrenId =  getChildren(Lantern.getConn(), User.getCurrentUser().getUsername());
+        ArrayList<Integer> eventIds = geteventId(Lantern.getConn(), childrenId); //get the eventIds for the child
 
         ArrayList<String> finalDate = new ArrayList<>();
 
@@ -273,7 +205,7 @@ public class BookingPageGUI {
            // selectBtn.getStyleClass().add("selectButton");
             selectBtn.setStyle("-fx-font-size: 12px; -fx-border-radius: 3px; -fx-background-radius: 5px;-fx-border-width: 0;   -fx-background-color: #ffffff;");
                 selectBtn.setOnAction(event ->{
-                    Booking.bookingTour(Lantern.getConn(), bd,User.getCurrentUser().getUsername(), childId); //make booking
+                    Booking.bookingTour(Lantern.getConn(), bd,User.getCurrentUser().getUsername()); //make booking
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Success");
                     alert.setContentText("Your booking has been confirmed.");
@@ -317,67 +249,34 @@ public class BookingPageGUI {
         return childrenList;
     }
        
-    // public static ArrayList<Integer> geteventId(Connection conn, Integer childId) {
-    //     ArrayList<Integer> eventIds = new ArrayList<>();
-    //     String queryEventRegistered = "SELECT event_id FROM EventRegistered WHERE main_id = ?";
-    //     String queryEventExists = "SELECT 1 FROM event WHERE id = ?";
-    
-    //     try (PreparedStatement statementEventRegistered = conn.prepareStatement(queryEventRegistered);
-    //          PreparedStatement statementEventExists = conn.prepareStatement(queryEventExists)) {
-            
-    //         for (Integer childId : childrenList) {
-    //             statementEventRegistered.setInt(1, childId);
-    //             ResultSet resultSetRegistered = statementEventRegistered.executeQuery();
-    //             boolean found = false;
-                
-    //             while (resultSetRegistered.next()) {
-    //                 int eventId = resultSetRegistered.getInt("event_id");                
-    //                 statementEventExists.setInt(1, eventId);
-    //                 ResultSet resultSetExists = statementEventExists.executeQuery();
-                    
-    //                 if (resultSetExists.next()) {  
-    //                     eventIds.add(eventId);
-    //                 }                
-    //                 found = true;
-    //             }
-                
-    //             if (!found) {
-    //                 System.out.println("No events found for child with ID: " + childId);
-    //             }
-    //         }
-    //     } catch (SQLException e) {
-    //         e.printStackTrace();
-    //     }
-    
-    //     return eventIds;
-    // }
-    public static ArrayList<Integer> geteventId(Connection conn, Integer childId) {
+    public static ArrayList<Integer> geteventId(Connection conn, ArrayList<Integer> childrenList) {
         ArrayList<Integer> eventIds = new ArrayList<>();
         String queryEventRegistered = "SELECT event_id FROM EventRegistered WHERE main_id = ?";
         String queryEventExists = "SELECT 1 FROM event WHERE id = ?";
     
         try (PreparedStatement statementEventRegistered = conn.prepareStatement(queryEventRegistered);
              PreparedStatement statementEventExists = conn.prepareStatement(queryEventExists)) {
-    
-            statementEventRegistered.setInt(1, childId);
-            ResultSet resultSetRegistered = statementEventRegistered.executeQuery();
-            boolean found = false;
-    
-            while (resultSetRegistered.next()) {
-                int eventId = resultSetRegistered.getInt("event_id");
-                statementEventExists.setInt(1, eventId);
-                ResultSet resultSetExists = statementEventExists.executeQuery();
-    
-                if (resultSetExists.next()) {
-                    eventIds.add(eventId);
+            
+            for (Integer childId : childrenList) {
+                statementEventRegistered.setInt(1, childId);
+                ResultSet resultSetRegistered = statementEventRegistered.executeQuery();
+                boolean found = false;
+                
+                while (resultSetRegistered.next()) {
+                    int eventId = resultSetRegistered.getInt("event_id");                
+                    statementEventExists.setInt(1, eventId);
+                    ResultSet resultSetExists = statementEventExists.executeQuery();
+                    
+                    if (resultSetExists.next()) {  
+                        eventIds.add(eventId);
+                    }                
+                    found = true;
                 }
-                found = true;
+                
+                if (!found) {
+                    System.out.println("No events found for child with ID: " + childId);
+                }
             }
-    
-            if (!found) {
-                System.out.println("No events found for child with ID: " + childId);
-            }
-    
         } catch (SQLException e) {
             e.printStackTrace();
         }

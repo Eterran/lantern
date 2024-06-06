@@ -21,16 +21,15 @@ public class Booking {
   // viewBooking (view all the list made by user )
 
   // make booking
-  public static void bookingTour(Connection connection, BookingData booking, String username, Integer childId) {
+  public static void bookingTour(Connection connection, BookingData booking, String username) {
     Login_Register lg = new Login_Register();
     int id = lg.getID(username, connection);
-    String sql = "INSERT INTO BookingDate(main_id, bookingDate,destination, children_id) VALUES (?,?,?,?)";
+    String sql = "INSERT INTO BookingDate(main_id, bookingDate,destination) VALUES (?,?,?)";
     try {
       PreparedStatement preparedStatement = connection.prepareStatement(sql);
       preparedStatement.setInt(1, id);
       preparedStatement.setString(2, booking.date);
       preparedStatement.setString(3, booking.destination);
-      preparedStatement.setInt(4, childId);
       preparedStatement.executeUpdate();
     }
 
@@ -125,13 +124,13 @@ public class Booking {
     ArrayList<BookingData> bookingList = new ArrayList<>();
     Login_Register lg = new Login_Register();
     int id = lg.getID(username, connection);
-    String query = "SELECT bookingDate,destination, children_id FROM BookingDate WHERE main_id=?";
+    String query = "SELECT bookingDate,destination FROM BookingDate WHERE main_id=?";
     try {
       PreparedStatement preparedStatement = connection.prepareStatement(query);
       preparedStatement.setInt(1, id);
       ResultSet result = preparedStatement.executeQuery();
       while (result.next()) {
-        bookingList.add(new BookingData(result.getString("destination"), result.getString("bookingDate"), result.getInt("children_id")));
+        bookingList.add(new BookingData(result.getString("destination"), result.getString("bookingDate")));
       }
     }
 
@@ -144,7 +143,7 @@ public class Booking {
     ArrayList<String> bookingList = new ArrayList<>();
     Login_Register lg = new Login_Register();
     int id = lg.getID(username, connection);
-    String query = "SELECT bookingDate,destination, children_id FROM BookingDate WHERE main_id=?";
+    String query = "SELECT bookingDate,destination FROM BookingDate WHERE main_id=?";
     try {
       PreparedStatement preparedStatement = connection.prepareStatement(query);
       preparedStatement.setInt(1, id);
