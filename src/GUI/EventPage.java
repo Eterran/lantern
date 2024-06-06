@@ -38,7 +38,7 @@ public class EventPage {
         displayPointsBox.getChildren().clear();
         updatePoints();
         Label pointsLabel = new Label("Points: "+ pointLabel);
-        pointsLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        pointsLabel.setFont(Font.font("Nunito Bold", FontWeight.BOLD, 25));
         displayPointsBox.getChildren().add(pointsLabel);
     }
 
@@ -95,6 +95,8 @@ public class EventPage {
         vbox1.setPrefSize(600, 40); 
         Label label1 = new Label("Live Event");
         label1.getStyleClass().add("event_title");
+     //   label1.setStyle("-fx-font-family: 'Nunito SemiBold'; -fx-font-size: 40; -fx-text-fill: black;");
+      //  label1.getStyleClass().add("event_title");
         vbox1.setPadding(new Insets(10));
 
         Region spacer1 = new Region();
@@ -141,7 +143,9 @@ public class EventPage {
         vbox3.setStyle("-fx-background-color: lightyellow");
         vbox3.setPrefSize(600, 40);
         Label label3 = new Label("Closest 3 Upcoming Event");
-        label3.getStyleClass().add("event_title");
+      label3.getStyleClass().add("event_title");
+        //label3.setStyle("-fx-font-family: 'Nunito SemiBold'; -fx-font-size: 40; -fx-text-fill: black;");
+
         label3.setPadding(new Insets(10));
         vbox3.getChildren().add(label3);
 

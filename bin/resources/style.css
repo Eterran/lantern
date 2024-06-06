@@ -472,8 +472,8 @@
 
 /* Event Page */
 .event_title{
-    -fx-font-family: 'Nunito Bold';
-    -fx-font-size: 30;
+    -fx-font-family: 'Nunito ExtraBold';
+    -fx-font-size: 40;
     -fx-text-fill: black;
 }
 
