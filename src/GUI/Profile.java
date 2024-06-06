@@ -103,7 +103,6 @@ public class Profile {
         
         profileTab.setStyle("-fx-background-color: " + color.BACKGROUND.getCode() + ";");
         profileTab.getChildren().add(profileLabelBox);
-        profileTab.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         
         VBox usernameBox = Lantern.createInfoVBox("USERNAME: ", User.getCurrentUser().getUsername(), padding);
         VBox roleBox = Lantern.createInfoVBox("ROLE: ", User.getCurrentUser().getRole(), padding);
@@ -123,6 +122,7 @@ public class Profile {
         accessManager.getAccessiblePublicProfile(accessManager.getUserRole(User.getCurrentUser())).forEach(
                     vBoxSupplier -> profileContents.getChildren().add(vBoxSupplier.get()));
 
+        profileTab.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         profileTab.getChildren().addAll(profileContents, aboutVBox);
         profileTab.setAlignment(javafx.geometry.Pos.TOP_CENTER);
         stackpane.getChildren().add(profileTab);

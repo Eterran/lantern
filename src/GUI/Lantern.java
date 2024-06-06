@@ -16,6 +16,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.control.Separator;
@@ -265,10 +266,16 @@ public class Lantern extends Application {
         }
         label.getStyleClass().add("text_label");
         
+        TextFlow textFlow = new TextFlow();
+        textFlow.setPrefWidth(0);
+        textFlow.getChildren().add(value);
+
         HBox infoBox = new HBox(0);
+        textFlow.prefWidthProperty().bind(infoBox.widthProperty().subtract(20));
         infoBox.setPadding(spacing);
         infoBox.getStylesheets().add("resources/style.css");
-        infoBox.getChildren().addAll(label, value);
+        infoBox.getChildren().addAll(label, textFlow);
+
         return infoBox;
     }
     public static void playTransition(Pane pane, Double duration){

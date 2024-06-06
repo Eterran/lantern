@@ -144,7 +144,7 @@ public class LoginPage {
         leftBox.getChildren().addAll(registerText, registerText2);
         rootBox.getChildren().addAll(leftBox, separator, loginBox);
         StackPane rootPane = new StackPane();
-        rootBox.prefWidthProperty().bind(rootPane.widthProperty().multiply(0.85));
+        rootBox.prefWidthProperty().bind(rootPane.widthProperty().multiply(0.9));
         rootBox.prefHeightProperty().bind(rootPane.heightProperty().multiply(0.85));
         rootBox.setMaxSize(850, 600);
         

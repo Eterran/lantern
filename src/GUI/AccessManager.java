@@ -284,7 +284,7 @@ public class AccessManager {
     }
     private VBox createParentPublicProfileVBox() {
         VBox vBox = new VBox();
-        HBox bookings = Lantern.createInfoHBox("BOOKINGS MADE: ", Booking.viewBooking(conn, User.getCurrentUser().getUsername()).size(), new Insets(8, 10, 8, 15));
+        HBox bookings = Lantern.createInfoHBox("BOOKINGS MADE: ", Booking.viewBookingNames(conn, User.getCurrentUser().getUsername()), new Insets(8, 10, 8, 15));
         vBox.getChildren().add(bookings);
         return vBox;
     }

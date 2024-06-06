@@ -140,6 +140,25 @@ public class Booking {
     }
     return bookingList;
   }
+  public static ArrayList<String> viewBookingNames(Connection connection, String username) {
+    ArrayList<String> bookingList = new ArrayList<>();
+    Login_Register lg = new Login_Register();
+    int id = lg.getID(username, connection);
+    String query = "SELECT bookingDate,destination, children_id FROM BookingDate WHERE main_id=?";
+    try {
+      PreparedStatement preparedStatement = connection.prepareStatement(query);
+      preparedStatement.setInt(1, id);
+      ResultSet result = preparedStatement.executeQuery();
+      while (result.next()) {
+        bookingList.add(result.getString("destination") + " on " + result.getString("bookingDate"));
+      }
+    }
+
+    catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return bookingList;
+  }
 
   /*
    * public ArrayList<String>allDateBooked(Connection connection){
