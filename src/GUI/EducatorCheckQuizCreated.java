@@ -79,14 +79,10 @@ public class EducatorCheckQuizCreated {
         borderPane.setPadding(new Insets(15));
 
         Label label1 = new Label(labelText1);
-        //label1.setTextFill(Color.WHITE);
         label1.setFont(Font.font("Arial", FontWeight.BOLD, 25));
         Label label2 = new Label(labelText2);
-       // label2.setTextFill(Color.WHITE);
         Label label3 = new Label(labelText3);
-       // label3.setTextFill(Color.WHITE);
         Label label4 = new Label(labelText4);
-      //  label4.setTextFill(Color.WHITE);
         MenuButton menubutton = new MenuButton();
         menubutton.setText("Settings");
         menubutton.setStyle("-fx-background-color: white");

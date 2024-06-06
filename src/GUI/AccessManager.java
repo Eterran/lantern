@@ -90,6 +90,7 @@ public class AccessManager {
 
         buttonAccessRules1.put(UserRole.STUDENT, List.of(
             createButton("Quizzes", () -> {
+                QuizPage.updatePointsVbox();
                 Sidebar.selectTab(5);
             }, Sidebar.getQuizzesIcon())
         ));
@@ -105,6 +106,7 @@ public class AccessManager {
         ));
         retractedButtonAccessRules1.put(UserRole.STUDENT, List.of(
             createdRetractedButton(Sidebar.getRQuizzesIcon(), () -> {
+                QuizPage.updatePointsVbox();
                 Sidebar.selectTab(5);
             })
         ));

@@ -2,23 +2,22 @@ package GUI;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.util.Duration;
-import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -92,12 +91,14 @@ public class BookingPageGUI {
 
             Button bookingBtn = new Button("Book");
             bookingBtn.getStyleClass().add("bookingButton");
-            bookingBtn.setOnAction(event ->{  
+            bookingBtn.setOnAction(event ->{ 
+                //which children are you booking for ?
                 Stage stage = new Stage();
                 stage.initModality(Modality.APPLICATION_MODAL);
-                stage.setScene(new Scene(AvailableTimeSlot(destinationId.get(ind), destinationStrg.get(ind), bookSys), 300, 300));
+                stage.setScene(new Scene(chooseChildrenBox(destinationId.get(ind), destinationStrg.get(ind), bookSys), 500, 200));
                 stage.setTitle("Available Time Slot");
                 stage.showAndWait();
+                    
             });
 
             Region spacer = new Region();
@@ -137,7 +138,6 @@ public class BookingPageGUI {
             return mainvbox;
         }  
     }
-
     public static VBox showNoChild(){      
         VBox vbox = new VBox(10);
         vbox.setAlignment(Pos.CENTER);
@@ -156,7 +156,71 @@ public class BookingPageGUI {
     }
 
 
-    public static VBox AvailableTimeSlot(int destinationId, String destinationName, BookingSystem bookSys){
+    public static VBox chooseChildrenBox(int destinationId, String destinationName, BookingSystem bookSys){
+        VBox vbox = new VBox();
+        BorderPane bp = new BorderPane();
+        bp.setPadding(new Insets(20));
+        Label label1 = new Label("Which children are you booking for? \nChildren:");
+        label1.setStyle("-fx-font-size:20px;-fx-font-weight: bold;");
+        ArrayList<Integer> childrenId = getChildren(Lantern.getConn(), User.getCurrentUser().getUsername());
+
+        ToggleGroup toggleGroup = new ToggleGroup();
+        HBox storeradioButton = new HBox();
+        storeradioButton.setSpacing(10);
+        for (Integer childId : childrenId) {
+            RadioButton radioButton = new RadioButton(String.valueOf(childId));
+            radioButton.setToggleGroup(toggleGroup);
+            storeradioButton.getChildren().add(radioButton);    
+        }
+
+        String[] selectedChildId = {null};
+
+        toggleGroup.selectedToggleProperty().addListener((observable, oldVal, newVal) -> {
+            if (toggleGroup.getSelectedToggle() != null) {
+                RadioButton selectedRadioButton = (RadioButton) toggleGroup.getSelectedToggle();
+                selectedChildId[0] = selectedRadioButton.getText(); 
+            }
+        });
+       
+        Button saveBtn = new Button("OK");
+
+        saveBtn.setOnAction(event -> {
+            if (selectedChildId[0] != null) {
+                try {
+                    Integer childId = Integer.parseInt(selectedChildId[0]);
+                    Stage stage = new Stage();
+                    stage.initModality(Modality.APPLICATION_MODAL);
+                    stage.setScene(new Scene(AvailableTimeSlot(destinationId, destinationName, bookSys, childId), 300, 300));
+                    stage.setTitle("Available Time Slot");
+                    stage.showAndWait();
+                    if (vbox.getParent() instanceof VBox) {
+                        VBox parentVBox = (VBox)vbox.getParent();
+                        parentVBox.getChildren().remove(vbox);
+                    } 
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Please choose any one of the children before.", ButtonType.OK);
+                alert.showAndWait();
+            }
+        });
+        bp.setTop(label1);
+        bp.setBottom(saveBtn);
+        bp.setCenter(storeradioButton);
+        BorderPane.setAlignment(saveBtn,Pos.BOTTOM_RIGHT);
+
+        bp.prefHeightProperty().bind(vbox.heightProperty());
+        bp.prefWidthProperty().bind(vbox.widthProperty());
+
+        vbox.getChildren().add(bp);
+        vbox.setStyle("-fx-background-color: lightpink");
+        vbox.setFillWidth(true);
+        return vbox;
+    }
+
+
+    public static VBox AvailableTimeSlot(int destinationId, String destinationName, BookingSystem bookSys, Integer childId){
         
         BorderPane borderPane = new BorderPane();
         Label titleLabel = new Label("Available Time Slot");
@@ -176,17 +240,11 @@ public class BookingPageGUI {
         HBox headerBox = new HBox();
         HBox.setHgrow(headerBox, javafx.scene.layout.Priority.ALWAYS); 
 
-        ArrayList<Integer> childrenId =  getChildren(Lantern.getConn(), User.getCurrentUser().getUsername());
-        // for(Integer childrenid : childrenId){
-        //     System.out.print("Children id: " + childrenid +" ");
-        // }
-        
-        ArrayList<Integer> eventIds = geteventId(Lantern.getConn(), childrenId);
+        //ArrayList<Integer> childrenId =  getChildren(Lantern.getConn(), User.getCurrentUser().getUsername());
+        ArrayList<Integer> eventIds = geteventId(Lantern.getConn(), childId); //get the eventIds for the child
+
         ArrayList<String> finalDate = new ArrayList<>();
 
-        // for(Integer eventid: eventIds){
-        //     System.out.print("Event id" + eventid + " ");
-        //
         if(eventIds.isEmpty()){
             ArrayList<Date> convertDateToString = bookSys.getAvailableDates(User.getCurrentUser(),destinationId);
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
@@ -194,19 +252,11 @@ public class BookingPageGUI {
                 String dateString = dateFormat.format(date);
                 finalDate.add(dateString);
             }
-            System.out.println("eventIds is empty.");
         }else{
-            ArrayList <Date> availableDate = bookSys.getAvailableDates(User.getCurrentUser(),destinationId);
-            ArrayList <Date> registeredEventDate = getDateForEventRegistered(Lantern.getConn(), eventIds);
+            ArrayList <Date> availableDate = bookSys.getAvailableDates(User.getCurrentUser(),destinationId); //all 7 days excluding booking made
+            ArrayList <Date> registeredEventDate = getDateForEventRegistered(Lantern.getConn(), eventIds); //child event date
             finalDate = getFinalAvailableDates(availableDate, registeredEventDate) ;
-
         }
-        // for(Date ad : availableDate){
-        //     System.out.print("Available date: "+ ad + " ");
-        // }
-        // for(Date re: registeredEventDate){
-        //     System.out.print("Registered date: "+ re + " ");
-        // }
         
         for (int i = 0; i <finalDate.size() ; i++) {
             
@@ -223,7 +273,7 @@ public class BookingPageGUI {
            // selectBtn.getStyleClass().add("selectButton");
             selectBtn.setStyle("-fx-font-size: 12px; -fx-border-radius: 3px; -fx-background-radius: 5px;-fx-border-width: 0;   -fx-background-color: #ffffff;");
                 selectBtn.setOnAction(event ->{
-                    Booking.bookingTour(Lantern.getConn(), bd,User.getCurrentUser().getUsername()); //make booking
+                    Booking.bookingTour(Lantern.getConn(), bd,User.getCurrentUser().getUsername(), childId); //make booking
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Success");
                     alert.setContentText("Your booking has been confirmed.");
@@ -236,8 +286,7 @@ public class BookingPageGUI {
             Region spacer = new Region();
             HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
             dataBox.getChildren().addAll(num, availableTimeLabel , spacer, selectBtn);  
-            vBox.getChildren().add(dataBox); 
-                
+            vBox.getChildren().add(dataBox);               
         }
         
         scrollPane.setContent(vBox);
@@ -264,49 +313,78 @@ public class BookingPageGUI {
             }
         } catch (SQLException e) {
             e.printStackTrace(); 
-        }
-        
+        }     
         return childrenList;
     }
+       
+    // public static ArrayList<Integer> geteventId(Connection conn, Integer childId) {
+    //     ArrayList<Integer> eventIds = new ArrayList<>();
+    //     String queryEventRegistered = "SELECT event_id FROM EventRegistered WHERE main_id = ?";
+    //     String queryEventExists = "SELECT 1 FROM event WHERE id = ?";
     
-
+    //     try (PreparedStatement statementEventRegistered = conn.prepareStatement(queryEventRegistered);
+    //          PreparedStatement statementEventExists = conn.prepareStatement(queryEventExists)) {
+            
+    //         for (Integer childId : childrenList) {
+    //             statementEventRegistered.setInt(1, childId);
+    //             ResultSet resultSetRegistered = statementEventRegistered.executeQuery();
+    //             boolean found = false;
+                
+    //             while (resultSetRegistered.next()) {
+    //                 int eventId = resultSetRegistered.getInt("event_id");                
+    //                 statementEventExists.setInt(1, eventId);
+    //                 ResultSet resultSetExists = statementEventExists.executeQuery();
+                    
+    //                 if (resultSetExists.next()) {  
+    //                     eventIds.add(eventId);
+    //                 }                
+    //                 found = true;
+    //             }
+                
+    //             if (!found) {
+    //                 System.out.println("No events found for child with ID: " + childId);
+    //             }
+    //         }
+    //     } catch (SQLException e) {
+    //         e.printStackTrace();
+    //     }
     
-    public static ArrayList<Integer> geteventId(Connection conn, ArrayList<Integer> childrenList) {
+    //     return eventIds;
+    // }
+    public static ArrayList<Integer> geteventId(Connection conn, Integer childId) {
         ArrayList<Integer> eventIds = new ArrayList<>();
         String queryEventRegistered = "SELECT event_id FROM EventRegistered WHERE main_id = ?";
         String queryEventExists = "SELECT 1 FROM event WHERE id = ?";
     
         try (PreparedStatement statementEventRegistered = conn.prepareStatement(queryEventRegistered);
              PreparedStatement statementEventExists = conn.prepareStatement(queryEventExists)) {
-            
-            for (Integer childId : childrenList) {
-                statementEventRegistered.setInt(1, childId);
-                ResultSet resultSetRegistered = statementEventRegistered.executeQuery();
-                boolean found = false;
-                
-                while (resultSetRegistered.next()) {
-                    int eventId = resultSetRegistered.getInt("event_id");
-                    
-                    statementEventExists.setInt(1, eventId);
-                    ResultSet resultSetExists = statementEventExists.executeQuery();
-                    
-                    if (resultSetExists.next()) {  
-                        eventIds.add(eventId);
-                    }
-                    
-                    found = true;
+    
+            statementEventRegistered.setInt(1, childId);
+            ResultSet resultSetRegistered = statementEventRegistered.executeQuery();
+            boolean found = false;
+    
+            while (resultSetRegistered.next()) {
+                int eventId = resultSetRegistered.getInt("event_id");
+                statementEventExists.setInt(1, eventId);
+                ResultSet resultSetExists = statementEventExists.executeQuery();
+    
+                if (resultSetExists.next()) {
+                    eventIds.add(eventId);
                 }
-                
-                if (!found) {
-                    System.out.println("No events found for child with ID: " + childId);
-                }
+                found = true;
             }
+    
+            if (!found) {
+                System.out.println("No events found for child with ID: " + childId);
+            }
+    
         } catch (SQLException e) {
             e.printStackTrace();
         }
     
         return eventIds;
     }
+    
     
 
     public static ArrayList<Date> getDateForEventRegistered(Connection conn, ArrayList<Integer> eventIds) {
@@ -319,8 +397,6 @@ public class BookingPageGUI {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 String eventDateString = resultSet.getString("Date");
-                System.out.println("Retrieved Date String: " + eventDateString);
-
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 try {
                     Date eventDate = dateFormat.parse(eventDateString);

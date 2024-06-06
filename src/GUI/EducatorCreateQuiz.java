@@ -24,7 +24,6 @@ public class EducatorCreateQuiz {
     public static VBox tabCreateQuiz() {
         Label title = new Label("Create Quiz");
         title.setPadding(new Insets(10, 0, 0, 10));
-        // title.setTextFill(Color.BLACK);
         title.setStyle("-fx-font-size: 20px;-fx-font-weight: bold");
 
         Label quizTitle = new Label("Quiz Title:");
@@ -60,14 +59,12 @@ public class EducatorCreateQuiz {
         gridPane.setVgap(6);
         gridPane.setHgap(6);
 
-        // Set ColumnConstraints
         ColumnConstraints column1 = new ColumnConstraints();
         column1.setPercentWidth(20);
         ColumnConstraints column2 = new ColumnConstraints();
         column2.setPercentWidth(80);
         gridPane.getColumnConstraints().addAll(column1, column2);
 
-        // Set RowConstraints
         for (int i = 0; i < 7; i++) {
             RowConstraints row = new RowConstraints();
             row.setVgrow(Priority.ALWAYS);
@@ -99,8 +96,8 @@ public class EducatorCreateQuiz {
                 String Qcontent = quizContentTF.getText();
                 boolean savedSuccessfully = Quiz.createQuiz(Lantern.getConn(), QTitle, Qdescription, Qtheme, Qcontent, user.getUsername());
                 QuizData qd = new QuizData(QTitle, Qdescription, Qtheme, Qcontent);
+
                 if (savedSuccessfully) {
-                    //update columns in QuizAttempt 
                     Quiz.updateLatestQuiz(Lantern.getConn(),qd);   
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Success");
@@ -121,6 +118,11 @@ public class EducatorCreateQuiz {
                     alert.showAndWait();
                 }
             }
+        });
+
+        cancelBtn.setOnAction(e->{
+            Stage stage = (Stage) saveBtn.getScene().getWindow();
+            stage.close();
         });
 
         VBox mainvBox = new VBox();

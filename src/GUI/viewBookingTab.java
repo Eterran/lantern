@@ -21,19 +21,17 @@ public class viewBookingTab {
         
         bookingCheckBox.getChildren().clear();
         bookingMade = Booking.viewBooking(Lantern.getConn(),User.getCurrentUser().getUsername()); //does not get the latest info
-        for(BookingData bd : bookingMade){
-            System.out.println(bd.getDestination());
-        }
         VBox column = new VBox(); 
         column.setPadding(new Insets(10));
         HBox.setHgrow(column, Priority.ALWAYS);
         column.setStyle("-fx-background-color: lightyellow");
-        column.setSpacing(20); // Set spacing between items
+        column.setSpacing(20); 
 
         for(BookingData data: bookingMade){
             String labelText1 = data.getDestination();
             String labelText2 = data.getDate();
-            BorderPane bp =BPForAllBooking(labelText1, labelText2);
+            String labelText3 = String.valueOf(data.getChildId());
+            BorderPane bp =BPForAllBooking(labelText1, labelText2, labelText3);
 
             column.getChildren().addAll(bp);
         }
@@ -55,7 +53,6 @@ public class viewBookingTab {
         vbox1.setStyle("-fx-background-color: lightyellow");
         Label label1 = new Label("BOOKING MADE");
         label1.getStyleClass().add("booking_title");
-        //label1.setStyle("-fx-font-weight: bold; -fx-font-size: 16");
         label1.setPadding(new Insets(10));
         vbox1.getChildren().add(label1);
 
@@ -87,27 +84,33 @@ public class viewBookingTab {
         
         return vbox;
     }
-    public static BorderPane BPForAllBooking(String labelText1, String labelText2) {
+    public static BorderPane BPForAllBooking(String labelText1, String labelText2, String labelText3) {
         System.out.println("Label " + labelText1);
         System.out.println("Date "+ labelText2);
+        System.out.println("Child: "+ labelText3);
         BorderPane borderPane3 = new BorderPane();
-        borderPane3.setStyle("-fx-background-color: #b5def7; fx-border-width: 1px; -fx-border-color: black; -fx-border-radius: 5px; ");
+     //   borderPane3.setStyle("-fx-background-color: #b5def7; fx-border-width: 1px; -fx-border-color: black; -fx-border-radius: 5px; ");
+        borderPane3.setStyle("-fx-background-color: #FFE268; fx-border-width: 1px; -fx-border-color: black; -fx-border-radius: 5px; ");
 
+        
         borderPane3.setPadding(new Insets(15));
 
         Label label1 = new Label(labelText1);
         label1.setTextFill(Color.WHITE);
         label1.getStyleClass().add("destination_label");
-       // label1.setFont(Font.font("Arial", FontWeight.BOLD, 25));
         Label label2 = new Label(labelText2);
         label2.getStyleClass().add("distance_label");
-     //   label2.setTextFill(Color.WHITE);
+        Label label3 = new Label(labelText3);
+        label3.getStyleClass().add("distance_label");
+
         MenuButton menubutton = new MenuButton();
         menubutton.setText("Settings");
+        menubutton.getStyleClass().add("bookingButton2");
         MenuItem deleteItem = new MenuItem("Delete");
+        deleteItem.getStyleClass().add("deleteItem");
         menubutton.getItems().add(deleteItem);
         menubutton.setAlignment(Pos.TOP_RIGHT);
-        menubutton.getStyleClass().add("bookingButton2");
+      
         deleteItem.setOnAction(event ->{
             deleteBooking (Lantern.getConn(),User.getCurrentUser().getUsername(), labelText2);
             if (borderPane3.getParent() instanceof VBox) {
@@ -117,16 +120,16 @@ public class viewBookingTab {
         });
 
         BorderPane.setAlignment(label1, Pos.TOP_LEFT);
-        BorderPane.setAlignment(menubutton, Pos.BOTTOM_LEFT);
+        BorderPane.setAlignment(menubutton, Pos.CENTER_RIGHT);
         BorderPane.setAlignment(label2, Pos.CENTER_LEFT);
+        BorderPane.setAlignment(label3, Pos.BOTTOM_LEFT);
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
-        //HBox topBox = new HBox(label1, spacer, menubutton);
         HBox topBox = new HBox(label1, spacer, menubutton);
         topBox.setPrefHeight(40);
-        VBox bottomBox = new VBox(menubutton);
         VBox middleBox = new VBox(label2);
+        VBox bottomBox = new VBox(label3);
 
         borderPane3.setTop(topBox);
         borderPane3.setCenter(middleBox);
