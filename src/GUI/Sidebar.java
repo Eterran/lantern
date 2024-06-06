@@ -71,7 +71,6 @@ public class Sidebar {
         Lantern.Clear_History();
 
         initialiseButtons();
-        initialseVBoxes();
         
         root.setBackground(new Background(new BackgroundFill(Color.web(color.BACKGROUND.getCode()), new CornerRadii(0), Insets.EMPTY)));
         HBox layout1 = new HBox(0);
@@ -112,12 +111,6 @@ public class Sidebar {
         });
         
         HBox searcHBox = createSearchBox();
-
-        HBox.setHgrow(stackPane, Priority.ALWAYS);
-        VBox.setVgrow(stackPane, Priority.ALWAYS);
-        stackPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        stackPane.getChildren().clear();
-        stackPane.getChildren().addAll(profileBox, eventBox, discussionBox, leaderboardBox, box5, box6, box7, othersProfile);
         
         Button backButton = createBackButton();
         backAndRetract.getChildren().addAll(backButton, retractButton);
@@ -164,12 +157,17 @@ public class Sidebar {
                     retractedVBox.getChildren().add(rtab7);
                 });
         sidebar.getChildren().addAll(Lantern.createSpacer(), createLogoutButton(stg));
+    
+        initialseVBoxes();
+        HBox.setHgrow(stackPane, Priority.ALWAYS);
+        VBox.setVgrow(stackPane, Priority.ALWAYS);
+        stackPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        stackPane.getChildren().clear();
+        stackPane.getChildren().addAll(profileBox, eventBox, discussionBox, leaderboardBox, box5, box6, box7, othersProfile);
         initialiseArrays();
 
-        Platform.runLater(() -> {
-            updateAvailableWidth(isSidebarRetracted.get());
-            sidebarWidth = sidebar.getWidth();
-        });
+        updateAvailableWidth(isSidebarRetracted.get());
+        sidebarWidth = sidebar.getWidth();
         
         root.setCenter(layout1);
         root.setLeft(sidebar);
@@ -653,8 +651,13 @@ public class Sidebar {
         setOneVisible(0);
     }
     public static void setBox1(VBox box){
-        othersProfile.getChildren().clear();
-        othersProfile.getChildren().add(box);
+        profileBox.getChildren().clear();
+        profileBox.getChildren().add(box);
         setOneVisible(1);
+    }
+    public static void setBox7(VBox box){
+        box7.getChildren().clear();
+        box7.getChildren().add(box);
+        setOneVisible(7);
     }
 }

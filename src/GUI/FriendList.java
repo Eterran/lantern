@@ -2,7 +2,6 @@ package GUI;
 
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -201,6 +200,7 @@ public class FriendList {
                 friend.acceptFriend(conn, friendRequest, User.getCurrentUser().getUsername());
                 friendRequestsVBox.getChildren().remove(friendRequestHBox);
                 refreshFriendList();
+                Sidebar.setBox7(FriendGraph.createFriendGraph());
             });
             Button declineButton = new Button();
             declineButton.setPrefSize(30, 30);

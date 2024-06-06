@@ -11,9 +11,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import Database.Booking;
+
 public class viewBookingTab {
     private static ArrayList<BookingData> bookingMade = Booking.viewBooking(Lantern.getConn(),User.getCurrentUser().getUsername());
     private static VBox bookingCheckBox = new VBox(); 
