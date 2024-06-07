@@ -4,8 +4,6 @@
  */
 package Database;
 
-import GUI.Lantern;
-
 /**
  *
  * @author den51

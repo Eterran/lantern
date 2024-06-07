@@ -100,6 +100,8 @@ public class FriendGraph {
 
             graphPane.setTranslateX(0);
             graphPane.setTranslateY(0);
+
+            Sidebar.setBox7(createFriendGraph());
         });
         resetViewButton.getStyleClass().add("login_button");
         graphContainer.getChildren().add(resetViewButton);

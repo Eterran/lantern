@@ -67,7 +67,7 @@ public class RegistrationPage {
             String confirmPassword = confirmPasswordTF.getText();
             boolean passwordMatch = password.equals(confirmPassword);
             boolean usernameExists = true;
-            if(usernameTF.getText().isEmpty() || emailTF.getText().isEmpty() || passwordTF.getText().isEmpty() || confirmPasswordTF.getText().isEmpty()){
+            if(usernameTF.getText().isEmpty() || emailTF.getText().isEmpty() || passwordTF.getText().isEmpty() || confirmPasswordTF.getText().isEmpty() || comboBox.getValue() == null){
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Empty Field(s)");
                 alert.setHeaderText(null);

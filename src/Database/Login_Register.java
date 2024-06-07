@@ -87,7 +87,7 @@ public class Login_Register {
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, username);
             preparedStatement.setString(3, encyrptPw);
-            preparedStatement.setString(4, role.toLowerCase());
+            preparedStatement.setString(4, role);
             preparedStatement.setString(5, coordinate);
             preparedStatement.setDouble(6, 0);
             preparedStatement.executeUpdate();

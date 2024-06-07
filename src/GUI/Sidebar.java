@@ -166,8 +166,10 @@ public class Sidebar {
         stackPane.getChildren().addAll(profileBox, eventBox, discussionBox, leaderboardBox, box5, box6, box7, othersProfile);
         initialiseArrays();
 
-        updateAvailableWidth(isSidebarRetracted.get());
-        sidebarWidth = sidebar.getWidth();
+        Platform.runLater(() -> {
+            updateAvailableWidth(isSidebarRetracted.get());
+            sidebarWidth = sidebar.getWidth();
+        });
         
         root.setCenter(layout1);
         root.setLeft(sidebar);
@@ -648,16 +650,16 @@ public class Sidebar {
         VBox temp = new VBox();
         temp.getChildren().add(box);
         othersProfile.getChildren().add(temp);
-        setOneVisible(0);
+        selectTab(0);
     }
     public static void setBox1(VBox box){
         profileBox.getChildren().clear();
         profileBox.getChildren().add(box);
-        setOneVisible(1);
+        selectTab(1);
     }
     public static void setBox7(VBox box){
         box7.getChildren().clear();
         box7.getChildren().add(box);
-        setOneVisible(7);
+        selectTab(7);
     }
 }
