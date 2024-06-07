@@ -19,64 +19,6 @@ import javafx.geometry.Insets;
 public class GlobalLeaderboard {
     private static VBox refreshGLBtab =  new VBox();
 
-    // public static void refreshUIGLB() {
-    //     refreshGLBtab.getChildren().clear();
-    //     VBox temp = new VBox();
-    //     VBox.setVgrow(temp, javafx.scene.layout.Priority.ALWAYS);
-    //     GlobalLeaderBoard glb = new GlobalLeaderBoard();
-    //     Login_Register user = new Login_Register();
-    //     glb.updateXpState(Lantern.getConn(), user.getId());
-    //     try {
-    //         glb.loadGlobal(Lantern.getConn());
-    //     } catch (IOException e) {
-    //         e.printStackTrace(); 
-    //         return;
-    //     }catch(SQLException e){
-    //         e.printStackTrace();
-    //         return;
-    //     }
-    //     String [] username = glb.getUsername();
-    //     double[] points = glb.getXp();
-    //     for (int i = 0; i <20; i++) {
-    //         HBox dataBox = new HBox();
-    //         dataBox.setPadding(new Insets(5)); 
-    //         if(i>=username.length){
-    //              dataBox.setPrefSize(300, 80);
-    //              if (i % 2 == 0) {
-    //                 dataBox.setStyle("-fx-background-color: #FACBA6;");
-    //             } else {
-    //                 dataBox.setStyle("-fx-background-color: #ffffff;");
-    //             }    
-    //             temp.getChildren().add(dataBox);
-
-    //         }else{
-    //             if (i % 2 == 0) {
-    //                 dataBox.setStyle("-fx-background-color: #FACBA6;");
-    //             } else {
-    //                 dataBox.setStyle("-fx-background-color: #ffffff;");
-    //             }       
-    //             Label rankData = new Label(String.valueOf(i + 1));  
-    //             rankData.setPadding(new Insets(5,10,5,5));
-    //             Label usernameData = new Label(username[i]);
-    //             usernameData.setPadding(new Insets(5,10,5,5));
-    //             Label pointData = new Label(String.valueOf(points[i]));
-    //             pointData.setPadding(new Insets(5,10,5,5));
-    //             Region spacer3 = new Region();
-    //             HBox.setHgrow(spacer3, javafx.scene.layout.Priority.ALWAYS);
-    //             Region spacer4 = new Region();
-    //             HBox.setHgrow(spacer4, javafx.scene.layout.Priority.ALWAYS);
-    //             dataBox.getChildren().addAll(rankData, spacer3, usernameData, spacer4, pointData);  //adding every info into hbox for each line
-
-    //             temp.getChildren().add(dataBox); //continue add all the databox into vbox
-
-    //         }
-    //     }
-
-      
-    //    // temp.getChildren().add(scrollPane);
-    //     refreshGLBtab.getChildren().add(temp);
-    // }
-
     public static void refreshUIGLB() {
         refreshGLBtab.getChildren().clear();
 
@@ -102,7 +44,7 @@ public class GlobalLeaderboard {
             HBox dataBox = new HBox();
             dataBox.setPadding(new Insets(5));
             if (i % 2 == 0) {
-                dataBox.setStyle("-fx-background-color: #FACBA6;");
+                dataBox.setStyle("-fx-background-color: #FFBF6C;");
             } else {
                 dataBox.setStyle("-fx-background-color: #ffffff;");
             }
@@ -111,15 +53,15 @@ public class GlobalLeaderboard {
                 if (username[i].equals(User.getCurrentUser().getUsername())) {
                     Label ownrankData = new Label(String.valueOf(i + 1));
                     ownrankData.setPadding(new Insets(5, 10, 5, 5));
-                    ownrankData.setStyle("-fx-font-weight: bold;");
+                    ownrankData.setStyle("-fx-font-weight: bold;-fx-font-size:19px;");
 
                     Label ownUsername = new Label(username[i]);
                     ownUsername.setPadding(new Insets(5, 10, 5, 5));
-                    ownUsername.setStyle("-fx-font-weight: bold;");
+                    ownUsername.setStyle("-fx-font-weight: bold; -fx-font-size: 19px;");
 
-                    Label ownpointData = new Label(String.valueOf(points[i]));
+                    Label ownpointData = new Label(String.valueOf((int)(points[i])));
                     ownpointData.setPadding(new Insets(5, 10, 5, 5));
-                    ownpointData.setStyle("-fx-font-weight: bold;");
+                    ownpointData.setStyle("-fx-font-weight: bold; -fx-font-size:19px");
 
                     Region spacer5 = new Region();
                     HBox.setHgrow(spacer5, Priority.ALWAYS);
@@ -130,12 +72,16 @@ public class GlobalLeaderboard {
                     dataBox.getChildren().addAll(ownrankData, spacer5, ownUsername, spacer6, ownpointData);
                 } else {
                     Label rankData = new Label(String.valueOf(i + 1));
+                    rankData.setStyle("-fx-font-size:18px; -fx-font-family: Arial;-fx-text-fill: black");
                     rankData.setPadding(new Insets(5, 10, 5, 5));
 
+
                     Label usernameData = new Label(username[i]);
+                    usernameData.setStyle("-fx-font-size:18px; -fx-font-family: Arial;-fx-text-fill: black");
                     usernameData.setPadding(new Insets(5, 10, 5, 5));
 
-                    Label pointData = new Label(String.valueOf(points[i]));
+                    Label pointData = new Label(String.valueOf((int)(points[i])));
+                    pointData.setStyle("-fx-font-size:18px; -fx-font-family: Arial;-fx-text-fill: black");
                     pointData.setPadding(new Insets(5, 10, 5, 5));
 
                     Region spacer3 = new Region();
@@ -186,12 +132,9 @@ public class GlobalLeaderboard {
          //creating ScrollPane 
         Pane content = new Pane();
         content.setStyle("-fx-background-color:lightyellow");
-       // content.setPrefSize(391,247);
         content.setPrefWidth(391);
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setFitToWidth(true);
-        //scrollPane.setPrefSize(391.0, 247.0);
-        
 
         //header to store rank, username, point label
         HBox headerBox = new HBox();
@@ -200,12 +143,12 @@ public class GlobalLeaderboard {
         
         Label rankLabel = new Label("Rank");
         rankLabel.setPadding(new Insets(5));
-        rankLabel.setStyle("-fx-font-weight: bold; -fx-font-size:14px; -fx-font-family: Arial;-fx-text-fill: white");
+        rankLabel.setStyle("-fx-font-weight: bold; -fx-font-size:20px; -fx-font-family: Arial;-fx-text-fill: white");
         Label usernameLabel = new Label("Username");
-        usernameLabel.setStyle("-fx-font-weight:bold;-fx-font-size: 14px; -fx-font-family: Arial;-fx-text-fill: white");
+        usernameLabel.setStyle("-fx-font-weight:bold;-fx-font-size: 20px; -fx-font-family: Arial;-fx-text-fill: white");
         usernameLabel.setPadding(new Insets(5));
         Label pointLabel = new Label("Point");
-        pointLabel.setStyle("-fx-font-weight:bold; -fx-font-size: 14px; -fx-font-family: Arial;-fx-text-fill: white");
+        pointLabel.setStyle("-fx-font-weight:bold; -fx-font-size: 20px; -fx-font-family: Arial;-fx-text-fill: white");
         pointLabel.setPadding(new Insets(5,10,5,5));
 
         Region spacer1 = new Region();
@@ -236,11 +179,8 @@ public class GlobalLeaderboard {
         leftPane.setPrefSize(50.0, 250.0);
         Pane rightPane = new Pane();
         rightPane.setPrefSize(50.0, 250.0);
-        // Pane bottomPane = new Pane();
-        // bottomPane.setPrefSize(400, 20);
         borderPane.setLeft(leftPane);
         borderPane.setRight(rightPane);
-        // borderPane.setBottom(bottomPane);
 
         VBox mainvbox = new VBox();
         mainvbox.getChildren().add(borderPane);

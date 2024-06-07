@@ -30,8 +30,7 @@ public class viewBookingTab {
         for(BookingData data: bookingMade){
             String labelText1 = data.getDestination();
             String labelText2 = data.getDate();
-            String labelText3 = String.valueOf(data.getChildId());
-            BorderPane bp =BPForAllBooking(labelText1, labelText2, labelText3);
+            BorderPane bp =BPForAllBooking(labelText1, labelText2);
 
             column.getChildren().addAll(bp);
         }
@@ -84,10 +83,9 @@ public class viewBookingTab {
         
         return vbox;
     }
-    public static BorderPane BPForAllBooking(String labelText1, String labelText2, String labelText3) {
+    public static BorderPane BPForAllBooking(String labelText1, String labelText2) {
         System.out.println("Label " + labelText1);
         System.out.println("Date "+ labelText2);
-        System.out.println("Child: "+ labelText3);
         BorderPane borderPane3 = new BorderPane();
      //   borderPane3.setStyle("-fx-background-color: #b5def7; fx-border-width: 1px; -fx-border-color: black; -fx-border-radius: 5px; ");
         borderPane3.setStyle("-fx-background-color: #FFE268; fx-border-width: 1px; -fx-border-color: black; -fx-border-radius: 5px; ");
@@ -100,8 +98,6 @@ public class viewBookingTab {
         label1.getStyleClass().add("destination_label");
         Label label2 = new Label(labelText2);
         label2.getStyleClass().add("distance_label");
-        Label label3 = new Label(labelText3);
-        label3.getStyleClass().add("distance_label");
 
         MenuButton menubutton = new MenuButton();
         menubutton.setText("Settings");
@@ -122,18 +118,17 @@ public class viewBookingTab {
         BorderPane.setAlignment(label1, Pos.TOP_LEFT);
         BorderPane.setAlignment(menubutton, Pos.CENTER_RIGHT);
         BorderPane.setAlignment(label2, Pos.CENTER_LEFT);
-        BorderPane.setAlignment(label3, Pos.BOTTOM_LEFT);
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         HBox topBox = new HBox(label1, spacer, menubutton);
         topBox.setPrefHeight(40);
         VBox middleBox = new VBox(label2);
-        VBox bottomBox = new VBox(label3);
+
 
         borderPane3.setTop(topBox);
         borderPane3.setCenter(middleBox);
-        borderPane3.setBottom( bottomBox);
+   //     borderPane3.setBottom( bottomBox);
 
         return borderPane3;
     }
