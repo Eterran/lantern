@@ -96,8 +96,6 @@ public class EventPage {
         vbox1.setPrefSize(600, 40); 
         Label label1 = new Label("Live Event");
         label1.getStyleClass().add("event_title");
-     //   label1.setStyle("-fx-font-family: 'Nunito SemiBold'; -fx-font-size: 40; -fx-text-fill: black;");
-      //  label1.getStyleClass().add("event_title");
         vbox1.setPadding(new Insets(10));
 
         Region spacer1 = new Region();
@@ -144,8 +142,7 @@ public class EventPage {
         vbox3.setStyle("-fx-background-color: lightyellow");
         vbox3.setPrefSize(600, 40);
         Label label3 = new Label("Closest 3 Upcoming Event");
-      label3.getStyleClass().add("event_title");
-        //label3.setStyle("-fx-font-family: 'Nunito SemiBold'; -fx-font-size: 40; -fx-text-fill: black;");
+        label3.getStyleClass().add("event_title");
 
         label3.setPadding(new Insets(10));
         vbox3.getChildren().add(label3);
@@ -191,13 +188,23 @@ public class EventPage {
         borderPane.setPadding(new Insets(15));
   
         Label label1 = new Label(thisevent.getEventTitle());
-        label1.setFont(Font.font("Arial", FontWeight.BOLD, 25));
+      //  label1.setFont(Font.font("Arial", FontWeight.BOLD, 25));
+        label1.setWrapText(true);
+        label1.setMaxWidth(250);
         Label label2 = new Label(thisevent.getDescription());
+        label2.setWrapText(true);
+        label2.setMaxWidth(220);
         Label label3 = new Label(thisevent.getVenue());
-        Label label4 = new Label(thisevent.getDate());
+        Label label4 = new Label( thisevent.getDate());
         Label label5 = new Label(thisevent.getTime());
 
-        label1.setFont(Font.font("Arial", FontWeight.BOLD, 15));
+
+        label1.setFont(Font.font("sans-serif", FontWeight.BOLD, 18));
+        label2.setFont(Font.font("sans-serif", 11));
+        label3.setFont(Font.font("sans-serif", FontWeight.BOLD, 12));
+        label4.setFont(Font.font("sans-serif", FontWeight.BOLD, 12));
+        label5.setFont(Font.font("sans-serif", FontWeight.BOLD, 12));
+
         ToggleButton toggleButton= new ToggleButton("Register");
         toggleButton.setStyle( "-fx-background-color: #475558");
         toggleButton.setTextFill(Color.WHITE); 
@@ -284,22 +291,26 @@ public class EventPage {
         HBox tophbox = new HBox();
         Region spacer2 = new Region();
         HBox.setHgrow(spacer2, Priority.ALWAYS);
-        tophbox.getChildren().addAll(label1, spacer2, liveEventImgView);
+    
+       VBox vtopbox = new VBox(10);
+       vtopbox.getChildren().addAll(label1,label2);
+      
+        tophbox.getChildren().addAll(vtopbox,spacer2, liveEventImgView);
 
         Region spacer= new Region();
-        VBox middleBox = new VBox(label2,label3, label4); 
-
+        //VBox middleBox = new VBox(label2); 
+        VBox bottomVBox = new VBox(label3, label4, label5);
         if(User.getCurrentUser().getRole().equals("student")){
-            HBox bottomBox = new HBox(label5, spacer, toggleButton);
+            HBox bottomBox = new HBox(bottomVBox ,spacer, toggleButton);
             borderPane.setBottom(bottomBox);
         }else{
-            HBox bottomBox = new HBox(label5, spacer);
+            HBox bottomBox = new HBox(bottomVBox);
             borderPane.setBottom(bottomBox);
         }
        
         HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
         borderPane.setTop(tophbox);
-        borderPane.setCenter(middleBox);
+    //    borderPane.setCenter(middleBox);
         return borderPane;
     }
 
@@ -311,11 +322,21 @@ public class EventPage {
         borderPane.setPadding(new Insets(15));
   
         Label label1 = new Label(thisevent.getEventTitle());
-        label1.setFont(Font.font("Arial", FontWeight.BOLD, 25));
+       // label1.setFont(Font.font("Arial", FontWeight.BOLD, 25));
+        label1.setWrapText(true);
+        label1.setMaxWidth(250);
         Label label2 = new Label(thisevent.getDescription());
+        label2.setWrapText(true);
+        label2.setMaxWidth(220);
         Label label3 = new Label(thisevent.getVenue());
-        Label label4 = new Label(thisevent.getDate());
+        Label label4 = new Label( thisevent.getDate());
         Label label5 = new Label(thisevent.getTime());
+
+        label1.setFont(Font.font("sans-serif", FontWeight.BOLD, 18));
+        label2.setFont(Font.font("sans-serif", 11));
+        label3.setFont(Font.font("sans-serif", FontWeight.BOLD, 12));
+        label4.setFont(Font.font("sans-serif", FontWeight.BOLD, 12));
+        label5.setFont(Font.font("sans-serif", FontWeight.BOLD, 12));
 
         label1.setFont(Font.font("Arial", FontWeight.BOLD, 15));
         ToggleButton toggleButton= new ToggleButton("Register");
@@ -388,34 +409,30 @@ public class EventPage {
         BorderPane.setAlignment(label5, Pos.BOTTOM_CENTER);
         BorderPane.setAlignment(toggleButton, Pos.BOTTOM_RIGHT);
 
-
         Image upcomingEventImg = new Image("resources/assets/upcomingEvent3.png");
         ImageView upcomingEventView = new ImageView(upcomingEventImg);
         upcomingEventView.setFitHeight(60);
         upcomingEventView.setFitWidth(60);
 
+        VBox vtopbox = new VBox(10);
+        vtopbox.getChildren().addAll(label1,label2);
+       
         HBox tophbox = new HBox();
         Region spacer3 = new Region();
         HBox.setHgrow(spacer3, Priority.ALWAYS);
-        tophbox.getChildren().addAll(label1, spacer3, upcomingEventView);
-
-    
+        tophbox.getChildren().addAll(vtopbox, spacer3, upcomingEventView);
         Region spacer= new Region();
-        VBox middleBox = new VBox(label2,label3, label4); 
+        VBox bottomVBox = new VBox(label3, label4, label5);
 
         if(User.getCurrentUser().getRole().equals("student")){
-            HBox bottomBox = new HBox(label5, spacer, toggleButton);
+            HBox bottomBox = new HBox(bottomVBox, spacer, toggleButton);
             borderPane.setBottom(bottomBox);
         }else{
-            HBox bottomBox = new HBox(label5, spacer);
+            HBox bottomBox = new HBox (bottomVBox);
             borderPane.setBottom(bottomBox);
         }
         HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
-      
         borderPane.setTop(tophbox);
-        borderPane.setCenter(middleBox);
-
-
         return borderPane;
     }
 

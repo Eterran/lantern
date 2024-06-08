@@ -157,6 +157,7 @@ public class EducatorCheckEventCreated {
         addButton.setOnAction(event -> {
             VBox content = EducatorCreateEvent.tabCreateEvent();
             Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(content, 500, 300));
             stage.setTitle("Create Quiz");
             stage.show();
