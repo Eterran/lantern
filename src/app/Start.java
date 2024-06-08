@@ -1,3 +1,4 @@
+package app;
 import GUI.Lantern;
 
 public class Start extends Lantern{

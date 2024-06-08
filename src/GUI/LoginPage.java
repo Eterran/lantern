@@ -54,6 +54,8 @@ public class LoginPage {
         passwordTF.setStyle("-fx-border-color: black; -fx-border-width: 2px;");
         HBox username_hbox = new HBox();
         HBox password_hbox = new HBox();
+        username_hbox.setPadding(new Insets(0, 0, 0, 70));
+        password_hbox.setPadding(new Insets(0, 0, 0, 70));
         username_hbox.getChildren().addAll(user_icon, Lantern.createVerticalSeparator(4), usernameTF);
         password_hbox.getChildren().addAll(pw_icon, Lantern.createVerticalSeparator(4), passwordTF);
         username_hbox.setAlignment(Pos.CENTER_LEFT);
@@ -92,14 +94,14 @@ public class LoginPage {
         Text usernameText = new Text("Username:");
         usernameText.getStyleClass().add("text_content");
         VBox usernameBox = new VBox(usernameText);
-        usernameBox.setPadding(new Insets(0, 0, 0, 14));
+        usernameBox.setPadding(new Insets(0, 0, 0, 74));
         inputBox.getChildren().add(usernameBox);
         inputBox.getChildren().add(username_hbox);
 
         Text passwordText = new Text("Password:");
         passwordText.getStyleClass().add("text_content");
         VBox passwordBox = new VBox(passwordText);
-        passwordBox.setPadding(new Insets(0, 0, 0, 14));
+        passwordBox.setPadding(new Insets(0, 0, 0, 74));
         inputBox.getChildren().add(passwordBox);
         inputBox.getChildren().add(password_hbox);
 
@@ -111,7 +113,7 @@ public class LoginPage {
         VBox loginBox = new VBox(15);
         loginBox.setPrefSize(600, 500);
         loginBox.setMaxSize(600, 500);
-        loginBox.setMinSize(600, 500);
+        loginBox.setMinSize(700, 500);
         inputBox.prefWidthProperty().bind(loginBox.widthProperty());
         labelBox.prefWidthProperty().bind(loginBox.widthProperty());
         buttonBox.prefWidthProperty().bind(loginBox.widthProperty());
@@ -144,7 +146,7 @@ public class LoginPage {
         leftBox.getChildren().addAll(registerText, registerText2);
         rootBox.getChildren().addAll(leftBox, separator, loginBox);
         StackPane rootPane = new StackPane();
-        rootBox.prefWidthProperty().bind(rootPane.widthProperty().multiply(0.9));
+        rootBox.prefWidthProperty().bind(rootPane.widthProperty().multiply(0.95));
         rootBox.prefHeightProperty().bind(rootPane.heightProperty().multiply(0.85));
         rootBox.setMaxSize(850, 600);
         

@@ -1,5 +1,6 @@
 package GUI;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Stack;
@@ -8,6 +9,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import Database.Database;
 import Database.Login_Register;
 import Database.User;
+import app.Start;
+import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.property.*;
@@ -17,6 +20,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -211,7 +215,7 @@ public class Sidebar {
             sidebarHistory.pop();
         }
         if(!sidebarHistory.isEmpty()){
-            setOneVisible(sidebarHistory.pop());
+            selectTab(sidebarHistory.pop());
             return true;
         }
         return false;
@@ -334,7 +338,32 @@ public class Sidebar {
         logoutButton.setOnAction(e -> {
             User.setCurrentUser(null);
             sidebarHistory.clear();
-            LoginPage.showLoginScene(stg);
+            stg.close();
+            Platform.runLater(() -> {
+                try {
+                    String javaCmd = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
+                    String classpath = System.getProperty("java.class.path");
+                    String mainClass = "app.Start";
+                    String javafxPath = "../lib";
+                    String[] cmd = { javaCmd, "--module-path", javafxPath, "--add-modules", "javafx.controls,javafx.fxml", "-cp", classpath, mainClass };
+                    String currentDir = System.getProperty("user.dir");
+                    ProcessBuilder processBuilder = new ProcessBuilder(cmd);
+                    processBuilder.directory(new File(currentDir));
+                    processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+                    processBuilder.redirectError(ProcessBuilder.Redirect.INHERIT);
+
+                    try {
+                        Thread.sleep(1200);
+                        processBuilder.start();
+                        Platform.exit();
+                        System.exit(0);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            });
         });
         return logoutButton;
     }
