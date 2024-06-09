@@ -11,47 +11,7 @@ package Database;
 import java.sql.*;
 
 
-/*public class Database {
-    public static void main(String[] args) {
-        String databasePath = "jdbc:sqlite:.\\database.db";
 
-        try {
-            // Establish connection to the SQLite database
-            Connection connection = DriverManager.getConnection(databasePath);
-
-            // Check if connection is successful
-            if (connection != null) {
-                System.out.println("Connected to the SQLite database.");
-                // Perform database operations here
-            } else {
-                System.out.println("Failed to connect to the SQLite database.");
-            }
-            
-            String insertQuery = "INSERT INTO user (email) VALUES ('haha')";
-    PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
-    //preparedStatement.setString(1, "haha");
-    preparedStatement.executeUpdate();
-    System.out.println("Data inserted successfully.");
-
-    String selectQuery = "SELECT * FROM user";
-Statement statement = connection.createStatement();
-ResultSet resultSet = statement.executeQuery(selectQuery);
-while (resultSet.next()) {
-    String email = resultSet.getString("email");
-    System.out.println("Email: " + email);
-}
-
-            // Close connection
-            connection.close();
-            
-        } catch (SQLException e) {
-            // Handle any SQL errors
-            e.printStackTrace();
-        }
-        
-        
-    }
-}*/
 public class Database {
     private static Connection conn = null;
 
