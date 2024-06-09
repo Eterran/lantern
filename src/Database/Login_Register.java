@@ -61,26 +61,7 @@ public class Login_Register {
         double x_coordinate = min + (random.nextDouble() * (max - min));
         double y_coordinate=min + (random.nextDouble() * (max - min));;
         String coordinate=String.format("%.1f", x_coordinate)+","+String.format("%.1f", y_coordinate);
-        /*
-         * if(role.equalsIgnoreCase("parent")){
-         * String name ="";
-         * System.out.println("Enter the children name (1 to stop process): ");
-         * name=input.nextLine();
-         * do{
-         * children.add(name);
-         * name=input.nextLine();
-         * }while(!name.equalsIgnoreCase("1"));
-         * }
-         * if(role.equalsIgnoreCase("children")){
-         * String name="";
-         * System.out.println("Enter the parents name (1 to stop process): ");
-         * name=input.nextLine();
-         * do{
-         * parent.add(name);
-         * name=input.nextLine();
-         * }while(!name.equalsIgnoreCase("1"));
-         * }
-         */
+       
         try {
             String insertQuery = "INSERT INTO user (email, username, password, role, coordinate,point) VALUES (?, ?, ?, ?,?,?)";
             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);

@@ -194,24 +194,7 @@ public class Event {
         // //live events
         String description = "", venue = "", time = "", eventName = "", date = "";
 
-        // try{
-        // String sql = "SELECT EventTitle,Description,Venue,Time FROM event WHERE
-        // Date=?";
-        // PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        // preparedStatement.setString(1, currentDate.toString());
-        // ResultSet result = preparedStatement.executeQuery();
-        // while(result.next()){
-        // eventName=result.getString("EventTitle");
-        // description=result.getString("Description");
-        // venue=result.getString("Venue");
-        // time=result.getString("Time");
-        // latestEvent.add(new
-        // EventData(eventName,description,venue,currentDate.toString(),time));
-        // }
-        // }
-
-        // catch(SQLException e){
-        // e.printStackTrace();}
+       
 
         // latest 3upcoming events
         int count = 0;
@@ -289,19 +272,7 @@ public class Event {
 
     // the same event in same data is not allowed to create
     public static boolean checkSameEvent(Connection connection, EventData event) {
-        // boolean check=false;
-        // ArrayList<String>allEvent=getAllEvent(connection);
-        // LocalDate dateRegister=LocalDate.parse(event.date);
-        /*
-         * for(String hold:allEvent)
-         * if(hold.equalsIgnoreCase(event.)){
-         * for(String hold2:dateOfEvent(connection,hold)){
-         * if(LocalDate.parse(hold2).compareTo(dateRegister)==0)
-         * check=true;
-         * }
-         * }
-         * return check;
-         */
+        
         String query = "SELECT id FROM event WHERE (EventTitle=? AND Description=? AND Venue=? AND Date=?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -318,32 +289,7 @@ public class Event {
         return false;
     }
 
-    /*
-     * //provide the event name and its date to get all detail //
-     * public static EventData getDatailOfEvent(Connection connection,String
-     * eventName,String date){
-     * String description="",venue="",time="";
-     * try{
-     * String sql =
-     * "SELECT Description,Venue,Time FROM event WHERE (EventTitle = ? AND Date=?)";
-     * PreparedStatement preparedStatement = connection.prepareStatement(sql);
-     * preparedStatement.setString(1, eventName);
-     * preparedStatement.setString(2, date);
-     * ResultSet result = preparedStatement.executeQuery();
-     * while(result.next()){
-     * description=result.getString("Description");
-     * venue=result.getString("Venue");
-     * time=result.getString("Time");
-     * }
-     * }
-     * catch(SQLException e){
-     * e.printStackTrace();}
-     * 
-     * EventData ed=new EventData(eventName,description,venue,date,time);
-     * 
-     * return ed;
-     * }
-     */
+   
 
     // get all events create by a user, edit list
     public static ArrayList<EventData> getEventOfUser(Connection connection, String username) {

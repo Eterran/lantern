@@ -147,47 +147,9 @@ public class RegisterEvent {
   return check;
     }
     
-   /* //in case several different date but same event
-    public ArrayList<String>getEventDate(Connection connection,String event,String username){
-         ArrayList<String>data=new ArrayList<>();
-         Login_Register_Gui lg=new Login_Register_Gui();
-      int id =lg.getID(username, connection);
-         String query = "SELECT eventDate FROM EventRegistered WHERE (eventRegistered=? AND main_id=?)";
+  
+    
 
-    try{
-      PreparedStatement preparedStatement = connection.prepareStatement(query);
-      preparedStatement.setString(1, event);
-      preparedStatement.setInt(2, id);
-      ResultSet result=preparedStatement.executeQuery();
-      while(result.next()){
-      data.add(result.getString("eventDate"));
-      }
-    }
-    catch (SQLException e){
-        e.printStackTrace();}
-    return data;
-    }*/
-    
-   /* public boolean checkRegisterEvent(Connection connection,EventData event){
-    
-         try{
-            String sql = "SELECT EventTitle,Description,Venue,Date,Time FROM event WHERE main_id=?";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1,id);
-            ResultSet result = preparedStatement.executeQuery();
-            while(result.next()){
-                eventName=result.getString("EventTitle");
-            description=result.getString("Description");
-            venue=result.getString("Venue");
-            time=result.getString("Time");
-            date=result.getString("Date");
-            events.add(new EventData(eventName,description,venue,date,time));
-            }
-    }
-            catch(SQLException e){
-            e.printStackTrace();}
-    
-    }*/
 
     //check the children of a parent have event or not when making booking
     public static boolean checkEventChildrens(Connection connection,ArrayList<String>children,String currentDate){

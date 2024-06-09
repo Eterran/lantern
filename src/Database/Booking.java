@@ -40,24 +40,7 @@ public class Booking {
     increaseCount(connection, getCount(connection, username), username);
   }
 
-  /*
-   * public void updateDate(Connection connection,String date,String username){
-   * Login_Register lg=new Login_Register();
-   * int id =lg.getID(username, connection);
-   * String sql = "UPDATE Booking SET bookingDate=? WHERE main_id=?";
-   * try{
-   * PreparedStatement preparedStatement = connection.prepareStatement(sql);
-   * preparedStatement.setString(1, date);
-   * preparedStatement.setInt(2, id);
-   * preparedStatement.executeUpdate();
-   * }
-   * 
-   * catch(SQLException e){
-   * e.printStackTrace();
-   * }
-   * 
-   * }
-   */
+ 
   // false mean booking is not make yet
   //applied 
   //check if there's any existing booking from the db prevent duplication on the same booking date, destination based on main_id
@@ -159,25 +142,7 @@ public class Booking {
     return bookingList;
   }
 
-  /*
-   * public ArrayList<String>allDateBooked(Connection connection){
-   * 
-   * ArrayList<String>datesList=new ArrayList<>();
-   * 
-   * String query = "SELECT bookingDate FROM Booking ";
-   * try{
-   * Statement stm = connection.createStatement();
-   * ResultSet result= stm.executeQuery(query);
-   * while(result.next()){
-   * datesList.add(result.getString("bookingDate"));
-   * }
-   * }
-   * 
-   * catch(SQLException e){
-   * e.printStackTrace();
-   * }
-   * return datesList;}
-   */
+ 
 
   public static void increaseCount(Connection connection, int num, String parentName) {
     int count = num + 1;

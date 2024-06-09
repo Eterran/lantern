@@ -90,10 +90,7 @@ import java.time.format.DateTimeFormatter;
             XP2[i]=XP;
             time2[i]=time;
         }
-        
-        // for(int i=0;i<count;i++){
-        //     System.out.println(username2[i]+" "+xpLastUpdated2[i]+" "+XP2[i]);
-        // }
+       
         
            for(int i=1; i<count; i++){
             for(int j=0; j<count-1;j++){
@@ -156,21 +153,9 @@ import java.time.format.DateTimeFormatter;
                         time2[j+1] = time2[j];
                         time2[j]=hold4;
                     }
-                    
-                    
-                    
                     }
             }
-            
         }
-        
-    
-    
-        // System.out.println("This is the global leader part");
-        // for(int i=0;i<count;i++){
-        //     System.out.println(username2[i]);
-        //     System.out.println(XP2[i]);
-        //     System.out.println();}
     }
     
 
