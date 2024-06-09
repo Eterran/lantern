@@ -58,17 +58,7 @@ public class QuizData {
         this.content = content;
     }
 
-   /* public boolean isCompleted() {
-        return completed;
-    }
-
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
-    }*/
-   /* public int getNumOfQuizCreate() {
-        return numOfQuizCreated;
-    }*/
-
+  
     @Override
      public String toString() {
         return "Quiz Title : "+quizTitle+"\nDescription:  "+description+"\nTheme: "+theme+"\nContent: "+content;
