@@ -156,21 +156,9 @@ import java.time.format.DateTimeFormatter;
                         time2[j+1] = time2[j];
                         time2[j]=hold4;
                     }
-                    
-                    
-                    
                     }
             }
-            
         }
-        
-    
-    
-        // System.out.println("This is the global leader part");
-        // for(int i=0;i<count;i++){
-        //     System.out.println(username2[i]);
-        //     System.out.println(XP2[i]);
-        //     System.out.println();}
     }
     
 
