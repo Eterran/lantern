@@ -3,26 +3,7 @@ import java.util.*;
 import java.sql.*;
 
 public class Quiz {
-    /*public void createQuiz(Connection connection,String title,String description,String theme,String content,String username){
-    
-        Login_Register_Gui lg=new Login_Register_Gui();
-        int id =lg.getID(username, connection);
-         String sql = "INSERT INTO Quiz(main_id,quizTitle,description,theme,content) VALUES (?,?,?,?,?)";
-      try{
-      PreparedStatement preparedStatement = connection.prepareStatement(sql);
-      preparedStatement.setInt(1, id);
-      preparedStatement.setString(2, title);
-      preparedStatement.setString(3, description);
-      preparedStatement.setString(4, theme);
-      preparedStatement.setString(5, content);
-      preparedStatement.executeUpdate();
-      }
-      
-      catch(SQLException e){
-      e.printStackTrace();
-      }
-    increaseQuizNumber(connection,getNumberOfQuiz(connection,username),username);
-    }*/
+   
     
       public static boolean createQuiz(Connection connection,String title,String description,String theme,String content,String username){
     
@@ -49,10 +30,7 @@ public class Quiz {
       }
       return false;}
 
-    //   catch(SQLException e){
-    //   e.printStackTrace();
-    //   }
-    // increaseQuizNumber(connection,getNumberOfQuiz(connection,username),username);
+    
 
     
     public static void increaseQuizNumber(Connection connection,int num,String username){
@@ -72,24 +50,7 @@ public class Quiz {
       }
     }
     
-    //     public static void deleteQuiz(Connection connection,QuizData quiz,String username){
-    //     Login_Register lg=new Login_Register();
-    //     int id =lg.getID(username, connection);
-    //     try{
-    //    String query = "DELETE FROM Quiz WHERE (quizTitle=? AND description=? AND theme=? AND content=?) ";
-    //         PreparedStatement preparedStatement = connection.prepareStatement(query);
-    //         preparedStatement.setString(1,quiz.quizTitle);
-    //         preparedStatement.setString(2,quiz.description);
-    //         preparedStatement.setString(3,quiz.theme);
-    //         preparedStatement.setString(4,quiz.content);
-    //         preparedStatement.executeUpdate();
-    //     }
-    //      catch(SQLException e){
-    //         e.printStackTrace();
-    //     }
-    //     deleteColumn2(connection,quiz.quizTitle);
-    //     decreaseQuizNumber(connection,getNumberOfQuiz(connection,username),username);
-    // }
+
         
        public static void deleteColumn(Connection connection,String title) {
           String table ="QuizAttempt";
@@ -285,32 +246,7 @@ public class Quiz {
     return quiz;
     }
     
-    //use to update column of TABLE QuizAttempt when the new quiz is created
-    //q1 mean quiz with id 1 in Quiz table
-   /* public static void updateLatestQuizColumn(Connection connection){
-        int count=0;
-        int columnCount = getColumnNumber(connection);
-        String query = "SELECT id FROM Quiz";
-    try{
-      PreparedStatement preparedStatement = connection.prepareStatement(query);
-      ResultSet result=preparedStatement.executeQuery();
-      
-      while(result.next()){
-          count++;
-      }
-      if(columnCount<count)
-            for(int i=columnCount+1;i<=count;i++){
-         Statement statement = connection.createStatement();
-             String columnName="q"+i ;
-            String query2 = "ALTER TABLE QuizAttempt ADD " + columnName + " INTEGER";
-            statement.executeUpdate(query2);
-            }
-            
-    }
-     catch (SQLException e){
-        e.printStackTrace();}
-    }
-    */
+   
     //use to insert the new quiz in quiz attempt table//call it everytime create a quiz 
     //adding one column at the quizAttempt
     public static void updateLatestQuiz(Connection connection, QuizData quiz) {
@@ -331,25 +267,6 @@ public class Quiz {
     }
 }
 
-    
-    /*
-    public static int getColumnNumber(Connection connection){
-        int columnCount = 0;
-        try{
-        
-         DatabaseMetaData metaData = connection.getMetaData();
-            String tableName = "QuizAttempt";
-            ResultSet rs = metaData.getColumns(null, null, tableName,"q%");
-            
-            while (rs.next()) {
-                columnCount++;
-            }
-        }
-        catch(SQLException e){
-        e.printStackTrace();
-        }
-    return columnCount;
-    }*/
     
     //when a student is incresed in database,update it into a QuizAttempt table 
     //when a student press startAttempt, increase one row for students
