@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class EducatorCheckQuizCreated {
@@ -134,6 +135,7 @@ public class EducatorCheckQuizCreated {
         addButton.setOnAction(event -> {
             VBox content = EducatorCreateQuiz.tabCreateQuiz();
             Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(content, 500, 300));
             stage.setTitle("Create Quiz");
             stage.show();

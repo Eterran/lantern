@@ -4,9 +4,9 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -18,6 +18,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.web.WebView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import Database.User;
 import Student.GlobalLeaderBoard;
@@ -27,6 +29,10 @@ import Database.Login_Register;
 import Database.Database;
 import Database.Quiz;
 import Database.QuizData;
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 public class QuizPage {
     private static Double pointLabel = User.getCurrentUser().getPoints();//fetch from the user db
     private static VBox displayQuizBox = new VBox();
@@ -59,7 +65,7 @@ public class QuizPage {
         paneForScrollPane1.setStyle("-fx-background-color: lightyellow");
     
         scrollPane1.setFitToWidth(true);
-        scrollPane1.setFitToHeight(true);
+      //  scrollPane1.setFitToHeight(true);
         scrollPane1.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); 
         scrollPane1.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS); 
     
@@ -211,7 +217,7 @@ public class QuizPage {
 
     public static BorderPane BPForEveryQuiz(String qtitle, String qtheme, String qdescrip, String qContent) {
         BorderPane borderPane = new BorderPane();
-        borderPane.setPrefWidth(180);
+        borderPane.setPrefWidth(170);
         borderPane.setPrefHeight(120);
         borderPane.setStyle("-fx-background-color: #CDFCBE; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 10px;");
         borderPane.setPadding(new Insets(10));
@@ -220,26 +226,27 @@ public class QuizPage {
         ImageView quizImageView = new ImageView(quizImage);
         quizImageView.setFitHeight(60);
         quizImageView.setFitWidth(60);
-        //borderPane.setGraphic(quizImageView);
 
         Label label1 = new Label(qtitle);
         label1.setTextFill(Color.WHITE); 
         label1.getStyleClass().add("QuizTitle");
 
-        HBox tophbox = new HBox();
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-        tophbox.getChildren().addAll(label1, spacer, quizImageView);
-       // label1.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        Label label2 = new Label(qtheme);
-        label2.getStyleClass().add("QuizTheme");
-        // label2.setTextFill(Color.WHITE); 
-        // label2.setFont(Font.font("Arial", 10));
         Label label3 = new Label(qdescrip);
         label3.getStyleClass().add("QuizDescription");
-        // label3.setTextFill(Color.WHITE); 
-        // label3.setFont(Font.font("Arial", 10));
-        ToggleButton toggleBtn = new ToggleButton("Start Attempt");
+        label3.setWrapText(true);
+        label3.setMaxWidth(400);
+       Label label2 = new Label(qtheme);
+       label2.getStyleClass().add("QuizTheme");
+
+       VBox topvbox = new VBox(10);
+       topvbox.getChildren().addAll(label1, label2, label3);
+
+       HBox tophbox = new HBox();
+       Region spacer = new Region();
+       HBox.setHgrow(spacer, Priority.ALWAYS);
+       tophbox.getChildren().addAll(topvbox, spacer, quizImageView);
+    
+        Button toggleBtn = new Button("Start Attempt");
         toggleBtn.setAlignment(Pos.BOTTOM_RIGHT);
    
         if(Quiz.checkAttempted(Lantern.getConn(),qtitle,User.getCurrentUser().getUsername())){
@@ -248,34 +255,28 @@ public class QuizPage {
         }else{
             toggleBtn.setDisable(false);
             toggleBtn.setOnAction(event->{
-                if(toggleBtn.isSelected()){
-                    toggleBtn.setDisable(true);
+                    //toggleBtn.setDisable(true);
                     QuizData qd= new QuizData(qtitle, qdescrip, qtheme, qContent);
                     Stage stage = new Stage();
+                    stage.initModality(Modality.APPLICATION_MODAL);
                     stage.setScene(new Scene(showQuiz(qContent, stage, qd, toggleBtn), 400, 200));
                     stage.setTitle("Quiz Description");
                     stage.show();
 
-                }
+                
             });
             
         }
- 
-        //BorderPane.setAlignment(label1, Pos.TOP_LEFT);
-        VBox storelabel23 = new VBox();
-        storelabel23.getChildren().addAll(label2, label3);
-        BorderPane.setAlignment(storelabel23, Pos.CENTER);
         BorderPane.setAlignment(toggleBtn, Pos.BOTTOM_RIGHT);
 
         borderPane.setTop(tophbox);
-        borderPane.setLeft(storelabel23);
         borderPane.setBottom(toggleBtn);
 
         return borderPane;
     }
 
     //show quiz description and finish attempt button
-    public static BorderPane showQuiz(String quizContent,Stage stage, QuizData qd, ToggleButton toggleBtn){
+    public static BorderPane showQuiz(String quizContent,Stage stage, QuizData qd, Button toggleBtn){
         BorderPane borderPane= new BorderPane();
         borderPane.setStyle("-fx-background-color: lightyellow");
         
@@ -283,10 +284,17 @@ public class QuizPage {
         Label quizCLabel = new Label("Quiz Content");
         quizCLabel.setPadding(new Insets(10));
         quizCLabel.setStyle("-fx-font-size: 23px; -fx-font-weight: bold;");
-        Label quizC = new Label (quizContent);
+        Hyperlink quizC = new Hyperlink(quizContent);
         quizC.setPadding(new Insets(10,10,10,15));
+        quizC.setWrapText(true);
+        quizC.setMaxWidth(370);
         quizC.setStyle("fx-font-size: 20px");
         quizCVbox.getChildren().addAll(quizCLabel,quizC);
+
+        String url = extractUrl(quizContent);
+        
+        // Set the action event to open the link in a WebView
+        quizC.setOnAction(event -> openWebpage(url));
         Button finishAttemptBtn = new Button("Finish Attempt");
        
         borderPane.setCenter(quizCVbox);
@@ -306,6 +314,7 @@ public class QuizPage {
             glb.updateXpState(Lantern.getConn(), lr.getId()); 
             User.getCurrentUser().setPoints(updatedpoint);
             toggleBtn.setText("Completed");
+            toggleBtn.setDisable(true);
             try {
                 db.updatePoint(Lantern.getConn(), lr.getId(), updatedpoint);
                 updatePointsVbox();
@@ -317,5 +326,28 @@ public class QuizPage {
         });
        return borderPane;
     }
- 
+    
+    private static String extractUrl(String text) {
+        int startIndex = text.indexOf("http");
+        if (startIndex == -1) {
+            return null;
+        }
+        int endIndex = text.indexOf(" ", startIndex);
+        if (endIndex == -1) {
+            endIndex = text.length();
+        }
+        return text.substring(startIndex, endIndex);
+    }
+
+    public static void openWebpage(String url) {
+        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+            try {
+                Desktop.getDesktop().browse(new URI(url));
+            } catch (IOException | URISyntaxException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Desktop browsing is not supported.");
+        }
+    }
 }

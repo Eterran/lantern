@@ -71,7 +71,6 @@ public class EducatorCheckEventCreated {
         vbox1.setStyle("-fx-background-color: lightyellow");
         Label label1 = new Label("Event Created");
         label1.getStyleClass().add("title");
-        // label1.setStyle("-fx-font-weight: bold; -fx-font-size: 16");
         label1.setPadding(new Insets(10));
         vbox1.getChildren().add(label1);
 
@@ -89,16 +88,11 @@ public class EducatorCheckEventCreated {
         borderPane.setPadding(new Insets(15));
 
         Label label1 = new Label(labelText1);
-        // label1.setTextFill(Color.WHITE);
         label1.setFont(Font.font("Arial", FontWeight.BOLD, 25));
         Label label2 = new Label(labelText2);
-        // label2.setTextFill(Color.WHITE);
         Label label3 = new Label(labelText3);
-        // label3.setTextFill(Color.WHITE);
         Label label4 = new Label(labelText4);
-        // label4.setTextFill(Color.WHITE);
         Label label5 = new Label(labelText5);
-        // label5.setTextFill(Color.WHITE);
         MenuButton menubutton = new MenuButton();
         menubutton.setText("Settings");
         menubutton.setStyle("-fx-background-color:white");
@@ -157,6 +151,7 @@ public class EducatorCheckEventCreated {
         addButton.setOnAction(event -> {
             VBox content = EducatorCreateEvent.tabCreateEvent();
             Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(content, 500, 300));
             stage.setTitle("Create Quiz");
             stage.show();
@@ -217,7 +212,6 @@ public class EducatorCheckEventCreated {
         column2.setPercentWidth(80);
         gridPane.getColumnConstraints().addAll(column1, column2);
 
-        // Set RowConstraints
         for (int i = 0; i < 7; i++) {
             RowConstraints row = new RowConstraints();
             row.setVgrow(Priority.ALWAYS);
