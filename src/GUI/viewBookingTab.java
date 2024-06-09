@@ -87,9 +87,7 @@ public class viewBookingTab {
         System.out.println("Label " + labelText1);
         System.out.println("Date "+ labelText2);
         BorderPane borderPane3 = new BorderPane();
-     //   borderPane3.setStyle("-fx-background-color: #b5def7; fx-border-width: 1px; -fx-border-color: black; -fx-border-radius: 5px; ");
         borderPane3.setStyle("-fx-background-color: #FFE268; fx-border-width: 1px; -fx-border-color: black; -fx-border-radius: 5px; ");
-
         
         borderPane3.setPadding(new Insets(15));
 
@@ -148,7 +146,7 @@ public class viewBookingTab {
             int rowsAffected = statement.executeUpdate();
             if (rowsAffected > 0) {
                 Booking.decreaseCount(conn, Booking.getCount(conn, username), username); //checking
-                System.out.println("Quiz deleted successfully.");
+                System.out.println("Booking deleted successfully.");
             } else {
                 System.out.println("No quiz found matching the criteria.");
             }
