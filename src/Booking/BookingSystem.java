@@ -167,50 +167,53 @@ public class BookingSystem {
     // get the 7 days from the current dates and check if there is any existing booking based on the main_id
     public ArrayList<Date> getAvailableDates(User user, int destinationId) {
         ArrayList<Date> availableDates = new ArrayList<>();
-        String destinationName = destinationName(destinationId); //get name based on the id
+        String destinationName = destinationName(destinationId); // get name based on the id
 
         try {
-                Connection connection = Lantern.getConn();
-                Statement statement = connection.createStatement();
-                String username = user.getUsername();
-                Login_Register lg=new Login_Register();
-                int id =lg.getID(username, connection);
+            Connection connection = Lantern.getConn();
+            Statement statement = connection.createStatement();
+            String username = user.getUsername();
+            Login_Register lg = new Login_Register();
+            int id = lg.getID(username, connection);
 
-                // Get current date
-                Calendar calendar = Calendar.getInstance();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            // Get current date
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-                for (int i = 0; i < 7; i++) {
-                    // Add days to current date
-                    java.util.Date currentDate = calendar.getTime();
-                    String currentDateString = sdf.format(currentDate);
+            // Move to the next day to skip the current date
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
 
-                    // Check if there is an existing booking for the current date
-                    String query = "SELECT * FROM BookingDate WHERE main_id = " + id + " AND bookingDate = '"+ currentDateString + "'"; //id is not String no need single quote??
-                    ResultSet resultSet = statement.executeQuery(query);
+            for (int i = 0; i < 7; i++) {
+                // Add days to the current date
+                java.util.Date currentDate = calendar.getTime();
+                String currentDateString = sdf.format(currentDate);
 
-                    if (!resultSet.next()) {
-                        // If there is no booking for the current date, add it to the available dates
-                        if (!new Booking().checkExistingBooking(connection, username, new BookingData(destinationName, currentDateString))) {
-                            availableDates.add(new Date(currentDate.getTime()));
-                        }
+                // Check if there is an existing booking for the current date
+                String query = "SELECT * FROM BookingDate WHERE main_id = " + id + " AND bookingDate = '"
+                        + currentDateString + "'";
+                ResultSet resultSet = statement.executeQuery(query);
+
+                if (!resultSet.next()) {
+                    // If there is no booking for the current date, add it to the available dates
+                    if (!new Booking().checkExistingBooking(connection, username, new BookingData(destinationName, currentDateString))) {
+                        availableDates.add(new Date(currentDate.getTime()));
                     }
-
-                    resultSet.close();
-
-                    // Move to the next day
-                    calendar.add(Calendar.DAY_OF_YEAR, 1);
                 }
 
-                statement.close();
-                connection.close();
+                resultSet.close();
+
+                // Move to the next day
+                calendar.add(Calendar.DAY_OF_YEAR, 1);
+            }
+
+            statement.close();
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return availableDates;
     }
-
     // applied
     private ArrayList<Date> getBookedDatesForDestination(int destinationId) {
         ArrayList<Date> bookedDates = new ArrayList<>();
